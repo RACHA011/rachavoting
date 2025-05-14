@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SA Vote Online - Dashboard</title>
+  </head>
+  <body>
+    <!-- fragments/dashboard-sidebar.html -->
+    <aside th:fragment="dashboard-sidebar" class="flex flex-col w-64 border-r">
+      <div class="p-6">
+        <div class="flex items-center gap-2">
+          <img
+            th:src="@{/image/sa.png}"
+            alt="South African flag"
+            class="w-8 h-auto"
+          />
+          <h2 class="text-xl font-bold text-gray-900">SA Vote Online</h2>
+        </div>
+      </div>
+
+      <div class="flex-1 px-4 scroll-area">
+        <nav class="flex flex-col gap-1">
+          <!-- Dashboard -->
+          <a
+            th:href="@{/candidate/dashboard}"
+            class="flex items-center gap-3 rounded-lg px-3 py-2 transition-all"
+            th:class="${activePage == 'dashboard'} ? 'bg-sa-blue text-white flex items-center gap-3 rounded-lg px-3 py-2 transition-all' : 'flex items-center gap-3 rounded-lg px-3 py-2 transition-all text-gray-500 hover:bg-gray-100 hover:text-gray-900'"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-layout-dashboard-icon lucide-layout-dashboard h-5 w-5"
+            >
+              <rect width="7" height="9" x="3" y="3" rx="1" />
+              <rect width="7" height="5" x="14" y="3" rx="1" />
+              <rect width="7" height="9" x="14" y="12" rx="1" />
+              <rect width="7" height="5" x="3" y="16" rx="1" />
+            </svg>
+            <span>Dashboard</span>
+          </a>
+
+          <!-- Vote Now -->
+          <a
+            th:href="@{/candidate/dashboard/vote}"
+            class="flex items-center gap-3 rounded-lg px-3 py-2 transition-all"
+            th:class="${activePage == 'vote'} ? 'bg-sa-blue text-white flex items-center gap-3 rounded-lg px-3 py-2 transition-all' : 'flex items-center gap-3 rounded-lg px-3 py-2 transition-all text-gray-500 hover:bg-gray-100 hover:text-gray-900'"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-vote-icon lucide-vote h-5 w-5"
+            >
+              <path d="m9 12 2 2 4-4" />
+              <path d="M5 7c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v12H5V7Z" />
+              <path d="M22 19H2" />
+            </svg>
+            <span>Vote Now</span>
+          </a>
+
+          <!-- Results (Coming Soon) -->
+          <div
+            class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 opacity-50 cursor-not-allowed"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-chart-column-icon lucide-chart-column h-5 w-5"
+            >
+              <path d="M3 3v16a2 2 0 0 0 2 2h16" />
+              <path d="M18 17V9" />
+              <path d="M13 17V5" />
+              <path d="M8 17v-3" />
+            </svg>
+            <span>Results</span>
+            <span
+              class="ml-auto text-xs bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded"
+              >Soon</span
+            >
+          </div>
+
+          <!-- Party Members (Coming Soon) -->
+          <div
+            class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 opacity-50 cursor-not-allowed"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-users-icon lucide-users h-5 w-5"
+            >
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+              <circle cx="9" cy="7" r="4" />
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+            </svg>
+            <span>Party Members</span>
+            <span
+              class="ml-auto text-xs bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded"
+              >Soon</span
+            >
+          </div>
+
+          <!-- Events (Coming Soon) -->
+          <div
+            class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 opacity-50 cursor-not-allowed"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-calendar-icon lucide-calendar h-5 w-5"
+            >
+              <path d="M8 2v4" />
+              <path d="M16 2v4" />
+              <rect width="18" height="18" x="3" y="4" rx="2" />
+              <path d="M3 10h18" />
+            </svg>
+            <span>Events</span>
+            <span
+              class="ml-auto text-xs bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded"
+              >Soon</span
+            >
+          </div>
+        </nav>
+
+        <div class="mt-8 px-3">
+          <div class="rounded-lg border bg-white p-4 shadow-sm">
+            <div class="flex items-center gap-4 mb-3">
+              <div
+                class="w-8 h-8 rounded-full bg-green-700 text-white grid place-items-center font-semibold"
+              >
+                PM
+              </div>
+              <div>
+                <p class="text-sm font-medium">Party Member</p>
+                <p class="text-xs text-gray-500">ANC12345</p>
+              </div>
+            </div>
+            <div class="text-xs text-gray-500">
+              Logged in: Today at
+              <span th:text="${#dates.format(#dates.createNow(), 'HH:mm')}"
+                >12:00</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-auto p-4">
+        <nav class="flex flex-col gap-1 mb-4">
+          <a
+            th:href="@{/candidate/dashboard/settings}"
+            class="flex items-center gap-3 rounded-lg px-3 py-2 "
+            th:class="${activePage == 'settings'} ? 'bg-sa-blue text-white flex items-center gap-3 rounded-lg px-3 py-2 ' : 'flex items-center gap-3 rounded-lg px-3 py-2  text-gray-500 hover:bg-gray-100 hover:text-gray-900'"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-settings-icon lucide-settings h-5 w-5"
+            >
+              <path
+                d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"
+              />
+              <circle cx="12" cy="12" r="3" />
+            </svg>
+            <span>Settings</span>
+          </a>
+
+          <!-- Help & Support (Coming Soon) -->
+          <div
+            class="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 opacity-50 cursor-not-allowed"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-circle-help-icon lucide-circle-help h-5 w-5"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+              <path d="M12 17h.01" />
+            </svg>
+            <span>Help & Support</span>
+            <span
+              class="ml-auto text-xs bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded"
+              >Soon</span
+            >
+          </div>
+        </nav>
+
+        <form th:action="@{/candidate/logout}" method="post">
+          <button
+            type="submit"
+            class="w-full flex items-center gap-2 justify-start border border-dashed border-gray-300 rounded-md py-2 px-4 text-gray-700 hover:bg-gray-100"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-log-out-icon lucide-log-out h-4 w-4"
+            >
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" x2="9" y1="12" y2="12" />
+            </svg>
+            <span>Logout</span>
+          </button>
+        </form>
+      </div>
+    </aside>
+  </body>
+</html>

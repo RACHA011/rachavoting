@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar sidebar-open" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-container">
+                <i class="logo-icon bi bi-shield"></i>
+                <span class="logo-text">RachaVoting</span>
+            </div>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="bi bi-list"></i>
+            </button>
+        </div>
+        <nav class="nav-menu">
+            <a class="nav-item" th:href="@{/admin/dashboard}">
+                <i class="bi bi-graph-up"></i>
+                <span>Dashboard</span>
+            </a>
+            <a class="nav-item" th:href="@{/admin/voter}">
+                <i class="bi bi-people"></i>
+                <span>Voters</span>
+            </a>
+            <a class="nav-item" th:href="@{/admin/election}">
+                <i class="bi bi-calendar-check"></i>
+                <span>Elections</span>
+            </a>
+            <a class="nav-item" th:href="@{/admin/history}">
+                <i class="bi bi-clock"></i>
+                <span>History</span>
+            </a>
+            <a class="nav-item" th:href="@{/admin/setting}">
+                <i class="bi bi-gear"></i>
+                <span>Settings</span>
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+          <a th:href="@{/logout}" class="logout-btn">
+              <i class="bi bi-box-arrow-right"></i>
+              <span>Logout</span>
+          </a>
+      </div>
+    </aside>
+
+    <script>
+      
+    </script>
+</body>
+</html>

@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>SA Vote Online</title>
+    <link rel="stylesheet" th:href="@{/css/output.css}" />
+  </head>
+  <body class="min-h-screen flex flex-col">
+    <!-- Navbar will be inserted here -->
+    <header th:replace="~{/eg/header :: header}"></header>
+
+    <main class="flex-1">
+      <!-- Hero will be inserted here -->
+      <div th:replace="~{/eg/hero :: div}"></div>
+
+      <!-- Features Section -->
+      <section id="about" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+          <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold mb-4">
+              Empowering Democratic Participation
+            </h2>
+            <p class="text-muted-foreground max-w-2xl mx-auto">
+              Our platform makes it easier for political party members to
+              participate in South Africa's democratic process.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="border rounded-lg border-t-4 border-[var(--sa-blue)]">
+              <div class="p-6">
+                <div
+                  class="mb-4 w-12 h-12 rounded-lg bg-sa-blue/10 flex items-center justify-center text-sa-blue"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                    ></path>
+                  </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Secure Voting</h3>
+                <p class="text-muted-foreground mb-4">
+                  End-to-end encryption and advanced security protocols protect
+                  your vote.
+                </p>
+                <p class="text-sm text-muted-foreground mb-4">
+                  Our system employs military-grade encryption and blockchain
+                  technology to ensure votes cannot be tampered with or traced
+                  back to individuals.
+                </p>
+                <a
+                  href="#"
+                  class="text-sm text-sa-blue font-medium flex items-center hover:underline"
+                >
+                  Learn more about security
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="ml-1"
+                  >
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <div class="border rounded-lg border-t-4 border-t-sa-green">
+              <div class="p-6">
+                <div
+                  class="mb-4 w-12 h-12 rounded-lg bg-sa-green/10 flex items-center justify-center text-sa-green"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="9" cy="7" r="4"></circle>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                  </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Party Member Portal</h3>
+                <p class="text-muted-foreground mb-4">
+                  Exclusive access for registered party members.
+                </p>
+                <p class="text-sm text-muted-foreground mb-4">
+                  Participate in internal party elections, policy decisions, and
+                  candidate selections through a user-friendly dashboard
+                  designed for your party.
+                </p>
+                <a
+                  th:href="@{#}"
+                  class="text-sm text-sa-green font-medium flex items-center hover:underline"
+                >
+                  Explore member benefits
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="ml-1"
+                  >
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </a>
+              </div>
+            </div>
+
+            <div class="border rounded-lg border-t-4 border-t-sa-red">
+              <div class="p-6">
+                <div
+                  class="mb-4 w-12 h-12 rounded-lg bg-sa-red/10 flex items-center justify-center text-sa-red"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path
+                      d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                    ></path>
+                  </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Transparency</h3>
+                <p class="text-muted-foreground mb-4">
+                  Full visibility into the electoral process.
+                </p>
+                <p class="text-sm text-muted-foreground mb-4">
+                  Access real-time election data, voting statistics, and results
+                  verification tools that ensure the integrity of every
+                  election.
+                </p>
+                <a
+                  th:href="@{#}"
+                  class="text-sm text-sa-red font-medium flex items-center hover:underline"
+                >
+                  View transparency measures
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="ml-1"
+                  >
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- How It Works Section -->
+      <section id="elections" class="py-20 bg-gray-50">
+        <div class="container mx-auto px-4">
+          <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold mb-4">Election Information</h2>
+            <p class="text-muted-foreground max-w-2xl mx-auto">
+              Participate in upcoming elections and stay informed about the
+              electoral process.
+            </p>
+          </div>
+
+          <div class="max-w-4xl mx-auto">
+            <div
+              class="tab-list grid w-full grid-cols-3 mb-8 bg-gray-100 rounded-lg p-1"
+            >
+              <button
+                data-tab="upcoming"
+                class="tab-button px-6 py-3 text-sm md:text-base font-medium border-b-2 border-transparent hover:bg-gray-200 transition-all duration-200 tab-active"
+              >
+                Upcoming Elections
+              </button>
+              <button
+                data-tab="process"
+                class="tab-button px-6 py-3 text-sm md:text-base font-medium border-b-2 border-transparent hover:bg-gray-200 transition-all duration-200"
+              >
+                Voting Process
+              </button>
+              <button
+                data-tab="requirements"
+                class="tab-button px-6 py-3 text-sm md:text-base font-medium border-b-2 border-transparent hover:bg-gray-200 transition-all duration-200"
+              >
+                Requirements
+              </button>
+            </div>
+
+            <div id="upcoming" class="tab-content">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="" th:each="election : ${elections}">
+                  <div class="border rounded-lg">
+                    <div class="p-6">
+                      <div class="flex items-center gap-2 text-sa-blue mb-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <rect
+                            x="3"
+                            y="4"
+                            width="18"
+                            height="18"
+                            rx="2"
+                            ry="2"
+                          ></rect>
+                          <line x1="16" y1="2" x2="16" y2="6"></line>
+                          <line x1="8" y1="2" x2="8" y2="6"></line>
+                          <line x1="3" y1="10" x2="21" y2="10"></line>
+                          <path d="M8 14h.01"></path>
+                          <path d="M12 14h.01"></path>
+                          <path d="M16 14h.01"></path>
+                          <path d="M8 18h.01"></path>
+                          <path d="M12 18h.01"></path>
+                          <path d="M16 18h.01"></path>
+                        </svg>
+                        <span
+                          class="text-xs font-medium"
+                          th:text="${#temporals.format(election.startDate, 'MMMM d'','' yyyy ')}"
+                          >Day of election</span
+                        >
+                      </div>
+                      <h3
+                        class="text-xl font-bold mb-2"
+                        th:text="${election.title}"
+                      >
+                        title
+                      </h3>
+                      <p
+                        class="text-muted-foreground mb-4"
+                        th:text="${election.description}"
+                      >
+                        Description
+                      </p>
+                      <div class="space-y-4 mb-6">
+                        <div class="flex items-center gap-3">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#007749"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                          </svg>
+                          <span class="text-sm"
+                            >Registration period:
+                            <span
+                              th:text="@{${election.isActive} ? 'open' : 'closed'}"
+                              >status</span
+                            ></span
+                          >
+                        </div>
+                        <div class="flex items-center gap-3">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#007749"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                          </svg>
+                          <span class="text-sm"
+                            >Voting period:
+                            <span
+                              th:text="${#temporals.format(election.startDate, 'MMMM d'','' yyyy ')}"
+                            ></span>
+                            -
+                            <span
+                              th:text="${#temporals.format(election.endDate, ' MMMM d'','' yyyy ')}"
+                            ></span
+                          ></span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="20"
+                            height="20"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#f59e0b"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                          </svg>
+                          <span class="text-sm"
+                            >Results announcement:
+                            <span
+                              th:text="${election.resultAnouncement != null} ? ${#temporals.format(election.endDate, ' MMMM d'','' yyyy ')} : 'TBA'"
+                            ></span
+                          ></span>
+                        </div>
+                      </div>
+                      <div th:if="@{${election.isActive}}">
+                        <a
+                          th:href="@{/candidate/login}"
+                          class="inline-block bg-sa-blue hover:bg-sa-blue-dark text-white font-medium py-2 px-4 rounded-md transition-colors"
+                        >
+                          Vote
+                        </a>
+                      </div>
+                      <div class="" th:if="@{${!election.isActive}}">
+                        <a
+                          th:href="@{/candidate/login}"
+                          class="inline-block bg-sa-blue hover:bg-sa-blue-dark text-white font-medium py-2 px-4 rounded-md transition-colors"
+                        >
+                          Register to Vote
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="border rounded-lg"
+                  th:if="${#lists.isEmpty(elections)}"
+                >
+                  <p class="p-6">No elections available.</p>
+                </div>
+              </div>
+            </div>
+
+            <div id="process" class="tab-content hidden">
+              <div class="border rounded-lg">
+                <div class="p-6">
+                  <h3 class="text-xl font-bold mb-2">
+                    How the Voting Process Works
+                  </h3>
+                  <p class="text-muted-foreground mb-6">
+                    A step-by-step guide to casting your vote online
+                  </p>
+                  <ol class="space-y-6 mt-4">
+                    <li class="flex gap-4">
+                      <div
+                        class="flex-shrink-0 w-8 h-8 rounded-full bg-sa-blue text-white flex items-center justify-center font-medium"
+                      >
+                        1
+                      </div>
+                      <div>
+                        <h4 class="font-medium mb-1">Register for Voting</h4>
+                        <p class="text-sm text-muted-foreground">
+                          South African citizens must register for voting during
+                          the registration period before the deadline. Upon
+                          successful registration, you will receive a
+                          confirmation message.
+                        </p>
+                      </div>
+                    </li>
+                    <li class="flex gap-4">
+                      <div
+                        class="flex-shrink-0 w-8 h-8 rounded-full bg-sa-blue text-white flex items-center justify-center font-medium"
+                      >
+                        2
+                      </div>
+                      <div>
+                        <h4 class="font-medium mb-1">Log In to the Portal</h4>
+                        <p class="text-sm text-muted-foreground">
+                          During the active voting period, log in to your
+                          account using your credentials.
+                        </p>
+                      </div>
+                    </li>
+                    <li class="flex gap-4">
+                      <div
+                        class="flex-shrink-0 w-8 h-8 rounded-full bg-sa-blue text-white flex items-center justify-center font-medium"
+                      >
+                        3
+                      </div>
+                      <div>
+                        <h4 class="font-medium mb-1">
+                          Access Active Elections
+                        </h4>
+                        <p class="text-sm text-muted-foreground">
+                          View the list of current elections you are eligible to
+                          participate in.
+                        </p>
+                      </div>
+                    </li>
+                    <li class="flex gap-4">
+                      <div
+                        class="flex-shrink-0 w-8 h-8 rounded-full bg-sa-blue text-white flex items-center justify-center font-medium"
+                      >
+                        4
+                      </div>
+                      <div>
+                        <h4 class="font-medium mb-1">Cast Your Vote</h4>
+                        <p class="text-sm text-muted-foreground">
+                          Select your preferred candidate or party and confirm
+                          your selection during the voting period.
+                        </p>
+                      </div>
+                    </li>
+                    <li class="flex gap-4">
+                      <div
+                        class="flex-shrink-0 w-8 h-8 rounded-full bg-sa-blue text-white flex items-center justify-center font-medium"
+                      >
+                        5
+                      </div>
+                      <div>
+                        <h4 class="font-medium mb-1">Receive Confirmation</h4>
+                        <p class="text-sm text-muted-foreground">
+                          After casting your vote, you will receive a
+                          confirmation message verifying that you have
+                          successfully voted
+                        </p>
+                      </div>
+                    </li>
+                  </ol>
+                </div>
+              </div>
+            </div>
+
+            <div id="requirements" class="tab-content hidden">
+              <div class="border rounded-lg">
+                <div class="p-6">
+                  <h3 class="text-xl font-bold mb-2">Voting Requirements</h3>
+                  <p class="text-muted-foreground mb-6">
+                    Eligibility criteria and necessary documents
+                  </p>
+                  <div class="space-y-6 mt-4">
+                    <div class="border rounded-lg p-4">
+                      <h4 class="font-medium mb-2 flex items-center gap-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#000B8D"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <rect
+                            x="3"
+                            y="11"
+                            width="18"
+                            height="11"
+                            rx="2"
+                            ry="2"
+                          ></rect>
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        Eligibility Criteria
+                      </h4>
+                      <ul class="space-y-2 text-sm text-muted-foreground">
+                        <li class="flex items-center gap-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#007749"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                          </svg>
+                          <span
+                            >Must be a registered member of a recognized
+                            political party</span
+                          >
+                        </li>
+                        <li class="flex items-center gap-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#007749"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                          </svg>
+                          <span>Must be at least 18 years of age</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#007749"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                          </svg>
+                          <span>Must be a South African citizen</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#007749"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                          </svg>
+                          <span>Must have a valid party membership ID</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <div class="border rounded-lg p-4">
+                      <h4 class="font-medium mb-2 flex items-center gap-2">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="#E03C31"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                        >
+                          <rect
+                            x="3"
+                            y="11"
+                            width="18"
+                            height="11"
+                            rx="2"
+                            ry="2"
+                          ></rect>
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                        Required Documents
+                      </h4>
+                      <ul class="space-y-2 text-sm text-muted-foreground">
+                        <li class="flex items-center gap-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#007749"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                          </svg>
+                          <span>South African ID number</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#007749"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                          </svg>
+                          <span>Party membership identification number</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#007749"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                          </svg>
+                          <span>Valid email address for verification</span>
+                        </li>
+                        <li class="flex items-center gap-2">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="#007749"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          >
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                          </svg>
+                          <span
+                            >Mobile phone number for two-factor
+                            authentication</span
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ Section -->
+      <section id="faq" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+          <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
+            <p class="text-muted-foreground max-w-2xl mx-auto">
+              Find answers to common questions about the online voting system.
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div class="border rounded-lg">
+              <div class="p-6">
+                <div class="flex items-center gap-2 mb-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#000B8D"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                  <h3 class="text-lg font-bold">Is online voting secure?</h3>
+                </div>
+                <p class="text-sm text-muted-foreground">
+                  Yes, our system uses end-to-end encryption, blockchain
+                  technology, and multiple verification steps to ensure secure
+                  voting. Your vote is private and cannot be traced back to you.
+                </p>
+              </div>
+            </div>
+
+            <div class="border rounded-lg">
+              <div class="p-6">
+                <div class="flex items-center gap-2 mb-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#000B8D"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                  <h3 class="text-lg font-bold">Who is eligible to vote?</h3>
+                </div>
+                <p class="text-sm text-muted-foreground">
+                  All South African citizens aged 18 and over are eligible to
+                  vote
+                </p>
+              </div>
+            </div>
+
+            <!-- <div class="border rounded-lg">
+              <div class="p-6">
+                <div class="flex items-center gap-2 mb-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#000B8D"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                  <h3 class="text-lg font-bold">
+                    What if I forget my password?
+                  </h3>
+                </div>
+                <p class="text-sm text-muted-foreground">
+                  You can reset your password through the "Forgot Password" link
+                  on the login page. You'll receive a password reset link to
+                  your registered email address.
+                </p>
+              </div>
+            </div> -->
+
+            <div class="border rounded-lg">
+              <div class="p-6">
+                <div class="flex items-center gap-2 mb-2">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#000B8D"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                  </svg>
+                  <h3 class="text-lg font-bold">
+                    Can I change my vote after submitting?
+                  </h3>
+                </div>
+                <p class="text-sm text-muted-foreground">
+                  No, once your vote is submitted, it cannot be changed. Make
+                  sure to review your selection carefully before confirming your
+                  vote.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center mt-12">
+            <a
+              th:href="@{#}"
+              class="text-sa-blue font-medium hover:underline inline-flex items-center"
+            >
+              View all FAQs
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="ml-1"
+              >
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <polyline points="12 5 19 12 12 19"></polyline>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section
+        id="contact"
+        class="py-20 bg-sa-blue from-sa-blue to-sa-blue-dark text-white"
+      >
+        <div class="container mx-auto px-4 text-center">
+          <h2 class="text-3xl font-bold mb-4">
+            Ready to Participate in Democracy?
+          </h2>
+          <p class="text-xl opacity-90 max-w-2xl mx-auto mb-8">
+            Join millions of South Africans in making their voices heard through
+            a secure and innovative online voting platform.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <!-- show thia during voting days -->
+            <!-- <a th:if
+              href="/candidate/login"
+              class="inline-block bg-white hover:bg-gray-100 text-gray-900 font-medium py-3 px-6 rounded-md transition-colors w-full sm:w-auto"
+            >
+              vote
+            </a>  -->
+
+            <a
+              th:href="@{/vote/register}"
+              class="inline-block bg-white text-sa-blue hover:bg-white/90 font-medium py-3 px-6 rounded-md transition-colors w-full sm:w-auto"
+            >
+              Register Now
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer will be inserted here -->
+    <footer th:replace="~{/eg/footer :: footer}"></footer>
+
+    <script th:src="@{/js/main.js}"></script>
+  </body>
+</html>

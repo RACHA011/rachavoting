@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SA Vote Online - Manage Party</title>
+  </head>
+  <body class="bg-gray-50">
+    <div
+      id="manage-party-container" 
+      class="col-span-12 md:col-span-9 lg:col-span-10 space-y-6 p-6"
+      sec:authorize="'hasAuthority(''PRESIDENT'') or hasAuthority(''DEPUTY_PRESIDENT'')'"
+    >
+      <div
+        id="alert"
+        th:if="${error}"
+        class="flex items-center p-4 mb-4 text-red-800 rounded-lg bg-red-50 dark:text-red-400"
+        role="alert"
+      >
+        <svg
+          class="shrink-0 w-4 h-4"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path
+            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+          />
+        </svg>
+        <span class="sr-only">Info</span>
+        <div class="ms-3 text-sm font-medium" th:text="${error}"></div>
+      </div>
+      <div
+        id="alert-3"
+        th:if="${success}"
+        class="flex items-center p-4 mb-4 text-green-800 rounded-lg bg-green-50 dark:text-green-400"
+        role="alert"
+      >
+        <svg
+          class="shrink-0 w-4 h-4"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+        >
+          <path
+            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"
+          />
+        </svg>
+        <span class="sr-only">Info</span>
+        <div class="ms-3 text-sm font-medium" th:text="${success}"></div>
+      </div>
+      <!-- Party Settings Section -->
+      <section id="party-settings" class="bg-white rounded-lg shadow-sm p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h2
+            class="text-xl font-bold text-gray-900"
+            th:text="${party.id != null} ? 'Edit Party' : 'Create Party'"
+          >
+            Party Management
+          </h2>
+
+          <div class="flex items-center space-x-2">
+            <span class="text-sm text-gray-500">Party Status</span>
+            <label class="custom-switch">
+              <input
+                type="checkbox"
+                name="status_checkbox"
+                id="status_checkbox"
+                th:checked="${party.status}"
+                value="true"
+              />
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <form
+          id="save-icon-form"
+          action="#"
+          th:action="@{/save-icon}"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <div class="flex justify-center mb-5">
+            <div class="w-full">
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-1 lg:col-start-2">
+                  <div
+                    class="flex flex-col items-center p-6 border-2 border-dashed border-gray-300 rounded-lg"
+                  >
+                    <div
+                      class="w-40 h-full bg-gray-100 mb-4 flex items-center justify-center overflow-hidden mx-auto"
+                    >
+                      <img
+                        th:if="${party.logoUrl != null && !party.logoUrl.isEmpty()}"
+                        th:src="${party.logoUrl}"
+                        alt="Party Logo"
+                        class=""
+                        id="imagePreview"
+                      />
+
+                      <svg
+                        th:unless="${party.logoUrl != null && !party.logoUrl.isEmpty()}"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 100 100"
+                        class="w-full h-full"
+                        id="svgPlaceholder"
+                      >
+                        <circle cx="50" cy="50" r="45" fill="#4f46e5" />
+                        <path
+                          d="M30,30 L70,30 L70,70 L30,70 Z"
+                          fill="#ef4444"
+                        />
+                        <circle cx="50" cy="50" r="20" fill="#ffffff" />
+                        <text
+                          x="50"
+                          y="55"
+                          font-family="Arial"
+                          font-size="16"
+                          fill="#4f46e5"
+                          text-anchor="middle"
+                          font-weight="bold"
+                        >
+                          icon
+                        </text>
+                      </svg>
+                    </div>
+
+                    <!-- File Input (Hidden) -->
+                    <input
+                      type="file"
+                      id="imageUpload"
+                      accept="image/*"
+                      class="hidden"
+                      name="icon"
+                    />
+
+                    <input
+                      type="hidden"
+                      id="id"
+                      name="id"
+                      th:value="${party.id}"
+                    />
+
+                    <!-- Upload Button -->
+                    <button
+                      type="button"
+                      id="uploadbutton"
+                      class="mt-2 px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-md whitespace-nowrap hover:bg-blue-600"
+                    >
+                      Change Logo
+                    </button>
+
+                    <p class="mt-2 text-xs text-gray-500 text-center">
+                      Recommended: 400x400px PNG or JPG
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <form
+          id="party-manage"
+          th:action="@{${party.id != null}? '/candidate/dashboard/settings/manage-party/update' :'/candidate/dashboard/settings/manage-party'}"
+          th:object="${party}"
+          method="post"
+        >
+          <input type="hidden" id="uniqueId" name="uniqueId" />
+          <input type="hidden" id="status" name="status" th:value="*{status}" />
+          <input type="hidden" name="id" th:value="*{id}" />
+          <input
+            type="hidden"
+            id="logoUrl"
+            name="logoUrl"
+            th:value="*{logoUrl}"
+          />
+          <div class="lg:col-span-2 space-y-4">
+            <div>
+              <label
+                for="party-name"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Party Name</label
+              >
+              <input
+                type="text"
+                id="party-name"
+                th:field="*{name}"
+                name="name"
+                placeholder="Party Name"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+              />
+            </div>
+            <div>
+              <label
+                for="party-abbreviation"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Party abbreviation</label
+              >
+              <input
+                type="text"
+                id="party-abbreviation"
+                th:field="*{abbreviation}"
+                name="abbreviation"
+                placeholder="Party Abbreviation"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+              />
+            </div>
+
+            <div>
+              <label
+                for="party-slogan"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Party Slogan</label
+              >
+              <input
+                type="text"
+                id="party-slogan"
+                th:field="*{slogan}"
+                placeholder="Party slogan"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+              />
+            </div>
+
+            <div>
+              <label
+                for="party-description"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Party Description</label
+              >
+              <textarea
+                id="party-description"
+                rows="4"
+                th:field="*{description}"
+                placeholder="party description"
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+              ></textarea>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Party Colors</label
+              >
+              <div class="flex items-center space-x-4">
+                <div>
+                  <span class="block text-xs text-gray-500 mb-1">Primary</span>
+                  <input
+                    type="color"
+                    name="colors"
+                    value="#4f46e5"
+                    th:field="*{colors[0]}"
+                    class="color-picker rounded-xl"
+                  />
+                </div>
+                <div>
+                  <span class="block text-xs text-gray-500 mb-1"
+                    >Secondary</span
+                  >
+                  <input
+                    type="color"
+                    name="colors"
+                    value="#6366f1"
+                    th:field="*{colors[1]}"
+                    class="color-picker rounded-xl"
+                  />
+                </div>
+                <div>
+                  <span class="block text-xs text-gray-500 mb-1">Accent</span>
+                  <input
+                    type="color"
+                    name="colors"
+                    value="#ef4444"
+                    th:field="*{colors[2]}"
+                    class="color-picker rounded-xl"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-6 border-t border-gray-200">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">
+              Party Details
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label
+                  for="founding-date"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Founding Date</label
+                >
+                <input
+                  type="date"
+                  id="founding-date"
+                  th:field="*{foundingDate}"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                />
+              </div>
+              <div>
+                <label
+                  for="registration-number"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Registration Number</label
+                >
+                <input
+                  type="text"
+                  id="registration-number"
+                  placeholder="PA-2010-05678"
+                  th:field="*{registrationNo}"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                />
+              </div>
+              <div>
+                <label
+                  for="headquarters"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Headquarters</label
+                >
+                <input
+                  type="text"
+                  id="headquarters"
+                  placeholder="headquarters"
+                  th:field="*{headquarters}"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                />
+              </div>
+              <div>
+                <label
+                  for="website"
+                  th:field="*{website}"
+                  class="block text-sm font-medium text-gray-700 mb-1"
+                  >Website</label
+                >
+                <input
+                  type="url"
+                  id="website"
+                  th:field="*{website}"
+                  placeholder="Your website URL"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-6 border-t border-gray-200">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Social Media</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="flex items-center">
+                <div
+                  class="w-10 h-10 flex items-center justify-center text-blue-600 mr-2"
+                >
+                  <!-- Facebook SVG -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  placeholder="Facebook URL"
+                  th:field="*{Facebook}"
+                  class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                />
+              </div>
+              <div class="flex items-center">
+                <div
+                  class="w-10 h-10 flex items-center justify-center text-gray-900 mr-2"
+                >
+                  <!-- Twitter/X SVG -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  placeholder="X URL"
+                  th:field="*{x}"
+                  class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                />
+              </div>
+              <div class="flex items-center">
+                <div
+                  class="w-10 h-10 flex items-center justify-center text-pink-600 mr-2"
+                >
+                  <!-- Instagram SVG -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  placeholder="Instagram URL"
+                  th:field="*{instagram}"
+                  class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                />
+              </div>
+              <div class="flex items-center">
+                <div
+                  class="w-10 h-10 flex items-center justify-center text-red-600 mr-2"
+                >
+                  <!-- YouTube SVG -->
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path
+                      d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"
+                    />
+                  </svg>
+                </div>
+                <input
+                  type="text"
+                  placeholder="YouTube URL"
+                  th:field="*{youtube}"
+                  class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="m-5 flex justify-end bg-white rounded shadow-sm p-6 sticky bottom-6"
+          >
+            <button
+              id="submit"
+              type="submit"
+              class="px-6 py-3 bg-blue-500 text-white font-medium rounded-lg hover:bg-blue-600 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              <span
+                th:text="${party.id != null} ? 'Save Changes' : 'Create Party'"
+              ></span>
+            </button>
+          </div>
+        </form>
+      </section>
+    </div>
+  </body>
+</html>

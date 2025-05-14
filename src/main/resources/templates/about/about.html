@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{/componets/head :: head}"> </head>
+  <body>
+    <!-- header section starts -->
+    <header th:replace="~{/componets/header :: header}"></header>
+    <!-- end header section -->
+
+    <main>
+      <div class="container">
+        <a th:href="@{/}" class="back-link">
+          <i class="fa fa-arrow-left"></i> Back to Home
+        </a>
+
+        <div class="about-header text-center">
+          <h1>About RachaVoting</h1>
+          <p>
+            RachaVoting is dedicated to making the democratic process more
+            accessible, transparent, and secure for all citizens.
+          </p>
+        </div>
+
+        <div class="about-mission">
+          <div class="mission-content">
+            <h2>Our Mission</h2>
+            <p>
+              At RachaVoting, we believe that participation in the democratic
+              process should be accessible to every eligible citizen. Our
+              mission is to provide a secure, user-friendly platform that makes
+              voting convenient while maintaining the integrity of the electoral
+              process.
+            </p>
+            <p>
+              We are committed to transparency, security, and inclusivity in all
+              aspects of our service, ensuring that every voice can be heard in
+              our democracy.
+            </p>
+          </div>
+          <div class="mission-image">
+            <img src="https://placehold.co/400x300" alt="People voting" />
+          </div>
+        </div>
+
+        <h2>Our Core Values</h2>
+
+        <div class="values-grid">
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="fa fa-shield"></i>
+            </div>
+            <h3>Security</h3>
+            <p>
+              We employ state-of-the-art security measures to protect voter data
+              and ensure the integrity of every vote.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="fa fa-users"></i>
+            </div>
+            <h3>Accessibility</h3>
+            <p>
+              We design our platform to be accessible to all citizens,
+              regardless of technical ability or physical limitations.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="fa fa-file"></i>
+            </div>
+            <h3>Transparency</h3>
+            <p>
+              We believe in complete transparency in the voting process, from
+              ballot creation to result tabulation.
+            </p>
+          </div>
+        </div>
+
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-section">
+          <div class="faq-item">
+            <h3>How does online voting work?</h3>
+            <p>
+              RachaVoting provides a secure platform where eligible voters can
+              access their ballot, make their selections, and submit their vote.
+              The system verifies the voter's identity while maintaining the
+              anonymity of their selections.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h3>Is online voting secure?</h3>
+            <p>
+              Yes. RachaVoting employs multiple layers of security, including
+              encryption, authentication protocols, and regular security audits
+              to ensure the integrity of the voting process and protect voter
+              data.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h3>How do you prevent fraud?</h3>
+            <p>
+              Our system includes multiple verification steps to confirm voter
+              identity, prevents duplicate voting, and maintains a secure audit
+              trail of all voting activity while preserving voter anonymity.
+            </p>
+          </div>
+
+          <div class="faq-item">
+            <h3>What if I need assistance while voting?</h3>
+            <p>
+              RachaVoting provides comprehensive help resources, including
+              step-by-step guides and a support team available via phone, email,
+              or chat during voting periods.
+            </p>
+          </div>
+        </div>
+
+        <div class="cta-section text-center">
+          <h2>Ready to Make Your Voice Heard?</h2>
+          <p>
+            Join millions of citizens who are participating in our democracy
+            through RachaVoting's secure and accessible platform.
+          </p>
+          <a th:href="@{/vote}" class="btn primary-btn large-btn">
+            <i class="fa fa-check-circle"></i> Vote Now
+          </a>
+        </div>
+      </div>
+    </main>
+
+    <!-- footer section starts -->
+    <footer th:replace="~{/componets/footer :: footer}"></footer>
+    <!-- end footer section -->
+  </body>
+</html>

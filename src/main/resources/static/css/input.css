@@ -1,0 +1,414 @@
+/* Tailwind CSS imports */
+/* @import 'tailwindcss/base';
+@import 'tailwindcss/components';*/
+@import 'tailwindcss/utilities';
+@import "tailwindcss";
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes successPulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.animate-fadeInUp {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.animate-successPulse {
+    animation: successPulse 1.5s infinite;
+}
+
+.flag-stripe {
+    height: 8px;
+    background: linear-gradient(90deg,
+            #000 0%, #000 33%,
+            #FFF 33%, #FFF 66%,
+            #007749 66%, #007749 100%);
+}
+
+.flag-triangle {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 0 60px 60px;
+    border-color: transparent transparent #FFB81C transparent;
+}
+
+@layer utilities {
+    .border-t-sa-blue {
+        border-color: var(--sa-blue);
+    }
+
+    .border-t-sa-green {
+        border-color: var(--sa-green);
+    }
+
+    .border-t-sa-yellow {
+        border-color: var(--sa-yellow);
+    }
+
+    .border-t-sa-black {
+        border-color: var(--sa-black);
+    }
+
+    .border-t-sa-red {
+        border-color: var(--sa-red);
+    }
+
+    .bg-sa-blue-opacity {
+        background-color: rgb(var(--sa-blue) / 10%);
+    }
+
+    .bg-sa-green-opacity {
+        background-color: rgb(var(--sa-green) / 10%);
+    }
+
+    .bg-sa-red-opacity {
+        background-color: rgb(var(--sa-red) / 10%);
+    }
+
+    .bg-sa-yellow-opacity {
+        background-color: rgb(var(--sa-yellow) / 10%);
+    }
+
+    .bg-sa-black-opacity {
+        background-color: rgb(var(--sa-black) / 10%);
+    }
+
+
+}
+
+:root {
+    /* Light Theme Colors */
+    --primary-color: #1a5f9c;
+    /* South African blue */
+    --primary-hover: #134b7e;
+    --text-color: #333333;
+    --text-light: #6b7280;
+    --border-color: #e5e7eb;
+    --background-light: #f9fafb;
+    --background-primary-light: #e6f0fa;
+    /* Light blue background */
+    --success-color: #28a745;
+    /* Green for success */
+    --error-color: #dc3545;
+    /* Red for errors */
+    --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --background: #ffffff;
+    --card-bg: #ffffff;
+
+    /* South African inspired accent colors */
+    --sa-red: #e03c31;
+    /* Red from SA flag */
+    --sa-green: #007749;
+    /* Green from SA flag */
+    --sa-yellow: #ffb81c;
+    /* Yellow from SA flag */
+    --sa-black: #000000;
+    /* Black from SA flag */
+    --sa-blue: #005ba1;
+    /* Blue from SA flag */
+}
+
+[data-theme="dark"] {
+    /* Dark Theme Colors */
+    --primary-color: #4a90e2;
+    /* Lighter blue for dark mode */
+    --primary-hover: #357abd;
+    --text-color: #f8f9fa;
+    --text-light: #adb5bd;
+    --border-color: #495057;
+    --background-light: #343a40;
+    --background-primary-light: #1e2a3a;
+    /* Dark blue background */
+    --success-color: #28a745;
+    --error-color: #dc3545;
+    --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    --background: #212529;
+    --card-bg: #2c3034;
+}
+
+/* South Africa Theme Colors */
+/* Blue shades */
+.bg-sa-blue {
+    background-color: #0077cc;
+}
+
+.bg-sa-blue-dark {
+    background-color: #000b8d;
+}
+
+.bg-sa-red {
+    background-color: var(--sa-red);
+}
+
+.bg-sa-yellow {
+    background-color: var(--sa-yellow);
+}
+
+.bg-sa-green {
+    background-color: var(--sa-green);
+}
+
+.hover\:bg-sa-blue-dark:hover {
+    background-color: #005a9e;
+}
+
+/* Text colors */
+.text-sa-blue {
+    color: #0077cc;
+}
+
+.text-sa-green {
+    color: #007749;
+}
+
+.text-sa-red {
+    color: #e03c31;
+}
+
+.text-sa-yellow {
+    color: #ffb81c;
+}
+
+.text-muted-foreground {
+    color: #6b7280;
+}
+
+.hover\:text-foreground:hover {
+    color: #111827;
+}
+
+/* Background with opacity */
+.bg-sa-blue\/10 {
+
+    background-color: rgba(0, 11, 141, 0.1);
+}
+
+.bg-sa-green\/10 {
+    background-color: rgba(0, 119, 73, 0.1);
+}
+
+.bg-white\/95 {
+    background-color: rgba(255, 255, 255, 0.95);
+}
+
+.bg-sa-red\/10 {
+    background-color: rgba(224, 60, 49, 0.1);
+}
+
+.hover\:bg-sa-green\/90:hover {
+    background-color: rgba(0, 119, 73, 0.9);
+}
+
+/* Special effects */
+.sa-gradient-text {
+    background: linear-gradient(to right, #007749, #0077cc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+}
+
+.sa-flag-border {
+    border-top: 5px solid #007749;
+    /* Green */
+    border-right: 5px solid #000;
+    /* Black */
+    border-bottom: 5px solid #ffb81c;
+    /* Gold */
+    border-left: 5px solid #e03c31;
+    /* Red */
+}
+
+/* Card and background patterns */
+.card-with-pattern {
+    background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+    background-size: 16px 16px;
+}
+
+.bg-grid-pattern-light {
+    /* background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32' width='32' height='32' fill='none' stroke='rgb(15 23 42 / 0.04)'%3e%3cpath d='M0 .5H31.5V32'/%3e%3c/svg%3e"); */
+    background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+    background-size: 16px 16px;
+}
+
+/* UI Components */
+.tab-active {
+    background: white;
+    color: #0077cc;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+    font-weight: 600;
+}
+
+.bg-card {
+    background-color: #ffffff;
+}
+
+.border-muted {
+    border-color: #e5e7eb;
+}
+
+.border-dashed {
+    border-style: dashed;
+}
+
+/* Scroll area */
+.scroll-area {
+    max-height: calc(100vh - 300px);
+    overflow-y: auto;
+}
+
+.scroll-area::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scroll-area::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.scroll-area::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+/* Progress bar */
+.progress-bar {
+    height: 0.5rem;
+    background-color: #e5e7eb;
+    border-radius: 0.25rem;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background-color: #0070c0;
+    border-radius: 0.25rem;
+}
+
+.bg-gradient-sa {
+    background: linear-gradient(135deg, #f8fafc 0%, #f0f9ff 100%);
+}
+
+de .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.color-picker {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.color-picker::-webkit-color-swatch {
+    border: none;
+    border-radius: 4px;
+}
+
+/* Custom Switch Styling */
+.custom-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.custom-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.switch-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked+.switch-slider {
+    background-color: #4f46e5;
+}
+
+input:checked+.switch-slider:before {
+    transform: translateX(26px);
+}
+
+/* .toggle-checkbox:checked {
+    @apply right-0 border-primary-500;
+    right: 0;
+    border-color: #4f46e5;
+}
+
+.toggle-checkbox:checked+.toggle-label {
+    @apply bg-primary-500;
+    background-color: #4f46e5;
+} */

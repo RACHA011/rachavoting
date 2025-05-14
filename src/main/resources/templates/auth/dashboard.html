@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SA Vote Online - Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/output.css}" />
+  </head>
+  <body class="h-full">
+    <!-- Dashboard Layout -->
+    <div class="h-full flex overflow-hidden">
+      <!-- Sidebar (Thymeleaf fragment) -->
+      <aside
+        class="flex flex-col w-64 border-r"
+        th:replace="~{auth/components/sidebar :: aside}"
+      ></aside>
+
+      <!-- Main Content Area -->
+      <main class="flex-1 flex flex-col overflow-auto">
+        <!-- Dynamic content based on URL -->
+        <div th:if="${activePage == 'dashboard'} ">
+          <div th:replace="~{auth/components/dashboardContent :: div}"></div>
+        </div>
+        <div id="vote-content" th:if="${activePage == 'vote'} ">
+          <div th:replace="~{auth/components/voteContent :: div}"></div>
+        </div>
+        <div th:if="${activePage == 'settings'} ">
+          <div th:replace="~{auth/settings :: div}"></div>
+        </div>
+      </main>
+    </div>
+
+    <script th:src="@{/js/vote-content.js}"></script>
+    <script th:src="@{/js/dashboard-content.js}"></script>
+    
+  </body>
+</html>

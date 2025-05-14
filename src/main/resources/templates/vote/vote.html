@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{/componets/head :: head}"> </head>
+  <body>
+    <!-- header section starts -->
+    <header th:replace="~{/componets/header :: header}"></header>
+    <!-- end header section -->
+
+    <main>
+      <div class="container">
+        <a th:href="@{/}" class="back-link">
+          <i class="fa fa-arrow-left"></i> Back to Home
+        </a>
+
+        <h1>Cast Your Vote</h1>
+
+        <div id="error-message" class="alert error-alert none">
+          <i class="fa fa-exclamation-circle"></i>
+          <div>
+            <h4>Error</h4>
+            <p>Please select a candidate before submitting your vote.</p>
+          </div>
+        </div>
+
+        <div id="voting-form" class="card">
+          <div class="card-header">
+            <h2>Presidential Election 2024</h2>
+            <p>Select one candidate from the list below</p>
+          </div>
+          <div class="card-content">
+            <div class="radio-group">
+              <div class="radio-option">
+                <input
+                  type="radio"
+                  name="candidate"
+                  id="candidate1"
+                  value="candidate1"
+                />
+                <label for="candidate1">
+                  <span class="candidate-name">Jane Smith</span>
+                  <span class="candidate-party">Progressive Party</span>
+                </label>
+              </div>
+              <div class="radio-option">
+                <input
+                  type="radio"
+                  name="candidate"
+                  id="candidate2"
+                  value="candidate2"
+                />
+                <label for="candidate2">
+                  <span class="candidate-name">John Doe</span>
+                  <span class="candidate-party">Conservative Party</span>
+                </label>
+              </div>
+              <div class="radio-option">
+                <input
+                  type="radio"
+                  name="candidate"
+                  id="candidate3"
+                  value="candidate3"
+                />
+                <label for="candidate3">
+                  <span class="candidate-name">Alex Johnson</span>
+                  <span class="candidate-party">Centrist Alliance</span>
+                </label>
+              </div>
+              <div class="radio-option">
+                <input
+                  type="radio"
+                  name="candidate"
+                  id="candidate4"
+                  value="candidate4"
+                />
+                <label for="candidate4">
+                  <span class="candidate-name">Maria Rodriguez</span>
+                  <span class="candidate-party">Green Party</span>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button id="submit-vote" class="btn primary-btn full-width">
+              Submit Vote
+            </button>
+          </div>
+        </div>
+
+        <div id="thank-you" class="card none">
+          <div class="card-header text-center">
+            <h2>Thank You For Voting!</h2>
+            <p>Your vote has been recorded successfully.</p>
+          </div>
+          <div class="card-content text-center">
+            <div class="success-icon">
+              <i class="fa fa-check-circle"></i>
+            </div>
+            <p id="vote-confirmation">
+              Thank you for participating in this democratic process.
+            </p>
+          </div>
+          <div class="card-footer text-center">
+            <a th:href="@{/result}" class="btn primary-btn">View Results</a>
+          </div>
+        </div>
+
+        <div class="voting-info">
+          <p>
+            Your vote is anonymous and secure. Each voter can only vote once.
+          </p>
+          <p>If you experience any issues, please contact our support team.</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- footer section starts -->
+    <footer th:replace="~{/componets/footer :: footer}"></footer>
+    <!-- end footer section -->
+
+    <script th:src="@{/js/vote.js}"></script>
+  </body>
+</html>

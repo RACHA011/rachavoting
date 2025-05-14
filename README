@@ -1,0 +1,30 @@
+#This are just things not to forget while building this poject
+
+-in election make registered user to be added staticaly for each registered voter 
+there should be many types of election
+
+-add a function to download the database
+
+-make use that all the icons and sny other thing a run from local , avoid using cnd
+
+-fix the see password in the login
+
+-make sure that the password is strong
+
+-if creating a new president of a party write other
+
+-think of a way to validate candidate other than sending an email to them then validate it
+
+-// in the candidate service change is the aproval methord to fetch all waiting for aproval not and not all people not varified
+
+-edit the roles for party creation 
+ 
+ -update the party status 
+
+ -if vice presidents cant create a party if they try to access the page they will not be allowed to do any this further
+
+ -make a mapping for saving images 
+
+ -change party model an orgination not a party then 
+
+ -for now i will not consider if a party is registered or not

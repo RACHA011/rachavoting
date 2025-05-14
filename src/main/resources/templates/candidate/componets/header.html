@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <header class="header">
+        <div class="header-content">
+          <h1 class="page-title" th:text="${title}">Admin</h1>
+          <div class="header-actions">
+            <button class="notification-btn">
+              <i class="bi bi-bell"></i>
+              <span class="notification-dot"></span>
+            </button>
+            <div class="user-profile">
+              <img
+              th:src="@{/image/user.png}"
+                alt="Admin"
+                class="user-avatar"
+              />
+              <span class="user-name" th:text="${user}">...</span>
+              <i class="bi bi-chevron-down user-dropdown"></i>
+            </div>
+          </div>
+        </div>
+    </header>
+</body>
+</html>

@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Party Settings | VotePro Admin</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: { primary: "#4f46e5", secondary: "#6366f1" },
+            borderRadius: {
+              none: "0px",
+              sm: "4px",
+              DEFAULT: "8px",
+              md: "12px",
+              lg: "16px",
+              xl: "20px",
+              "2xl": "24px",
+              "3xl": "32px",
+              full: "9999px",
+              button: "8px",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+      rel="stylesheet"
+    />
+    <style>
+      :where([class^="ri-"])::before {
+        content: "\f3c2";
+      }
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f9fafb;
+      }
+      .settings-card {
+        transition: all 0.3s ease;
+      }
+      .settings-card:hover {
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+          0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      }
+      input[type="number"]::-webkit-inner-spin-button,
+      input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+      .custom-switch {
+        position: relative;
+        display: inline-block;
+        width: 48px;
+        height: 24px;
+      }
+      .custom-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .switch-slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #e5e7eb;
+        transition: 0.4s;
+        border-radius: 24px;
+      }
+      .switch-slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+      input:checked + .switch-slider {
+        background-color: #4f46e5;
+      }
+      input:checked + .switch-slider:before {
+        transform: translateX(24px);
+      }
+      .custom-radio {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+      .custom-radio-input {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border: 2px solid #d1d5db;
+        border-radius: 50%;
+        margin-right: 8px;
+        position: relative;
+        cursor: pointer;
+      }
+      .custom-radio-input:checked {
+        border-color: #4f46e5;
+      }
+      .custom-radio-input:checked::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 3px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #4f46e5;
+      }
+      .custom-checkbox {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+      .custom-checkbox-input {
+        appearance: none;
+        width: 18px;
+        height: 18px;
+        border: 2px solid #d1d5db;
+        border-radius: 4px;
+        margin-right: 8px;
+        position: relative;
+        cursor: pointer;
+      }
+      .custom-checkbox-input:checked {
+        border-color: #4f46e5;
+        background-color: #4f46e5;
+      }
+      .custom-checkbox-input:checked::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 5px;
+        width: 5px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+      }
+      .color-picker {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        width: 36px;
+        height: 36px;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+      }
+      .color-picker::-webkit-color-swatch-wrapper {
+        padding: 0;
+      }
+      .color-picker::-webkit-color-swatch {
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="min-h-screen flex flex-col">
+      <!-- Header -->
+      <header class="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div
+          class="container mx-auto px-4 py-3 flex items-center justify-between"
+        >
+          <div class="flex items-center space-x-4">
+            <button
+              class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-primary rounded-full hover:bg-gray-100"
+            >
+              <i class="ri-arrow-left-line ri-lg"></i>
+            </button>
+            <div>
+              <div class="text-sm text-gray-500">
+                <span>Admin Dashboard</span>
+                <span class="mx-2">/</span>
+                <span class="text-primary">Settings</span>
+              </div>
+              <h1 class="text-2xl font-bold text-gray-900">Party Settings</h1>
+            </div>
+          </div>
+          <div class="flex items-center space-x-4">
+            <div class="hidden md:flex items-center space-x-2">
+              <span class="text-sm font-medium text-gray-700"
+                >Last saved: April 16, 2025 10:23 AM</span
+              >
+              <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+            </div>
+            <div class="flex items-center space-x-3">
+              <div class="relative">
+                <button
+                  class="w-10 h-10 flex items-center justify-center text-gray-600 hover:text-primary rounded-full hover:bg-gray-100"
+                >
+                  <i class="ri-notification-3-line ri-lg"></i>
+                  <span
+                    class="absolute top-1 right-1 w-4 h-4 bg-red-500 rounded-full text-xs text-white flex items-center justify-center"
+                    >3</span
+                  >
+                </button>
+              </div>
+              <div class="flex items-center space-x-3">
+                <div class="text-right hidden md:block">
+                  <div class="text-sm font-medium text-gray-900">
+                    Progressive Alliance
+                  </div>
+                  <div class="text-xs text-gray-500">Admin Account</div>
+                </div>
+                <div
+                  class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center"
+                >
+                  <i class="ri-user-line ri-lg"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="flex-grow container mx-auto px-4 py-6">
+        <div class="grid grid-cols-12 gap-6">
+          <!-- Left Sidebar Navigation -->
+          <div class="col-span-12 md:col-span-3 lg:col-span-2">
+            <div class="bg-white rounded shadow-sm p-4">
+              <nav class="space-y-1">
+                <a
+                  href="#party-settings"
+                  class="flex items-center px-3 py-2 text-sm font-medium rounded-md bg-primary bg-opacity-10 text-primary"
+                >
+                  <div class="w-6 h-6 flex items-center justify-center mr-3">
+                    <i class="ri-government-line"></i>
+                  </div>
+                  <span>Party Settings</span>
+                </a>
+                <a
+                  href="#account"
+                  class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50 hover:text-primary"
+                >
+                  <div class="w-6 h-6 flex items-center justify-center mr-3">
+                    <i class="ri-user-settings-line"></i>
+                  </div>
+                  <span>Account</span>
+                </a>
+                <a
+                  href="#notifications"
+                  class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50 hover:text-primary"
+                >
+                  <div class="w-6 h-6 flex items-center justify-center mr-3">
+                    <i class="ri-notification-line"></i>
+                  </div>
+                  <span>Notifications</span>
+                </a>
+                <a
+                  href="#privacy"
+                  class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50 hover:text-primary"
+                >
+                  <div class="w-6 h-6 flex items-center justify-center mr-3">
+                    <i class="ri-shield-keyhole-line"></i>
+                  </div>
+                  <span>Privacy</span>
+                </a>
+                <a
+                  href="#appearance"
+                  class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50 hover:text-primary"
+                >
+                  <div class="w-6 h-6 flex items-center justify-center mr-3">
+                    <i class="ri-palette-line"></i>
+                  </div>
+                  <span>Appearance</span>
+                </a>
+                <a
+                  href="#system"
+                  class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-50 hover:text-primary"
+                >
+                  <div class="w-6 h-6 flex items-center justify-center mr-3">
+                    <i class="ri-settings-3-line"></i>
+                  </div>
+                  <span>System</span>
+                </a>
+              </nav>
+            </div>
+          </div>
+
+          <!-- Main Settings Content -->
+          <div class="col-span-12 md:col-span-9 lg:col-span-10 space-y-6">
+            <!-- Party Settings Section -->
+            <section
+              id="party-settings"
+              class="settings-card bg-white rounded shadow-sm p-6"
+            >
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold text-gray-900">
+                  Party Management
+                </h2>
+                <div class="flex items-center space-x-2">
+                  <span class="text-sm text-gray-500">Party Status</span>
+                  <label class="custom-switch">
+                    <input type="checkbox" checked />
+                    <span class="switch-slider"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-1">
+                  <div
+                    class="flex flex-col items-center p-6 border border-dashed border-gray-300 rounded-lg"
+                  >
+                    <div
+                      class="w-32 h-32 bg-gray-100 rounded-full mb-4 flex items-center justify-center overflow-hidden"
+                    >
+                      <img
+                        src="https://readdy.ai/api/search-image?query=modern%20minimalist%20political%20party%20logo%20with%20blue%20and%20red%20colors%2C%20professional%20design%2C%20clean%20lines%2C%20simple%20geometric%20shapes%2C%20suitable%20for%20a%20progressive%20political%20party%2C%20high%20quality%2C%20vector%20style&width=300&height=300&seq=party_logo_1&orientation=squarish"
+                        alt="Party Logo"
+                        class="w-full h-full object-cover"
+                      />
+                    </div>
+                    <button
+                      class="mt-2 px-4 py-2 bg-primary text-white text-sm font-medium rounded-button whitespace-nowrap hover:bg-opacity-90"
+                    >
+                      Change Logo
+                    </button>
+                    <p class="mt-2 text-xs text-gray-500">
+                      Recommended: 400x400px PNG or JPG
+                    </p>
+                  </div>
+                </div>
+
+                <div class="lg:col-span-2 space-y-4">
+                  <div>
+                    <label
+                      for="party-name"
+                      class="block text-sm font-medium text-gray-700 mb-1"
+                      >Party Name</label
+                    >
+                    <input
+                      type="text"
+                      id="party-name"
+                      value="Progressive Alliance"
+                      class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      for="party-slogan"
+                      class="block text-sm font-medium text-gray-700 mb-1"
+                      >Party Slogan</label
+                    >
+                    <input
+                      type="text"
+                      id="party-slogan"
+                      value="Building a Better Tomorrow, Together"
+                      class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      for="party-description"
+                      class="block text-sm font-medium text-gray-700 mb-1"
+                      >Party Description</label
+                    >
+                    <textarea
+                      id="party-description"
+                      rows="4"
+                      class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                    >
+The Progressive Alliance is committed to sustainable development, social justice, and democratic reforms. We believe in creating an inclusive society where every citizen has equal opportunities and rights.</textarea
+                    >
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2"
+                      >Party Colors</label
+                    >
+                    <div class="flex items-center space-x-4">
+                      <div>
+                        <span class="block text-xs text-gray-500 mb-1"
+                          >Primary</span
+                        >
+                        <input
+                          type="color"
+                          value="#4f46e5"
+                          class="color-picker"
+                        />
+                      </div>
+                      <div>
+                        <span class="block text-xs text-gray-500 mb-1"
+                          >Secondary</span
+                        >
+                        <input
+                          type="color"
+                          value="#6366f1"
+                          class="color-picker"
+                        />
+                      </div>
+                      <div>
+                        <span class="block text-xs text-gray-500 mb-1"
+                          >Accent</span
+                        >
+                        <input
+                          type="color"
+                          value="#ef4444"
+                          class="color-picker"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-6 pt-6 border-t border-gray-200">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">
+                  Party Details
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label
+                      for="founding-date"
+                      class="block text-sm font-medium text-gray-700 mb-1"
+                      >Founding Date</label
+                    >
+                    <input
+                      type="date"
+                      id="founding-date"
+                      value="2010-05-15"
+                      class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      for="registration-number"
+                      class="block text-sm font-medium text-gray-700 mb-1"
+                      >Registration Number</label
+                    >
+                    <input
+                      type="text"
+                      id="registration-number"
+                      value="PA-2010-05678"
+                      class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      for="headquarters"
+                      class="block text-sm font-medium text-gray-700 mb-1"
+                      >Headquarters</label
+                    >
+                    <input
+                      type="text"
+                      id="headquarters"
+                      value="123 Democracy Avenue, Capital City"
+                      class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      for="website"
+                      class="block text-sm font-medium text-gray-700 mb-1"
+                      >Website</label
+                    >
+                    <input
+                      type="url"
+                      id="website"
+                      value="https://progressivealliance.org"
+                      class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 pt-6 border-t border-gray-200">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">
+                  Social Media
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="flex items-center">
+                    <div
+                      class="w-10 h-10 flex items-center justify-center text-blue-600 mr-2"
+                    >
+                      <i class="ri-facebook-fill ri-lg"></i>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Facebook URL"
+                      value="https://facebook.com/progressivealliance"
+                      class="flex-1 px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                    />
+                  </div>
+                  <div class="flex items-center">
+                    <div
+                      class="w-10 h-10 flex items-center justify-center text-blue-400 mr-2"
+                    >
+                      <i class="ri-twitter-x-fill ri-lg"></i>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Twitter URL"
+                      value="https://twitter.com/progalliance"
+                      class="flex-1 px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                    />
+                  </div>
+                  <div class="flex items-center">
+                    <div
+                      class="w-10 h-10 flex items-center justify-center text-pink-600 mr-2"
+                    >
+                      <i class="ri-instagram-fill ri-lg"></i>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Instagram URL"
+                      value="https://instagram.com/progressivealliance"
+                      class="flex-1 px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                    />
+                  </div>
+                  <div class="flex items-center">
+                    <div
+                      class="w-10 h-10 flex items-center justify-center text-red-600 mr-2"
+                    >
+                      <i class="ri-youtube-fill ri-lg"></i>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="YouTube URL"
+                      value="https://youtube.com/progressivealliance"
+                      class="flex-1 px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                    />
+                  </div>
+                </div>
+              </div>
+            </section>
+            <!-- Account Settings Section -->
+            <section
+              id="account"
+              class="settings-card bg-white rounded shadow-sm p-6"
+            >
+              <h2 class="text-xl font-bold text-gray-900 mb-6">
+                Account Preferences
+              </h2>
+
+              <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-1">
+                  <div
+                    class="flex flex-col items-center p-6 border border-dashed border-gray-300 rounded-lg"
+                  >
+                    <div
+                      class="w-24 h-24 bg-gray-100 rounded-full mb-4 flex items-center justify-center overflow-hidden"
+                    >
+                      <img
+                        src="https://readdy.ai/api/search-image?query=professional%20headshot%20of%20a%20middle-aged%20man%20with%20glasses%2C%20business%20attire%2C%20neutral%20background%2C%20high%20quality%20portrait%2C%20friendly%20expression%2C%20suitable%20for%20political%20profile&width=200&height=200&seq=admin_profile_1&orientation=squarish"
+                        alt="Admin Profile"
+                        class="w-full h-full object-cover"
+                      />
+                    </div>
+                    <h3 class="font-medium text-gray-900">Robert Anderson</h3>
+                    <p class="text-sm text-gray-500">Party Administrator</p>
+                    <button
+                      class="mt-3 px-4 py-2 bg-primary text-white text-sm font-medium rounded-button whitespace-nowrap hover:bg-opacity-90"
+                    >
+                      Change Photo
+                    </button>
+                  </div>
+                </div>
+
+                <div class="lg:col-span-2 space-y-4">
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        for="admin-first-name"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >First Name</label
+                      >
+                      <input
+                        type="text"
+                        id="admin-first-name"
+                        value="Robert"
+                        class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label
+                        for="admin-last-name"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Last Name</label
+                      >
+                      <input
+                        type="text"
+                        id="admin-last-name"
+                        value="Anderson"
+                        class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label
+                      for="admin-email"
+                      class="block text-sm font-medium text-gray-700 mb-1"
+                      >Email Address</label
+                    >
+                    <input
+                      type="email"
+                      id="admin-email"
+                      value="robert.anderson@progressivealliance.org"
+                      class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      for="admin-phone"
+                      class="block text-sm font-medium text-gray-700 mb-1"
+                      >Phone Number</label
+                    >
+                    <input
+                      type="tel"
+                      id="admin-phone"
+                      value="+1 (555) 123-4567"
+                      class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      for="admin-role"
+                      class="block text-sm font-medium text-gray-700 mb-1"
+                      >Role</label
+                    >
+                    <select
+                      id="admin-role"
+                      class="w-full px-4 py-2 pr-8 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none appearance-none bg-white"
+                    >
+                      <option value="super-admin">Super Administrator</option>
+                      <option value="admin">Administrator</option>
+                      <option value="manager">Party Manager</option>
+                      <option value="coordinator">Regional Coordinator</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-6 pt-6 border-t border-gray-200">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Security</h3>
+
+                <div class="space-y-4">
+                  <div
+                    class="flex items-center justify-between p-4 bg-gray-50 rounded"
+                  >
+                    <div>
+                      <h4 class="font-medium text-gray-900">Password</h4>
+                      <p class="text-sm text-gray-500">
+                        Last changed 45 days ago
+                      </p>
+                    </div>
+                    <button
+                      class="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-button whitespace-nowrap hover:bg-gray-50"
+                    >
+                      Change Password
+                    </button>
+                  </div>
+                  <div
+                    class="flex items-center justify-between p-4 bg-gray-50 rounded"
+                  >
+                    <div>
+                      <h4 class="font-medium text-gray-900">
+                        Two-Factor Authentication
+                      </h4>
+                      <p class="text-sm text-gray-500">
+                        Add an extra layer of security to your account
+                      </p>
+                    </div>
+                    <label class="custom-switch">
+                      <input type="checkbox" checked />
+                      <span class="switch-slider"></span>
+                    </label>
+                  </div>
+                  <div
+                    class="flex items-center justify-between p-4 bg-gray-50 rounded"
+                  >
+                    <div>
+                      <h4 class="font-medium text-gray-900">Login History</h4>
+                      <p class="text-sm text-gray-500">
+                        View your recent login activity
+                      </p>
+                    </div>
+                    <button
+                      class="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-button whitespace-nowrap hover:bg-gray-50"
+                    >
+                      View History
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 pt-6 border-t border-gray-200">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">
+                  Permissions
+                </h3>
+
+                <div class="space-y-3">
+                  <div class="flex items-center">
+                    <label class="custom-checkbox">
+                      <input
+                        type="checkbox"
+                        class="custom-checkbox-input"
+                        checked
+                      />
+                      <span>Manage party members</span>
+                    </label>
+                  </div>
+                  <div class="flex items-center">
+                    <label class="custom-checkbox">
+                      <input
+                        type="checkbox"
+                        class="custom-checkbox-input"
+                        checked
+                      />
+                      <span>Create and manage campaigns</span>
+                    </label>
+                  </div>
+                  <div class="flex items-center">
+                    <label class="custom-checkbox">
+                      <input
+                        type="checkbox"
+                        class="custom-checkbox-input"
+                        checked
+                      />
+                      <span>Access financial information</span>
+                    </label>
+                  </div>
+                  <div class="flex items-center">
+                    <label class="custom-checkbox">
+                      <input
+                        type="checkbox"
+                        class="custom-checkbox-input"
+                        checked
+                      />
+                      <span>Manage party settings</span>
+                    </label>
+                  </div>
+                  <div class="flex items-center">
+                    <label class="custom-checkbox">
+                      <input type="checkbox" class="custom-checkbox-input" />
+                      <span>Manage other administrators</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Notifications Section -->
+            <section
+              id="notifications"
+              class="settings-card bg-white rounded shadow-sm p-6"
+            >
+              <h2 class="text-xl font-bold text-gray-900 mb-6">
+                Notification Center
+              </h2>
+
+              <div class="space-y-6">
+                <div>
+                  <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    Email Notifications
+                  </h3>
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">
+                          New Member Requests
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Get notified when someone applies to join your party
+                        </p>
+                      </div>
+                      <label class="custom-switch">
+                        <input type="checkbox" checked />
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">
+                          Voting Activity
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Get notified about important voting events and results
+                        </p>
+                      </div>
+                      <label class="custom-switch">
+                        <input type="checkbox" checked />
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">
+                          System Updates
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Get notified about platform updates and maintenance
+                        </p>
+                      </div>
+                      <label class="custom-switch">
+                        <input type="checkbox" />
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">
+                          Security Alerts
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Get notified about suspicious activities and login
+                          attempts
+                        </p>
+                      </div>
+                      <label class="custom-switch">
+                        <input type="checkbox" checked />
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-200">
+                  <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    Push Notifications
+                  </h3>
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">
+                          Browser Notifications
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Receive notifications in your browser
+                        </p>
+                      </div>
+                      <label class="custom-switch">
+                        <input type="checkbox" checked />
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">
+                          Mobile Notifications
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Receive notifications on your mobile device
+                        </p>
+                      </div>
+                      <label class="custom-switch">
+                        <input type="checkbox" checked />
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-200">
+                  <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    Notification Schedule
+                  </h3>
+                  <div class="space-y-4">
+                    <div>
+                      <label
+                        for="notification-frequency"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Frequency</label
+                      >
+                      <select
+                        id="notification-frequency"
+                        class="w-full px-4 py-2 pr-8 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none appearance-none bg-white"
+                      >
+                        <option value="real-time">Real-time</option>
+                        <option value="daily" selected>Daily Digest</option>
+                        <option value="weekly">Weekly Digest</option>
+                        <option value="custom">Custom</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label
+                        for="quiet-hours-start"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Quiet Hours</label
+                      >
+                      <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center">
+                          <span class="text-sm text-gray-500 mr-2">From</span>
+                          <input
+                            type="time"
+                            id="quiet-hours-start"
+                            value="22:00"
+                            class="flex-1 px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                          />
+                        </div>
+                        <div class="flex items-center">
+                          <span class="text-sm text-gray-500 mr-2">To</span>
+                          <input
+                            type="time"
+                            id="quiet-hours-end"
+                            value="08:00"
+                            class="flex-1 px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <!-- Privacy Section -->
+            <section
+              id="privacy"
+              class="settings-card bg-white rounded shadow-sm p-6"
+            >
+              <h2 class="text-xl font-bold text-gray-900 mb-6">
+                Privacy Controls
+              </h2>
+
+              <div class="space-y-6">
+                <div>
+                  <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    Data Sharing
+                  </h3>
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">
+                          Share Party Analytics
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Share anonymized data to improve the platform
+                        </p>
+                      </div>
+                      <label class="custom-switch">
+                        <input type="checkbox" checked />
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">
+                          Third-Party Integration
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Allow third-party services to access your party data
+                        </p>
+                      </div>
+                      <label class="custom-switch">
+                        <input type="checkbox" />
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-200">
+                  <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    Party Visibility
+                  </h3>
+                  <div class="space-y-4">
+                    <div>
+                      <label
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                        >Party Profile Visibility</label
+                      >
+                      <div class="space-y-2">
+                        <label class="custom-radio">
+                          <input
+                            type="radio"
+                            name="visibility"
+                            class="custom-radio-input"
+                            checked
+                          />
+                          <span>Public - Visible to everyone</span>
+                        </label>
+                        <label class="custom-radio">
+                          <input
+                            type="radio"
+                            name="visibility"
+                            class="custom-radio-input"
+                          />
+                          <span
+                            >Limited - Visible to registered voters only</span
+                          >
+                        </label>
+                        <label class="custom-radio">
+                          <input
+                            type="radio"
+                            name="visibility"
+                            class="custom-radio-input"
+                          />
+                          <span>Private - Visible to party members only</span>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-200">
+                  <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    Member Information Privacy
+                  </h3>
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">
+                          Show Member Directory
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Allow members to see other party members
+                        </p>
+                      </div>
+                      <label class="custom-switch">
+                        <input type="checkbox" checked />
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">
+                          Show Member Contact Info
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Display contact information in member profiles
+                        </p>
+                      </div>
+                      <label class="custom-switch">
+                        <input type="checkbox" />
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-200">
+                  <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    Compliance Settings
+                  </h3>
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">
+                          GDPR Compliance
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Enable features to comply with GDPR regulations
+                        </p>
+                      </div>
+                      <label class="custom-switch">
+                        <input type="checkbox" checked />
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">
+                          Electoral Commission Reporting
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Enable automatic reporting for electoral compliance
+                        </p>
+                      </div>
+                      <label class="custom-switch">
+                        <input type="checkbox" checked />
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Appearance Section -->
+            <section
+              id="appearance"
+              class="settings-card bg-white rounded shadow-sm p-6"
+            >
+              <h2 class="text-xl font-bold text-gray-900 mb-6">
+                Theme Customization
+              </h2>
+
+              <div class="space-y-6">
+                <div>
+                  <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    Color Scheme
+                  </h3>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        for="theme-mode"
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                        >Theme Mode</label
+                      >
+                      <div class="flex p-1 bg-gray-100 rounded-full w-fit">
+                        <button
+                          class="px-4 py-2 bg-white text-gray-900 rounded-full shadow-sm text-sm font-medium whitespace-nowrap"
+                        >
+                          Light
+                        </button>
+                        <button
+                          class="px-4 py-2 text-gray-600 rounded-full text-sm font-medium whitespace-nowrap"
+                        >
+                          Dark
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <label
+                        class="block text-sm font-medium text-gray-700 mb-2"
+                        >Color Palette</label
+                      >
+                      <div class="flex space-x-2">
+                        <button
+                          class="w-8 h-8 rounded-full bg-primary border-2 border-white outline outline-primary"
+                        ></button>
+                        <button
+                          class="w-8 h-8 rounded-full bg-blue-600 border-2 border-white"
+                        ></button>
+                        <button
+                          class="w-8 h-8 rounded-full bg-green-600 border-2 border-white"
+                        ></button>
+                        <button
+                          class="w-8 h-8 rounded-full bg-red-600 border-2 border-white"
+                        ></button>
+                        <button
+                          class="w-8 h-8 rounded-full bg-purple-600 border-2 border-white"
+                        ></button>
+                        <button
+                          class="w-8 h-8 rounded-full bg-gray-800 border-2 border-white"
+                        ></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-200">
+                  <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    Font Settings
+                  </h3>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        for="font-family"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Font Family</label
+                      >
+                      <select
+                        id="font-family"
+                        class="w-full px-4 py-2 pr-8 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none appearance-none bg-white"
+                      >
+                        <option value="inter" selected>Inter</option>
+                        <option value="roboto">Roboto</option>
+                        <option value="open-sans">Open Sans</option>
+                        <option value="montserrat">Montserrat</option>
+                        <option value="poppins">Poppins</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label
+                        for="font-size"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Font Size</label
+                      >
+                      <select
+                        id="font-size"
+                        class="w-full px-4 py-2 pr-8 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none appearance-none bg-white"
+                      >
+                        <option value="small">Small</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="large">Large</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-200">
+                  <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    Layout Options
+                  </h3>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        for="sidebar-position"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Sidebar Position</label
+                      >
+                      <select
+                        id="sidebar-position"
+                        class="w-full px-4 py-2 pr-8 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none appearance-none bg-white"
+                      >
+                        <option value="left" selected>Left</option>
+                        <option value="right">Right</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label
+                        for="content-width"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Content Width</label
+                      >
+                      <select
+                        id="content-width"
+                        class="w-full px-4 py-2 pr-8 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none appearance-none bg-white"
+                      >
+                        <option value="fixed">Fixed</option>
+                        <option value="fluid" selected>Fluid</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-200">
+                  <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    Custom Branding
+                  </h3>
+                  <div class="space-y-4">
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">
+                          Show Party Logo in Header
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Display your party logo in the dashboard header
+                        </p>
+                      </div>
+                      <label class="custom-switch">
+                        <input type="checkbox" checked />
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">
+                          Custom Login Page
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Use party branding on the login page
+                        </p>
+                      </div>
+                      <label class="custom-switch">
+                        <input type="checkbox" checked />
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+                    <div>
+                      <label
+                        for="favicon"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Favicon</label
+                      >
+                      <div class="flex items-center">
+                        <div
+                          class="w-10 h-10 bg-gray-100 rounded mr-3 flex items-center justify-center overflow-hidden"
+                        >
+                          <img
+                            src="https://readdy.ai/api/search-image?query=simple%20minimalist%20political%20party%20logo%20icon%2C%20suitable%20for%20favicon%2C%20clean%20design%2C%20blue%20color%20scheme&width=40&height=40&seq=favicon_1&orientation=squarish"
+                            alt="Favicon"
+                            class="w-full h-full object-cover"
+                          />
+                        </div>
+                        <button
+                          class="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-button whitespace-nowrap hover:bg-gray-50"
+                        >
+                          Change Favicon
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- System Settings Section -->
+            <section
+              id="system"
+              class="settings-card bg-white rounded shadow-sm p-6"
+            >
+              <h2 class="text-xl font-bold text-gray-900 mb-6">
+                System Settings
+              </h2>
+
+              <div class="space-y-6">
+                <div>
+                  <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    Regional Settings
+                  </h3>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        for="language"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Language</label
+                      >
+                      <select
+                        id="language"
+                        class="w-full px-4 py-2 pr-8 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none appearance-none bg-white"
+                      >
+                        <option value="en" selected>English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                        <option value="zh">Chinese</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label
+                        for="timezone"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Time Zone</label
+                      >
+                      <select
+                        id="timezone"
+                        class="w-full px-4 py-2 pr-8 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none appearance-none bg-white"
+                      >
+                        <option value="utc-8">Pacific Time (UTC-8)</option>
+                        <option value="utc-7">Mountain Time (UTC-7)</option>
+                        <option value="utc-6">Central Time (UTC-6)</option>
+                        <option value="utc-5" selected>
+                          Eastern Time (UTC-5)
+                        </option>
+                        <option value="utc+0">
+                          Greenwich Mean Time (UTC+0)
+                        </option>
+                        <option value="utc+1">
+                          Central European Time (UTC+1)
+                        </option>
+                      </select>
+                    </div>
+                    <div>
+                      <label
+                        for="date-format"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Date Format</label
+                      >
+                      <select
+                        id="date-format"
+                        class="w-full px-4 py-2 pr-8 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none appearance-none bg-white"
+                      >
+                        <option value="mm-dd-yyyy" selected>MM/DD/YYYY</option>
+                        <option value="dd-mm-yyyy">DD/MM/YYYY</option>
+                        <option value="yyyy-mm-dd">YYYY/MM/DD</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label
+                        for="time-format"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Time Format</label
+                      >
+                      <select
+                        id="time-format"
+                        class="w-full px-4 py-2 pr-8 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none appearance-none bg-white"
+                      >
+                        <option value="12h" selected>12-hour (AM/PM)</option>
+                        <option value="24h">24-hour</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-200">
+                  <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    Data Management
+                  </h3>
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">
+                          Automatic Backups
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Regularly backup your party data
+                        </p>
+                      </div>
+                      <label class="custom-switch">
+                        <input type="checkbox" checked />
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+                    <div>
+                      <label
+                        for="backup-frequency"
+                        class="block text-sm font-medium text-gray-700 mb-1"
+                        >Backup Frequency</label
+                      >
+                      <select
+                        id="backup-frequency"
+                        class="w-full px-4 py-2 pr-8 border border-gray-300 rounded focus:ring-2 focus:ring-primary focus:border-primary outline-none appearance-none bg-white"
+                      >
+                        <option value="daily" selected>Daily</option>
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                      </select>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">Data Export</h4>
+                        <p class="text-sm text-gray-500">
+                          Export your party data for offline use
+                        </p>
+                      </div>
+                      <button
+                        class="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-button whitespace-nowrap hover:bg-gray-50"
+                      >
+                        Export Data
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-200">
+                  <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    Performance
+                  </h3>
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">
+                          Cache Management
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Clear cache to improve performance
+                        </p>
+                      </div>
+                      <button
+                        class="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-button whitespace-nowrap hover:bg-gray-50"
+                      >
+                        Clear Cache
+                      </button>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">Analytics</h4>
+                        <p class="text-sm text-gray-500">
+                          Enable analytics to track system performance
+                        </p>
+                      </div>
+                      <label class="custom-switch">
+                        <input type="checkbox" checked />
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="pt-4 border-t border-gray-200">
+                  <h3 class="text-lg font-medium text-gray-900 mb-4">
+                    Advanced Settings
+                  </h3>
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">
+                          Developer Mode
+                        </h4>
+                        <p class="text-sm text-gray-500">
+                          Enable additional debugging features
+                        </p>
+                      </div>
+                      <label class="custom-switch">
+                        <input type="checkbox" />
+                        <span class="switch-slider"></span>
+                      </label>
+                    </div>
+                    <div class="flex items-center justify-between py-2">
+                      <div>
+                        <h4 class="font-medium text-gray-900">API Access</h4>
+                        <p class="text-sm text-gray-500">
+                          Manage API keys and permissions
+                        </p>
+                      </div>
+                      <button
+                        class="px-4 py-2 bg-white border border-gray-300 text-gray-700 text-sm font-medium rounded-button whitespace-nowrap hover:bg-gray-50"
+                      >
+                        Manage API
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <!-- Action Buttons -->
+            <div
+              class="flex justify-between items-center bg-white rounded shadow-sm p-6 sticky bottom-6"
+            >
+              <div class="flex items-center space-x-4">
+                <button
+                  type="button"
+                  class="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 font-medium rounded-button whitespace-nowrap hover:bg-gray-50"
+                >
+                  Reset to Default
+                </button>
+                <button
+                  class="px-5 py-2.5 bg-white border border-gray-300 text-gray-700 font-medium rounded-button whitespace-nowrap hover:bg-gray-50"
+                >
+                  Export Settings
+                </button>
+              </div>
+              <button
+                class="px-5 py-2.5 bg-primary text-white font-medium rounded-button whitespace-nowrap hover:bg-opacity-90"
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Toggle sidebar on mobile
+        const menuButton = document.querySelector(
+          '[aria-controls="mobile-menu"]'
+        );
+        const mobileMenu = document.getElementById("mobile-menu");
+
+        if (menuButton && mobileMenu) {
+          menuButton.addEventListener("click", function () {
+            mobileMenu.classList.toggle("hidden");
+          });
+        }
+
+        // Smooth scrolling for navigation links
+        const navLinks = document.querySelectorAll('nav a[href^="#"]');
+
+        navLinks.forEach((link) => {
+          link.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            const targetId = this.getAttribute("href");
+            const targetElement = document.querySelector(targetId);
+
+            if (targetElement) {
+              window.scrollTo({
+                top: targetElement.offsetTop - 100,
+                behavior: "smooth",
+              });
+
+              // Update active state
+              navLinks.forEach((link) => {
+                link.classList.remove(
+                  "bg-primary",
+                  "bg-opacity-10",
+                  "text-primary"
+                );
+                link.classList.add(
+                  "text-gray-700",
+                  "hover:bg-gray-50",
+                  "hover:text-primary"
+                );
+              });
+
+              this.classList.remove(
+                "text-gray-700",
+                "hover:bg-gray-50",
+                "hover:text-primary"
+              );
+              this.classList.add("bg-primary", "bg-opacity-10", "text-primary");
+            }
+          });
+        });
+      });
+
+      document.addEventListener("DOMContentLoaded", function () {
+        // Save changes button functionality
+        const saveButton = document.querySelector(
+          'button:contains("Save Changes")'
+        );
+
+        if (saveButton) {
+          saveButton.addEventListener("click", function () {
+            // Show a success message
+            const notification = document.createElement("div");
+            notification.className =
+              "fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded shadow-lg flex items-center";
+            notification.innerHTML = `
+                              <div class="w-6 h-6 flex items-center justify-center mr-2">
+                                  <i class="ri-check-line"></i>
+                              </div>
+                              <span>Settings saved successfully!</span>
+                          `;
+
+            document.body.appendChild(notification);
+
+            // Remove the notification after 3 seconds
+            setTimeout(() => {
+              notification.remove();
+            }, 3000);
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

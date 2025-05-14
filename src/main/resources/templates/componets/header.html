@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="bi bi-check2-circle"></i>
+                <span>RachaVoting</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a th:href="@{/}" class="active">Home</a></li>
+                    <li><a th:href="@{/vote}">Vote Now</a></li>
+                    <li><a th:href="@{/result}">Results</a></li>
+                    <li><a th:href="@{/about}">About</a></li>
+                </ul>
+            </nav>
+            <a th:href="@{/vote}" class="btn primary-btn">Vote Now</a>
+        </div>
+    </header>
+</body>
+</html>

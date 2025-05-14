@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voter Registration - South African Electoral Commission</title>
+    <style>
+        :root {
+            --primary: #007A4D; /* South African green */
+            --secondary: #FFB612; /* South African gold */
+            --accent: #DE3831; /* South African red */
+            --dark: #000000; /* South African black */
+            --light: #FFFFFF; /* South African white */
+            --blue: #0032A0; /* South African blue */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: var(--light);
+            padding: 20px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 60px;
+            margin-right: 15px;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .flag-colors {
+            display: flex;
+            height: 10px;
+            width: 100%;
+        }
+
+        .flag-colors div {
+            flex: 1;
+        }
+
+        .flag-red { background-color: var(--accent); }
+        .flag-blue { background-color: var(--blue); }
+        .flag-yellow { background-color: var(--secondary); }
+        .flag-green { background-color: var(--primary); }
+        .flag-white { background-color: var(--light); }
+        .flag-black { background-color: var(--dark); }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(0, 122, 77, 0.2);
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--accent);
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #00694D;
+        }
+
+        .info-text {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .error {
+            color: var(--accent);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .logo {
+                margin-bottom: 15px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-text">
+                    <h1>Electoral Commission of South Africa</h1>
+                    <p>Voter Registration Portal</p>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="flag-colors">
+        <div class="flag-red"></div>
+        <div class="flag-blue"></div>
+        <div class="flag-yellow"></div>
+        <div class="flag-green"></div>
+        <div class="flag-white"></div>
+        <div class="flag-black"></div>
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <h2>Voter Registration Form</h2>
+            <form id="registrationForm" action="/api/register" method="post">
+                <div class="form-group">
+                    <label for="nationalId" class="required">National ID Number</label>
+                    <input type="text" id="nationalId" name="nationalId" required pattern="[0-9]{13}" maxlength="13">
+                    <p class="info-text">Your 13-digit South African ID number</p>
+                    <p class="error" id="nationalIdError">Please enter a valid 13-digit ID number</p>
+                </div>
+
+                <div class="form-group">
+                    <label for="province" class="required">Province</label>
+                    <select id="province" name="province" required>
+                        <option value="">Select Province</option>
+                        <option value="Eastern Cape">Eastern Cape</option>
+                        <option value="Free State">Free State</option>
+                        <option value="Gauteng">Gauteng</option>
+                        <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+                        <option value="Limpopo">Limpopo</option>
+                        <option value="Mpumalanga">Mpumalanga</option>
+                        <option value="Northern Cape">Northern Cape</option>
+                        <option value="North West">North West</option>
+                        <option value="Western Cape">Western Cape</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="district" class="required">District</label>
+                    <select id="district" name="district" required>
+                        <option value="">Select District</option>
+                        <!-- Districts will be populated based on province selection -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="municipality">Municipality</label>
+                    <input type="text" id="municipality" name="municipality">
+                </div>
+
+                <div class="form-group">
+                    <label for="town">Town</label>
+                    <input type="text" id="town" name="town">
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn">Register to Vote</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Important Information</h2>
+            <p>To register as a voter, you must:</p>
+            <ul>
+                <li>Be a South African citizen</li>
+                <li>Be at least 16 years old (you can only vote from age 18)</li>
+                <li>Have a valid South African ID (green barcoded ID book, smart ID card, or valid temporary ID certificate)</li>
+            </ul>
+            <p>Your personal information is protected and will be used only for electoral purposes.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Electoral Commission of South Africa. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Sample districts data - in a real application, this would come from an API
+        const districtsByProvince = {
+            "Eastern Cape": ["Buffalo City", "Nelson Mandela Bay", "Amathole", "Chris Hani", "Joe Gqabi", "OR Tambo", "Sarah Baartman"],
+            "Free State": ["Mangaung", "Fezile Dabi", "Lejweleputswa", "Thabo Mofutsanyana", "Xhariep"],
+            "Gauteng": ["City of Johannesburg", "City of Tshwane", "Ekurhuleni", "Sedibeng", "West Rand"],
+            "KwaZulu-Natal": ["eThekwini", "Amajuba", "Harry Gwala", "iLembe", "King Cetshwayo", "Ugu", "uMgungundlovu", "uMkhanyakude", "uMzinyathi", "uThukela", "Zululand"],
+            "Limpopo": ["Capricorn", "Mopani", "Sekhukhune", "Vhembe", "Waterberg"],
+            "Mpumalanga": ["Ehlanzeni", "Gert Sibande", "Nkangala"],
+            "Northern Cape": ["Frances Baard", "John Taolo Gaetsewe", "Namakwa", "Pixley ka Seme", "ZF Mgcawu"],
+            "North West": ["Bojanala Platinum", "Dr Kenneth Kaunda", "Dr Ruth Segomotsi Mompati", "Ngaka Modiri Molema"],
+            "Western Cape": ["City of Cape Town", "Cape Winelands", "Central Karoo", "Garden Route", "Overberg", "West Coast"]
+        };
+
+        // Populate districts based on province selection
+        document.getElementById('province').addEventListener('change', function() {
+            const provinceValue = this.value;
+            const districtSelect = document.getElementById('district');
+            
+            // Clear current options
+            districtSelect.innerHTML = '<option value="">Select District</option>';
+            
+            if (provinceValue && districtsByProvince[provinceValue]) {
+                districtsByProvince[provinceValue].forEach(district => {
+                    const option = document.createElement('option');
+                    option.value = district;
+                    option.textContent = district;
+                    districtSelect.appendChild(option);
+                });
+            }
+        });
+
+        // Form validation
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            let isValid = true;
+            const nationalId = document.getElementById('nationalId').value;
+            const nationalIdError = document.getElementById('nationalIdError');
+
+            // Validate National ID (simple validation for 13 digits)
+            if (!/^\d{13}$/.test(nationalId)) {
+                nationalIdError.style.display = 'block';
+                isValid = false;
+            } else {
+                nationalIdError.style.display = 'none';
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

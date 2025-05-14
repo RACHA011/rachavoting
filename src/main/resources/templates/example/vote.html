@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting Portal - South African Electoral Commission</title>
+    <style>
+        :root {
+            --primary: #007A4D; /* South African green */
+            --secondary: #FFB612; /* South African gold */
+            --accent: #DE3831; /* South African red */
+            --dark: #000000; /* South African black */
+            --light: #FFFFFF; /* South African white */
+            --blue: #0032A0; /* South African blue */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: var(--light);
+            padding: 20px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 60px;
+            margin-right: 15px;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .logo-text p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .flag-colors {
+            display: flex;
+            height: 10px;
+            width: 100%;
+        }
+
+        .flag-colors div {
+            flex: 1;
+        }
+
+        .flag-red { background-color: var(--accent); }
+        .flag-blue { background-color: var(--blue); }
+        .flag-yellow { background-color: var(--secondary); }
+        .flag-green { background-color: var(--primary); }
+        .flag-white { background-color: var(--light); }
+        .flag-black { background-color: var(--dark); }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(0, 122, 77, 0.2);
+        }
+
+        .required::after {
+            content: " *";
+            color: var(--accent);
+        }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #00694D;
+        }
+
+        .btn-verify {
+            background-color: var(--blue);
+        }
+
+        .btn-verify:hover {
+            background-color: #00297F;
+        }
+
+        .btn-submit {
+            background-color: var(--accent);
+        }
+
+        .btn-submit:hover {
+            background-color: #C32D27;
+        }
+
+        .info-text {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .error {
+            color: var(--accent);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .voter-info {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .voter-info p {
+            margin-bottom: 8px;
+        }
+
+        .voter-info strong {
+            color: var(--primary);
+        }
+
+        .party-list {
+            margin-top: 20px;
+        }
+
+        .party-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .party-option:hover {
+            border-color: var(--primary);
+            background-color: #f9f9f9;
+        }
+
+        .party-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(0, 122, 77, 0.1);
+        }
+
+        .party-logo {
+            width: 60px;
+            height: 60px;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+
+        .party-logo img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .party-info {
+            flex: 1;
+        }
+
+        .party-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .party-abbr {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .radio-input {
+            margin-left: 15px;
+            width: 20px;
+            height: 20px;
+        }
+
+        .verification-section, .voting-section {
+            display: block;
+        }
+
+        .voting-section {
+            display: none;
+        }
+
+        .confirmation-message {
+            text-align: center;
+            padding: 30px;
+            background-color: #f0f8f4;
+            border-radius: 8px;
+            border: 1px solid var(--primary);
+            margin-top: 20px;
+            display: none;
+        }
+
+        .confirmation-message h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .confirmation-message p {
+            margin-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .logo {
+                margin-bottom: 15px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .party-option {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .party-logo {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+
+            .radio-input {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-text">
+                    <h1>Electoral Commission of South Africa</h1>
+                    <p>Official Voting Portal</p>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="flag-colors">
+        <div class="flag-red"></div>
+        <div class="flag-blue"></div>
+        <div class="flag-yellow"></div>
+        <div class="flag-green"></div>
+        <div class="flag-white"></div>
+        <div class="flag-black"></div>
+    </div>
+
+    <div class="container">
+        <div class="card verification-section" id="verificationSection">
+            <h2>Voter Verification</h2>
+            <p>Please enter your National ID number to verify your voter registration.</p>
+            
+            <form id="verificationForm">
+                <div class="form-group">
+                    <label for="verifyNationalId" class="required">National ID Number</label>
+                    <input type="text" id="verifyNationalId" name="verifyNationalId" required pattern="[0-9]{13}" maxlength="13">
+                    <p class="info-text">Your 13-digit South African ID number</p>
+                    <p class="error" id="verifyNationalIdError">Please enter a valid 13-digit ID number</p>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-verify">Verify Identity</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card voting-section" id="votingSection">
+            <h2>Cast Your Vote</h2>
+            
+            <div class="voter-info" id="voterInfo">
+                <p><strong>Province:</strong> <span id="voterProvince">Gauteng</span></p>
+                <p><strong>District:</strong> <span id="voterDistrict">City of Johannesburg</span></p>
+                <p><strong>Municipality:</strong> <span id="voterMunicipality">Johannesburg</span></p>
+                <p><strong>Registration Date:</strong> <span id="voterRegistrationDate">2025-04-15</span></p>
+            </div>
+
+            <form id="votingForm" action="/api/vote" method="post">
+                <input type="hidden" id="hashedNationalId" name="hashedNationalId">
+                
+                <h3>Select a Political Party</h3>
+                <div class="party-list">
+                    <!-- Party options will be dynamically populated -->
+                </div>
+
+                <div class="form-group" style="margin-top: 30px;">
+                    <button type="submit" class="btn btn-submit">Submit Vote</button>
+                </div>
+            </form>
+
+            <div class="confirmation-message" id="confirmationMessage">
+                <h3>Vote Successfully Cast</h3>
+                <p>Thank you for participating in the democratic process.</p>
+                <p>Your vote has been securely recorded.</p>
+                <p>Reference Number: <strong id="referenceNumber">VT-2025-XXXXXXXX</strong></p>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Important Information</h2>
+            <p>To vote in this election, you must:</p>
+            <ul>
+                <li>Be a registered voter</li>
+                <li>Be at least 18 years old</li>
+                <li>Have a valid South African ID</li>
+                <li>Vote only once in this election</li>
+            </ul>
+            <p>Your vote is confidential and protected by law.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Electoral Commission of South Africa. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Sample political parties data - in a real application, this would come from an API
+        const politicalParties = [
+            { id: 1, name: "African National Congress", abbr: "ANC", logo: "anc-logo.png" },
+            { id: 2, name: "Democratic Alliance", abbr: "DA", logo: "da-logo.png" },
+            { id: 3, name: "Economic Freedom Fighters", abbr: "EFF", logo: "eff-logo.png" },
+            { id: 4, name: "Inkatha Freedom Party", abbr: "IFP", logo: "ifp-logo.png" },
+            { id: 5, name: "ActionSA", abbr: "ASA", logo: "actionsa-logo.png" },
+            { id: 6, name: "Freedom Front Plus", abbr: "FF+", logo: "ffplus-logo.png" },
+            { id: 7, name: "Good", abbr: "GOOD", logo: "good-logo.png" },
+            { id: 8, name: "African Christian Democratic Party", abbr: "ACDP", logo: "acdp-logo.png" },
+            { id: 9, name: "United Democratic Movement", abbr: "UDM", logo: "udm-logo.png" },
+            { id: 10, name: "Pan Africanist Congress", abbr: "PAC", logo: "pac-logo.png" }
+        ];
+
+        // Populate party options
+        function populatePartyOptions() {
+            const partyListContainer = document.querySelector('.party-list');
+            partyListContainer.innerHTML = '';
+
+            politicalParties.forEach(party => {
+                const partyOption = document.createElement('div');
+                partyOption.className = 'party-option';
+                partyOption.dataset.partyId = party.id;
+                
+                partyOption.innerHTML = `
+                    <div class="party-logo">
+                        <div style="width: 40px; height: 40px; background-color: #ddd; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                            <span>${party.abbr}</span>
+                        </div>
+                    </div>
+                    <div class="party-info">
+                        <div class="party-name">${party.name}</div>
+                        <div class="party-abbr">${party.abbr}</div>
+                    </div>
+                    <input type="radio" name="partyId" value="${party.id}" class="radio-input" required>
+                `;
+                
+                partyListContainer.appendChild(partyOption);
+                
+                // Add click event to select the party
+                partyOption.addEventListener('click', function() {
+                    // Remove selected class from all options
+                    document.querySelectorAll('.party-option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                    
+                    // Check the radio button
+                    const radio = this.querySelector('input[type="radio"]');
+                    radio.checked = true;
+                });
+            });
+        }
+
+        // Verification form submission
+        document.getElementById('verificationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nationalId = document.getElementById('verifyNationalId').value;
+            const nationalIdError = document.getElementById('verifyNationalIdError');
+            
+            // Validate National ID (simple validation for 13 digits)
+            if (!/^\d{13}$/.test(nationalId)) {
+                nationalIdError.style.display = 'block';
+                return;
+            } else {
+                nationalIdError.style.display = 'none';
+            }
+            
+            // In a real application, you would make an API call to verify the voter
+            // For this demo, we'll simulate a successful verification
+            simulateVoterVerification(nationalId);
+        });
+
+        // Simulate voter verification (in a real app, this would be an API call)
+        function simulateVoterVerification(nationalId) {
+            // Simulate API call delay
+            setTimeout(() => {
+                // For demo purposes, always show as verified
+                document.getElementById('hashedNationalId').value = hashNationalId(nationalId);
+                
+                // Show voter information (this would come from the API in a real app)
+                document.getElementById('voterProvince').textContent = "Gauteng";
+                document.getElementById('voterDistrict').textContent = "City of Johannesburg";
+                document.getElementById('voterMunicipality').textContent = "Johannesburg";
+                document.getElementById('voterRegistrationDate').textContent = "2025-04-15";
+                
+                // Hide verification section and show voting section
+                document.getElementById('verificationSection').style.display = 'none';
+                document.getElementById('votingSection').style.display = 'block';
+                
+                // Populate party options
+                populatePartyOptions();
+            }, 1000);
+        }
+
+        // Voting form submission
+        document.getElementById('votingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get selected party
+            const selectedParty = document.querySelector('input[name="partyId"]:checked');
+            
+            if (!selectedParty) {
+                alert('Please select a political party');
+                return;
+            }
+            
+            // In a real application, you would make an API call to submit the vote
+            // For this demo, we'll simulate a successful vote submission
+            simulateVoteSubmission(selectedParty.value);
+        });
+
+        // Simulate vote submission (in a real app, this would be an API call)
+        function simulateVoteSubmission(partyId) {
+            // Simulate API call delay
+            setTimeout(() => {
+                // Generate a random reference number
+                const referenceNumber = 'VT-2025-' + Math.floor(10000000 + Math.random() * 90000000);
+                document.getElementById('referenceNumber').textContent = referenceNumber;
+                
+                // Hide voting form and show confirmation message
+                document.getElementById('votingForm').style.display = 'none';
+                document.getElementById('confirmationMessage').style.display = 'block';
+            }, 1000);
+        }
+
+        // Simple function to simulate hashing the national ID (in a real app, this would be done securely on the server)
+        function hashNationalId(nationalId) {
+            // This is NOT a secure hash - just for demonstration purposes
+            return 'hashed_' + nationalId;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SA Vote Online - Hero</title>
+</head>
+<body>
+    <div class="relative pt-20 pb-16 md:pt-32 md:pb-24 overflow-hidden">
+        <div class="absolute inset-0 w-full h-full bg-grid-pattern-light opacity-5"></div>
+        
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="max-w-3xl mx-auto text-center">
+                <div class="inline-flex items-center gap-2 bg-sa-blue/10 text-sa-blue px-4 py-1.5 rounded-full text-sm font-medium mb-6">
+                    <span class="flex h-2 w-2 rounded-full bg-sa-blue"></span>
+                    <span>National Elections 2024</span>
+                </div>
+                
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6">
+                    <span class="block sa-gradient-text">Secure Online Voting</span>
+                    <span class="block">for South Africa's Future</span>
+                </h1>
+                
+                <p class="text-xl text-gray-500 mb-8 max-w-2xl mx-auto">
+                    A safe, transparent, and accessible platform for south african to participate in South Africa's elections
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a th:href="@{/candidate/login}">
+                        <button class="bg-sa-blue hover:bg-sa-blue-dark text-white font-medium py-3 px-6 rounded-lg transition-colors w-full sm:w-auto flex items-center justify-center">
+                            Member Login
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="ml-1">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                    </a>
+                    <a th:href="@{/candidate/login?tab=register}">
+                        <button class="border border-gray-300 hover:bg-gray-50 font-medium py-3 px-6 rounded-lg transition-colors w-full sm:w-auto">
+                            Register as Party Member
+                        </button>
+                    </a>
+                </div>
+                
+                <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-3xl mx-auto">
+                    <div class="flex flex-col items-center">
+                        <div class="text-2xl font-bold text-sa-green">100%</div>
+                        <div class="text-sm text-gray-500 text-center">Secure Voting</div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="text-2xl font-bold text-sa-blue">24/7</div>
+                        <div class="text-sm text-gray-500 text-center">Voter Support</div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="text-2xl font-bold text-sa-red">9</div>
+                        <div class="text-sm text-gray-500 text-center">Provinces Covered</div>
+                    </div>
+                    <div class="flex flex-col items-center">
+                        <div class="text-2xl font-bold text-sa-yellow">11M+</div>
+                        <div class="text-sm text-gray-500 text-center">Registered Voters</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-0 left-0 w-full h-40 bg-gradient-to-t from-white to-transparent"></div>
+    </div>
+</body>
+</html>

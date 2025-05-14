@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{/admin/auth/componets/head :: head}">
+    <title>RachaVoting - Voters</title>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <aside th:replace="~{/admin/auth/componets/sidebar :: aside}"></aside>
+
+    <div class="main-content">
+      <!-- Header -->
+      <header th:replace="~{/admin/auth/componets/header :: header}"></header>
+    </div>
+
+    <script th:src="@{/js/auth/admin.js}"></script>
+  </body>
+</html>

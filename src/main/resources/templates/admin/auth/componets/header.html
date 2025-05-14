@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <body>
+    <header class="header">
+      <div class="header-content">
+        <h1 class="page-title" th:text="${title}">Admin</h1>
+        <div class="header-actions">
+          <button class="notification-btn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-bell-icon lucide-bell"
+            >
+              <path d="M10.268 21a2 2 0 0 0 3.464 0" />
+              <path
+                d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"
+              />
+            </svg>
+            <span class="notification-dot"></span>
+          </button>
+          <div class="user-profile">
+            <img th:src="@{/image/user.png}" alt="Admin" class="user-avatar" />
+            <span class="user-name" th:text="${user}">...</span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="lucide lucide-chevron-down-icon lucide-chevron-down user-dropdown"
+            >
+              <path d="m6 9 6 6 6-6" />
+            </svg>
+              
+          </div>
+        </div>
+      </div>
+    </header>
+  </body>
+</html>

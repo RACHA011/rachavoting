@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SA Vote Online</title>
+    <link rel="stylesheet" th:href="@{/css/output.css}" />
+  </head>
+  <body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+      <!-- South African Flag Stripe -->
+      <div class="flex h-2 w-full">
+        <div class="w-1/6 bg-[#E03C31]"></div>
+        <div class="w-1/6 bg-[#0032A0]"></div>
+        <div class="w-1/6 bg-[#FFB81C]"></div>
+        <div class="w-1/6 bg-[#007A4D]"></div>
+        <div class="w-1/6 bg-white"></div>
+        <div class="w-1/6 bg-black"></div>
+      </div>
+
+      <div class="container mx-auto px-4 py-4">
+        <div class="flex flex-col md:flex-row items-center justify-between">
+          <!-- Logo & Title -->
+          <a
+            href="/"
+            class="flex items-center space-x-4 mb-4 md:mb-0 hover:opacity-90 transition-opacity"
+          >
+            <div
+              class="flex items-center justify-center bg-[#007A4D] rounded-full w-12 h-12 text-white"
+            >
+              <i data-lucide="vote" class="w-6 h-6"></i>
+            </div>
+
+            <div class="text-center md:text-left">
+              <h1 class="text-xl md:text-2xl font-bold text-gray-800">
+                SA vote online
+              </h1>
+              <p class="text-xs md:text-sm text-gray-600">
+                Secure Online Voter Registration
+              </p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 max-w-4xl relative">
+      <!-- Success Message -->
+      <div
+        class="bg-white rounded-lg shadow-lg mb-8 overflow-hidden animate-fadeIn"
+      >
+        <div class="bg-[#007A4D] text-white px-6 py-5 flex items-center">
+          <i
+            data-lucide="check-circle"
+            class="h-8 w-8 mr-3 animate-successPulse"
+          ></i>
+          <h2 class="text-2xl font-bold">Registration Successful</h2>
+        </div>
+
+        <div class="p-6">
+          <div
+            class="flex flex-col items-center justify-center mb-6 animate-fadeInUp"
+          >
+            <div class="rounded-full bg-green-100 p-4 mb-4">
+              <i
+                data-lucide="check-circle"
+                class="h-16 w-16 text-[#007A4D]"
+              ></i>
+            </div>
+            <p class="text-xl font-medium text-gray-800 text-center">
+              Thank you for registering to vote!
+            </p>
+            <p class="text-gray-600 mt-2 text-center">
+              Your voter registration has been successfully processed.
+            </p>
+          </div>
+
+          <!-- Registration Details Card -->
+          <div class="bg-gray-50 rounded-lg p-6 mb-6 border border-gray-200">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">
+              Registration Details
+            </h3>
+
+            <div class="mb-4">
+              <p class="text-sm text-gray-500">Registration Number</p>
+              <p class="font-semibold">SA-REG-123456</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <p class="text-sm text-gray-500">National ID</p>
+                <p class="font-semibold">9001****7890</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Province</p>
+                <p class="font-semibold">Gauteng</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">District</p>
+                <p class="font-semibold">Johannesburg</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Municipality</p>
+                <p class="font-semibold">City of Johannesburg</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Town</p>
+                <p class="font-semibold">Sandton</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-500">Registration Date</p>
+                <p class="font-semibold">05/01/2025</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- QR Code Placeholder -->
+          <div
+            class="flex flex-col md:flex-row items-center justify-center gap-6 mb-8"
+          >
+            <div
+              class="bg-white p-4 border border-gray-200 rounded-lg shadow-sm w-40 h-40 flex items-center justify-center"
+            >
+              <div class="text-center">
+                <p class="text-sm text-gray-500 mb-2">Registration QR Code</p>
+                <div
+                  class="border-2 border-gray-300 w-24 h-24 mx-auto grid grid-cols-4 grid-rows-4 gap-1 p-2"
+                >
+                  <!-- Simple QR code pattern simulation -->
+                  <div class="bg-black"></div>
+                  <div class="bg-black"></div>
+                  <div class="bg-black"></div>
+                  <div class="bg-black"></div>
+                  <div class="bg-black"></div>
+                  <div class="bg-white"></div>
+                  <div class="bg-white"></div>
+                  <div class="bg-black"></div>
+                  <div class="bg-black"></div>
+                  <div class="bg-white"></div>
+                  <div class="bg-black"></div>
+                  <div class="bg-black"></div>
+                  <div class="bg-black"></div>
+                  <div class="bg-black"></div>
+                  <div class="bg-white"></div>
+                  <div class="bg-black"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="text-center md:text-left">
+              <p class="text-gray-700 mb-4">
+                Save this confirmation for your records. You'll need to present
+                your ID document at your designated voting station on election
+                day.
+              </p>
+
+              <div class="flex flex-wrap gap-3 justify-center md:justify-start">
+                <button
+                  onclick="window.print()"
+                  class="flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                >
+                  <i data-lucide="printer" class="h-4 w-4 mr-2"></i>
+                  Print
+                </button>
+                <button
+                  onclick="downloadConfirmation()"
+                  class="flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-md transition-colors"
+                >
+                  <i data-lucide="download" class="h-4 w-4 mr-2"></i>
+                  Download
+                </button>
+                <button
+                  onclick="shareConfirmation()"
+                  class="flex items-center px-4 py-2 bg-[#0032A0] hover:bg-[#00287e] text-white rounded-md transition-colors"
+                >
+                  <i data-lucide="share-2" class="h-4 w-4 mr-2"></i>
+                  Share
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Election Countdown -->
+          <div
+            class="bg-[#0032A0] text-white rounded-lg p-6 mb-6 animate-fadeInUp"
+          >
+            <div class="flex items-center mb-4">
+              <i data-lucide="calendar" class="h-5 w-5 mr-2"></i>
+              <h3 class="text-lg font-bold">Election Countdown</h3>
+            </div>
+
+            <div class="grid grid-cols-4 gap-2 text-center">
+              <div class="bg-white/10 rounded-lg p-3">
+                <div class="text-2xl font-bold" id="countdown-days">365</div>
+                <div class="text-xs">Days</div>
+              </div>
+              <div class="bg-white/10 rounded-lg p-3">
+                <div class="text-2xl font-bold" id="countdown-hours">23</div>
+                <div class="text-xs">Hours</div>
+              </div>
+              <div class="bg-white/10 rounded-lg p-3">
+                <div class="text-2xl font-bold" id="countdown-minutes">59</div>
+                <div class="text-xs">Mins</div>
+              </div>
+              <div class="bg-white/10 rounded-lg p-3">
+                <div class="text-2xl font-bold" id="countdown-seconds">59</div>
+                <div class="text-xs">Secs</div>
+              </div>
+            </div>
+
+            <p class="text-sm mt-4 text-center">Election Date: 05/15/2026</p>
+          </div>
+
+          <!-- Next Steps -->
+          <div class="border-t border-gray-200 pt-6">
+            <h3 class="text-lg font-bold text-gray-800 mb-4">What's Next?</h3>
+            <ul class="space-y-4">
+              <li class="flex items-start">
+                <i
+                  data-lucide="arrow-right"
+                  class="h-5 w-5 text-[#007A4D] mt-0.5 mr-2 flex-shrink-0"
+                ></i>
+                <p>
+                  You will receive a confirmation SMS or email with your
+                  registration details.
+                </p>
+              </li>
+              <li class="flex items-start">
+                <i
+                  data-lucide="arrow-right"
+                  class="h-5 w-5 text-[#007A4D] mt-0.5 mr-2 flex-shrink-0"
+                ></i>
+                <p>
+                  Visit your designated voting station on election day with your
+                  ID document.
+                </p>
+              </li>
+              <li class="flex items-start">
+                <i
+                  data-lucide="arrow-right"
+                  class="h-5 w-5 text-[#007A4D] mt-0.5 mr-2 flex-shrink-0"
+                ></i>
+                <p>
+                  Stay informed about election updates and candidate
+                  information.
+                </p>
+              </li>
+            </ul>
+          </div>
+
+          <div class="mt-8 text-center">
+            <a
+              href="/"
+              class="inline-block bg-[#007A4D] hover:bg-[#006040] text-white font-semibold px-6 py-3 rounded-md transition-colors"
+            >
+              Return to Homepage
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 py-6">
+      <div class="container mx-auto px-4 text-center text-gray-600 text-sm">
+        <p>
+          &copy; 2025 Electoral Commission of South Africa. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Confetti (Simple Implementation) -->
+    <div
+      id="confetti-container"
+      class="fixed inset-0 pointer-events-none overflow-hidden z-50"
+    ></div>
+
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      // Initialize Lucide icons
+      lucide.createIcons();
+
+      // Set election date (May 15, 2026)
+      const electionDate = new Date("2026-05-15T08:00:00");
+
+      // Update countdown every second
+      function updateCountdown() {
+        const now = new Date();
+        const difference = electionDate.getTime() - now.getTime();
+
+        if (difference <= 0) {
+          document.getElementById("countdown-days").textContent = "0";
+          document.getElementById("countdown-hours").textContent = "0";
+          document.getElementById("countdown-minutes").textContent = "0";
+          document.getElementById("countdown-seconds").textContent = "0";
+          return;
+        }
+
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((difference / (1000 * 60)) % 60);
+        const seconds = Math.floor((difference / 1000) % 60);
+
+        document.getElementById("countdown-days").textContent = days;
+        document.getElementById("countdown-hours").textContent = hours;
+        document.getElementById("countdown-minutes").textContent = minutes;
+        document.getElementById("countdown-seconds").textContent = seconds;
+      }
+
+      setInterval(updateCountdown, 1000);
+      updateCountdown(); // Initial call
+
+      // Download confirmation handler
+      function downloadConfirmation() {
+        const registrationText = `
+=== SOUTH AFRICAN VOTER REGISTRATION CONFIRMATION ===
+
+Registration Number: SA-REG-123456
+Date: 05/01/2025
+
+VOTER DETAILS:
+National ID: 9001****7890
+Province: Gauteng
+District: Johannesburg
+Municipality: City of Johannesburg
+Town: Sandton
+
+Your voter registration has been successfully completed.
+Please keep this confirmation for your records.
+
+For any inquiries, contact the Electoral Commission of South Africa.
+            `;
+
+        const blob = new Blob([registrationText], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "voter-registration-SA-REG-123456.txt";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      // Share confirmation handler
+      async function shareConfirmation() {
+        try {
+          if (navigator.share) {
+            await navigator.share({
+              title: "My Voter Registration",
+              text: "I've registered to vote in the upcoming election! Registration #SA-REG-123456",
+              url: window.location.href,
+            });
+          } else {
+            alert(
+              "Web Share API not supported in your browser. You can copy the page URL to share manually."
+            );
+          }
+        } catch (error) {
+          console.log("Error sharing:", error);
+        }
+      }
+
+      // Simple confetti effect
+      function createConfetti() {
+        const colors = [
+          "#E03C31",
+          "#0032A0",
+          "#FFB81C",
+          "#007A4D",
+          "#000000",
+          "#FFFFFF",
+        ];
+        const container = document.getElementById("confetti-container");
+
+        for (let i = 0; i < 150; i++) {
+          const confetti = document.createElement("div");
+          confetti.style.position = "absolute";
+          confetti.style.left = `${Math.random() * 100}vw`;
+          confetti.style.top = "-10px";
+          confetti.style.width = `${Math.random() * 8 + 5}px`;
+          confetti.style.height = confetti.style.width;
+          confetti.style.backgroundColor =
+            colors[Math.floor(Math.random() * colors.length)];
+          confetti.style.borderRadius = Math.random() > 0.5 ? "50%" : "0";
+          confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+          confetti.style.opacity = "0.8";
+          confetti.style.zIndex = "9999";
+
+          container.appendChild(confetti);
+
+          // Animation
+          const animation = confetti.animate(
+            [
+              { top: "-10px", transform: `rotate(${Math.random() * 360}deg)` },
+              {
+                top: `${window.innerHeight + 10}px`,
+                transform: `rotate(${Math.random() * 360 + 360}deg)`,
+              },
+            ],
+            {
+              duration: Math.random() * 3000 + 2000,
+              easing: "cubic-bezier(0.1, 0.8, 0.3, 1)",
+            }
+          );
+
+          animation.onfinish = () => confetti.remove();
+        }
+
+        // Remove confetti after 5 seconds
+        setTimeout(() => {
+          container.innerHTML = "";
+        }, 5000);
+      }
+
+      // Start confetti when page loads
+      window.addEventListener("load", createConfetti);
+    </script>
+  </body>
+</html>

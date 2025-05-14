@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head th:replace="~{/admin/auth/componets/head :: head}">
+    <title>RachaVoting Admin Dashboard</title>
+  </head>
+  <body>
+    <!-- Sidebar -->
+    <aside th:replace="~{/admin/auth/componets/sidebar :: aside}"></aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Header -->
+      <header th:replace="~{/admin/auth/componets/header :: header}"></header>
+    </div>
+    <main></main>
+
+    <!-- footer section starts -->
+    <footer th:replace="~{/componets/footer :: footer}"></footer>
+    <!-- end footer section -->
+  </body>
+</html>

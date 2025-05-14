@@ -1,0 +1,37 @@
+{"properties": [
+  {
+    "name": "blockchain.private-key",
+    "type": "java.lang.String",
+    "description": "A description for 'blockchain.private-key'"
+  },
+  {
+    "name": "blockchain.private-key",
+    "type": "java.lang.String",
+    "description": "A description for 'blockchain.private-key'"
+  },
+  {
+    "name": "blockchain.contract-address",
+    "type": "java.lang.String",
+    "description": "A description for 'blockchain.contract-address'"
+  },
+  {
+    "name": "blockchain.rpc-url",
+    "type": "java.lang.String",
+    "description": "A description for 'blockchain.rpc-url'"
+  },
+  {
+    "name": "logo.temporary.expiration-hours",
+    "type": "java.lang.String",
+    "description": "A description for 'logo.temporary.expiration-hours'"
+  },
+  {
+    "name": "secured.papper.value",
+    "type": "java.lang.String",
+    "description": "A description for 'secured.papper.value'"
+  },
+  {
+    "name": "hashing.pepper",
+    "type": "java.lang.String",
+    "description": "A description for 'hashing.pepper'"
+  }
+]}

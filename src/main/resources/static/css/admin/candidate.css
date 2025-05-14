@@ -1,0 +1,95 @@
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.view-btn {
+    color: var(--primary-color);
+}
+
+.edit-btn {
+    color: var(--sa-yellow);
+}
+
+.delete-btn {
+    color: var(--sa-red);
+}
+
+.action-btn:hover {
+    background-color: var(--background-light);
+}
+
+.pagination-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 0.5rem;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background-color: var(--background);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background-color: var(--background-light);
+    border-color: var(--primary-color);
+}
+
+.pagination-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.status-active {
+    background-color: color-mix(in srgb, var(--sa-green) 15%, transparent);
+    color: var(--sa-green);
+}
+
+.status-pending {
+    background-color: color-mix(in srgb, var(--sa-yellow) 15%, transparent);
+    color: var(--sa-yellow);
+}
+
+.status-rejected {
+    background-color: color-mix(in srgb, var(--sa-red) 15%, transparent);
+    color: var(--sa-red);
+}
+
+.status-withdrawn {
+    background-color: color-mix(in srgb, var(--text-light) 15%, transparent);
+    color: var(--text-light);
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
