@@ -1,7 +1,3 @@
-Alright! Here's a much more detailed `README.md` that covers everything you've shared, organized clearly, still keeping it 100% accurate to what you've implemented and planned — no extras added:
-
----
-
 # Racha Voting App
 
 Racha Voting App is a full-featured role-based voting system developed using **Java**, **Thymeleaf**, and **PostgreSQL**. The application allows for secure and flexible election management, supporting both individual political participation and future integration with organizations and businesses.
@@ -20,7 +16,7 @@ The app is being actively developed and is designed with scalability and future-
 
 ---
 
-## 👥 User Roles & Authorities
+## User Roles & Authorities
 
 ### 1. **Admin**
 
@@ -110,5 +106,6 @@ The app is being actively developed and is designed with scalability and future-
 * 🔧 Voting logic in progress (PostgreSQL-based)
 * 🧠 Blockchain voting architecture under consideration
 
---
+---
+
 the reason for this app is to test my self more and to learn more about security and data protection
