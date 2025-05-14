@@ -1,6 +1,3 @@
-Alright! Here's a much more detailed `README.md` that covers everything you've shared, organized clearly, still keeping it 100% accurate to what you've implemented and planned — no extras added:
-
----
 
 # Racha Voting App
 
