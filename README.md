@@ -106,5 +106,5 @@ The app is being actively developed and is designed with scalability and future-
 * 🔧 Voting logic in progress (PostgreSQL-based)
 * 🧠 Blockchain voting architecture under consideration
 
---
+---
 the reason for this app is to test my self more and to learn more about security and data protection
