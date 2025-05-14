@@ -23,8 +23,8 @@ The app is being actively developed and is designed with scalability and future-
 * Has full access to the system.
 * Can:
 
-  * Create and manage elections.
-  * Create users and assign them roles (e.g., promote a user to **President**).
+  * Create elections.
+  * Assign candidate roles (e.g., promote a user to **President**).
   * View detailed election data and statistics.
   * Update information about any user or election.
 * Has authority: `ADMIN`
