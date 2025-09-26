@@ -15,6 +15,7 @@ public class VoterCreateDTO {
     @NotBlank
     @Pattern(regexp = "^[0-9]{13}$")
     private String nationalId; 
+    
     @NotBlank
     private String province;
 

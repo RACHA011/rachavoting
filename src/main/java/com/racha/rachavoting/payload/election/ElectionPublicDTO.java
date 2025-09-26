@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ElectionPublicDTO {
-    private Long id;
+    private String publicAccessKey;
 
     private String title;
 

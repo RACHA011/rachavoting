@@ -28,3 +28,14 @@ there should be many types of election
  -change party model an orgination not a party then 
 
  -for now i will not consider if a party is registered or not
+
+ - fix the province and district problem after page reload
+
+ - major update for security and time consumption   
+    - controllers should only handle dto's no entitie (since it might expose the stracture of the entie)
+    - servises can handle entities but return dtos(i think this is were ill be using transitional a lot but be ware of it)
+
+- The public access key for the election can be the election name since its unique for each year 
+
+- dont use cookies or session since the have their flows which are not good for secured processes, like when im registering for votes they say if im using cookies they can provide auto submition for other thing....
+    or if using them improve the implimented safegards

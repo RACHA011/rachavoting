@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .header {
+        background-color: #007a4d; /* SA green */
+        color: white;
+        padding: 20px;
+        text-align: center;
+        border-radius: 5px 5px 0 0;
+      }
+      .content {
+        padding: 25px;
+        background-color: #f9f9f9;
+      }
+      .confirmation-box {
+        background-color: #002395; /* SA blue */
+        color: white;
+        font-size: 20px;
+        padding: 20px;
+        text-align: center;
+        margin: 20px 0;
+        border-radius: 5px;
+        border-left: 5px solid #de3831; /* SA red accent */
+      }
+      .footer {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        font-size: 12px;
+        color: #777;
+        text-align: center;
+      }
+      .button {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #de3831; /* SA red */
+        color: white !important;
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        margin: 15px 0;
+      }
+      .election-details {
+        background-color: white;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Racha voting</h1>
+      <p>Voter Registration Confirmation</p>
+    </div>
+
+    <div class="content">
+      <div class="confirmation-box">
+        <strong>Your voter registration was successful!</strong>
+      </div>
+
+      <p>Dear Voter,</p>
+
+      <p>
+        Thank you for registering to vote in the upcoming election. Your
+        registration has been processed successfully.
+      </p>
+
+      <div class="election-details">
+        <h3>Election Details</h3>
+        <p><strong>Election:</strong> %s</p>
+        <p><strong>Year:</strong> %s</p>
+      </div>
+
+      <p>
+        We will notify you when voting opens with instructions on how to cast
+        your ballot.
+      </p>
+
+      <p>
+        For any questions about your registration, please contact our support
+        team.
+      </p>
+
+      <center>
+        <a href="https://yourdomain.com/voter-portal" class="button">
+          Access Your Voter Portal
+        </a>
+      </center>
+    </div>
+
+    <div class="footer">
+      <p>© %d South African Electoral Commission. All rights reserved.</p>
+      <p>
+        <a href="%s" style="color: #777; text-decoration: none">
+          Unsubscribe from future communications
+        </a>
+      </p>
+      <p>123 Government Avenue, Pretoria, 0002</p>
+    </div>
+  </body>
+</html>

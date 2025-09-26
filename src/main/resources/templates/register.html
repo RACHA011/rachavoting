@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="_csrf" content="${_csrf.token}" />
+    <meta name="_csrf_header" content="${_csrf.headerName}" />
+    <title>Email Verification - South African Electoral Commission</title>
+    <link rel="stylesheet" th:href="@{/css/output.css}" />
+  </head>
+  <body class="bg-gray-50 text-gray-800 font-sans">
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+      <!-- South African Flag Stripe -->
+      <div class="flex h-2 w-full">
+        <div class="w-1/6 bg-sa-red"></div>
+        <div class="w-1/6 bg-sa-blue"></div>
+        <div class="w-1/6 bg-sa-yellow"></div>
+        <div class="w-1/6 bg-sa-green"></div>
+        <div class="w-1/6 bg-white"></div>
+        <div class="w-1/6 bg-black"></div>
+      </div>
+      <div class="container mx-auto px-4 py-4">
+        <div class="flex flex-col md:flex-row items-center justify-between">
+          <!-- Logo & Title -->
+          <div class="flex items-center space-x-4 mb-4 md:mb-0">
+            <div
+              class="flex items-center justify-center bg-sa-green rounded-full w-12 h-12 text-white font-bold text-xl"
+            >
+              SA
+            </div>
+            <div class="text-center md:text-left">
+              <h1 class="text-xl md:text-2xl font-bold text-gray-800">
+                Racha voting
+              </h1>
+              <p class="text-xs md:text-sm text-gray-600">
+                Secure Online Voter Registration
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 max-w-2xl">
+      <!-- Email Verification Card -->
+      <div class="bg-white rounded-lg shadow-lg mb-8 overflow-hidden">
+        <div class="border-b border-gray-200">
+          <h2 class="text-2xl font-bold text-sa-green px-6 py-4">
+            Email Verification
+          </h2>
+        </div>
+        <div class="p-6">
+          <!-- Step 1: Request OTP -->
+          <div id="requestOtpSection" class="space-y-6">
+            <div class="text-center mb-6">
+              <div
+                class="mx-auto w-16 h-16 bg-sa-green rounded-full flex items-center justify-center mb-4"
+              >
+                <svg
+                  class="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                  ></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                Verify Your Email Address
+              </h3>
+              <p class="text-gray-600">
+                Enter your email address to receive a verification code
+              </p>
+            </div>
+            <div>
+              <label for="email" class="block text-gray-700 font-semibold mb-2">
+                Email Address
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                placeholder="Enter your email address"
+                class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green focus:border-transparent"
+              />
+            </div>
+            <button
+              type="button"
+              id="sendOtpBtn"
+              class="w-full bg-sa-green hover:bg-green-700 text-white font-bold py-3 px-6 rounded-md transition-colors duration-300"
+            >
+              Send Verification Code
+            </button>
+          </div>
+          <!-- Step 2: Enter OTP -->
+          <div id="verifyOtpSection" class="space-y-6 hidden">
+            <div class="text-center mb-6">
+              <div
+                class="mx-auto w-16 h-16 bg-sa-blue rounded-full flex items-center justify-center mb-4"
+              >
+                <svg
+                  class="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  ></path>
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold text-gray-800 mb-2">
+                Enter Verification Code
+              </h3>
+              <p class="text-gray-600">
+                We've sent a 6-digit code to
+                <span id="emailDisplay" class="font-semibold"></span>
+              </p>
+            </div>
+            <!-- OTP Input Fields -->
+            <div class="flex justify-center space-x-2 mb-6">
+              <input
+                type="text"
+                maxlength="1"
+                class="otp-input w-12 h-12 text-center text-xl font-bold border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green focus:border-transparent"
+              />
+              <input
+                type="text"
+                maxlength="1"
+                class="otp-input w-12 h-12 text-center text-xl font-bold border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green focus:border-transparent"
+              />
+              <input
+                type="text"
+                maxlength="1"
+                class="otp-input w-12 h-12 text-center text-xl font-bold border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green focus:border-transparent"
+              />
+              <input
+                type="text"
+                maxlength="1"
+                class="otp-input w-12 h-12 text-center text-xl font-bold border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green focus:border-transparent"
+              />
+              <input
+                type="text"
+                maxlength="1"
+                class="otp-input w-12 h-12 text-center text-xl font-bold border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green focus:border-transparent"
+              />
+              <input
+                type="text"
+                maxlength="1"
+                class="otp-input w-12 h-12 text-center text-xl font-bold border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green focus:border-transparent"
+              />
+            </div>
+            <!-- Timer -->
+            <div class="text-center mb-4">
+              <p class="text-gray-600">
+                Code expires in
+                <span id="timer" class="font-semibold text-sa-red">05:00</span>
+              </p>
+            </div>
+            <!-- Resend Code -->
+            <div class="text-center mb-6">
+              <p class="text-gray-600">Didn't receive the code?</p>
+              <button
+                type="button"
+                id="resendOtpBtn"
+                class="text-sa-green hover:text-green-700 font-semibold underline disabled:text-gray-400 disabled:no-underline"
+                disabled
+              >
+                Resend Code
+              </button>
+            </div>
+            <button
+              type="button"
+              id="verifyOtpBtn"
+              class="w-full bg-sa-green hover:bg-green-700 text-white font-bold py-3 px-6 rounded-md transition-colors duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+              disabled
+            >
+              Verify Email
+            </button>
+            <button
+              type="button"
+              id="backBtn"
+              class="w-full bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 px-6 rounded-md transition-colors duration-300"
+            >
+              Back to Email Entry
+            </button>
+          </div>
+          <!-- Step 3: Success Message -->
+          <!-- Success Section -->
+          <div id="successSection" class="hidden">
+            <div
+              class="max-w-md mx-auto text-center p-8 bg-white rounded-xl shadow-sm"
+            >
+              <!-- Success Icon -->
+              <div
+                class="mx-auto w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6"
+              >
+                <svg
+                  class="w-10 h-10 text-green-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+              </div>
+
+              <!-- Success Message -->
+              <div class="mb-8">
+                <h3 class="text-2xl font-bold text-gray-800 mb-3">
+                  Email Verified Successfully!
+                </h3>
+                <p class="text-gray-600">
+                  Your email address has been successfully verified. You're now
+                  ready to complete your voter registration.
+                </p>
+              </div>
+
+              <!-- Continue Button -->
+              <button
+                type="button"
+                onclick="window.location.href='/vote/register'"
+                class="w-full bg-sa-green hover:bg-green-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 shadow-md"
+              >
+                Continue to Registration
+                <svg
+                  class="w-5 h-5 ml-2 inline"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M14 5l7 7m0 0l-7 7m7-7H3"
+                  ></path>
+                </svg>
+              </button>
+
+              <!-- Additional Help Text -->
+              <p class="mt-4 text-sm text-gray-500">
+                Having issues?
+                <a href="#" class="text-sa-green hover:underline"
+                  >Contact support</a
+                >
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Information Card -->
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="border-b border-gray-200">
+          <h2 class="text-xl font-bold text-sa-green px-6 py-4">
+            Security Information
+          </h2>
+        </div>
+        <div class="p-6">
+          <ul class="space-y-2 text-gray-700">
+            <li class="flex items-start">
+              <svg
+                class="w-5 h-5 text-sa-green mt-0.5 mr-2 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              Your verification code is valid for 5 minutes
+            </li>
+            <li class="flex items-start">
+              <svg
+                class="w-5 h-5 text-sa-green mt-0.5 mr-2 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              Never share your verification code with anyone
+            </li>
+            <li class="flex items-start">
+              <svg
+                class="w-5 h-5 text-sa-green mt-0.5 mr-2 flex-shrink-0"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                  clip-rule="evenodd"
+                ></path>
+              </svg>
+              Check your spam folder if you don't receive the email
+            </li>
+          </ul>
+        </div>
+      </div>
+    </main>
+    <!-- Footer -->
+    <footer class="bg-gray-100 py-6 mt-8">
+      <div class="container mx-auto px-4 text-center text-gray-600 text-sm">
+        <p>&copy; 2025 Racha voting.</p>
+      </div>
+    </footer>
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+      document.addEventListener("DOMContentLoaded", function () {
+        const requestOtpSection = document.getElementById("requestOtpSection");
+        const verifyOtpSection = document.getElementById("verifyOtpSection");
+        const successSection = document.getElementById("successSection");
+        const emailInput = document.getElementById("email");
+        const emailDisplay = document.getElementById("emailDisplay");
+        const sendOtpBtn = document.getElementById("sendOtpBtn");
+        const verifyOtpBtn = document.getElementById("verifyOtpBtn");
+        const resendOtpBtn = document.getElementById("resendOtpBtn");
+        const backBtn = document.getElementById("backBtn");
+        const otpInputs = document.querySelectorAll(".otp-input");
+        const timerElement = document.getElementById("timer");
+
+        const csrfToken = document
+          .querySelector('meta[name="_csrf"]')
+          .getAttribute("content");
+        const csrfHeader = document
+          .querySelector('meta[name="_csrf_header"]')
+          .getAttribute("content");
+
+        let timerInterval;
+        let timeLeft = 300; // 5 minutes in seconds
+
+        const errorMessage = /*[[${error}]]*/ null;
+        if (errorMessage) {
+          showNotification(errorMessage, "error");
+        }
+
+        // Send OTP - AJAX Request
+        sendOtpBtn.addEventListener("click", async function () {
+          const email = emailInput.value.trim();
+          if (!email || !isValidEmail(email)) {
+            showNotification("Please enter a valid email address", "error");
+            return;
+          }
+
+          // Disable button and show loading state
+          sendOtpBtn.disabled = true;
+          sendOtpBtn.textContent = "Sending...";
+
+          try {
+            const response = await fetch("/vote/send-otp", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email: email,
+              }),
+            });
+
+            if (response.ok) {
+              // Success - move to OTP verification step
+              emailDisplay.textContent = email;
+              requestOtpSection.classList.add("hidden");
+              verifyOtpSection.classList.remove("hidden");
+
+              // Start timer
+              startTimer();
+
+              // Focus first OTP input
+              otpInputs[0].focus();
+
+              showNotification("Verification code sent to " + email, "success");
+            } else {
+              // Handle error response
+              const errorData = await response.text();
+              showNotification(
+                errorData || "Failed to send verification code",
+                "error"
+              );
+            }
+          } catch (error) {
+            console.error("Error sending OTP:", error);
+            showNotification("Network error. Please try again.", "error");
+          } finally {
+            // Re-enable button
+            sendOtpBtn.disabled = false;
+            sendOtpBtn.textContent = "Send Verification Code";
+          }
+        });
+
+        // OTP Input handling
+        otpInputs.forEach((input, index) => {
+          input.addEventListener("input", function (e) {
+            const value = e.target.value;
+
+            // Only allow numbers
+            if (!/^\d$/.test(value)) {
+              e.target.value = "";
+              return;
+            }
+
+            // Move to next input
+            if (value && index < otpInputs.length - 1) {
+              otpInputs[index + 1].focus();
+            }
+
+            // Check if all inputs are filled
+            checkOtpComplete();
+          });
+
+          input.addEventListener("keydown", function (e) {
+            // Handle backspace
+            if (e.key === "Backspace" && !e.target.value && index > 0) {
+              otpInputs[index - 1].focus();
+            }
+          });
+
+          input.addEventListener("paste", function (e) {
+            e.preventDefault();
+            const pastedData = e.clipboardData.getData("text");
+            const digits = pastedData.replace(/\D/g, "").slice(0, 6);
+
+            digits.split("").forEach((digit, i) => {
+              if (otpInputs[i]) {
+                otpInputs[i].value = digit;
+              }
+            });
+
+            checkOtpComplete();
+          });
+        });
+
+        // Verify OTP - Corrected version
+        verifyOtpBtn.addEventListener("click", async function () {
+          const otp = Array.from(otpInputs)
+            .map((input) => input.value)
+            .join("");
+
+          if (otp.length === 6) {
+            try {
+              const response = await fetch("/vote/varify-otp", {
+                // Note the 'a' in "varify"
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json", // Changed to JSON
+                },
+                body: JSON.stringify({
+                  otp: otp, // Send as JSON
+                }),
+                credentials: "include", // Required for cookies
+              });
+
+              if (response.ok) {
+                clearInterval(timerInterval);
+                verifyOtpSection.classList.add("hidden");
+                successSection.classList.remove("hidden");
+                showNotification("Email verified successfully!", "success");
+              } else {
+                const errorData = await response.text();
+                showNotification(errorData || "Error verifying OTP", "error");
+              }
+            } catch (error) {
+              console.error("Error verifying OTP:", error);
+              showNotification(
+                "Failed to verify OTP. Please try again.",
+                "error"
+              );
+            }
+          } else {
+            showNotification(
+              "Invalid verification code. Please try again.",
+              "error"
+            );
+            otpInputs.forEach((input) => (input.value = ""));
+            otpInputs[0].focus();
+          }
+        });
+
+        // Resend OTP - AJAX Request
+        resendOtpBtn.addEventListener("click", async function () {
+          const email = emailInput.value.trim();
+
+          // Disable button and show loading state
+          resendOtpBtn.disabled = true;
+          resendOtpBtn.textContent = "Sending...";
+
+          try {
+            const response = await fetch("/vote/send-otp", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                email: email,
+              }),
+            });
+
+            if (response.ok) {
+              // Reset timer
+              timeLeft = 300;
+              startTimer();
+
+              // Clear OTP inputs
+              otpInputs.forEach((input) => (input.value = ""));
+              otpInputs[0].focus();
+
+              // Disable verify button
+              verifyOtpBtn.disabled = true;
+              verifyOtpBtn.classList.add(
+                "disabled:bg-gray-400",
+                "disabled:cursor-not-allowed"
+              );
+
+              showNotification("New verification code sent!", "success");
+            } else {
+              const errorData = await response.text();
+              showNotification(
+                errorData || "Failed to resend verification code",
+                "error"
+              );
+            }
+          } catch (error) {
+            console.error("Error resending OTP:", error);
+            showNotification("Network error. Please try again.", "error");
+          } finally {
+            // Re-enable button
+            resendOtpBtn.disabled = true;
+            resendOtpBtn.textContent = "Resend Code";
+          }
+        });
+
+        // Back button
+        backBtn.addEventListener("click", function () {
+          verifyOtpSection.classList.add("hidden");
+          requestOtpSection.classList.remove("hidden");
+          clearInterval(timerInterval);
+
+          // Clear OTP inputs
+          otpInputs.forEach((input) => (input.value = ""));
+        });
+
+        function checkOtpComplete() {
+          const otp = Array.from(otpInputs)
+            .map((input) => input.value)
+            .join("");
+          verifyOtpBtn.disabled = otp.length !== 6;
+
+          if (otp.length === 6) {
+            verifyOtpBtn.classList.remove(
+              "disabled:bg-gray-400",
+              "disabled:cursor-not-allowed"
+            );
+          } else {
+            verifyOtpBtn.classList.add(
+              "disabled:bg-gray-400",
+              "disabled:cursor-not-allowed"
+            );
+          }
+        }
+
+        function startTimer() {
+          resendOtpBtn.disabled = true;
+          resendOtpBtn.classList.add(
+            "disabled:text-gray-400",
+            "disabled:no-underline"
+          );
+
+          timerInterval = setInterval(function () {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes
+              .toString()
+              .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+
+            if (timeLeft <= 0) {
+              clearInterval(timerInterval);
+              resendOtpBtn.disabled = false;
+              resendOtpBtn.classList.remove(
+                "disabled:text-gray-400",
+                "disabled:no-underline"
+              );
+              timerElement.textContent = "00:00";
+            }
+
+            timeLeft--;
+          }, 1000);
+        }
+
+        function isValidEmail(email) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          return emailRegex.test(email);
+        }
+
+        function showNotification(message, type) {
+          // Create notification element
+          const notification = document.createElement("div");
+          notification.className = `fixed top-4 right-4 p-4 rounded-md shadow-lg z-50 ${
+            type === "success"
+              ? "bg-green-500 text-white"
+              : "bg-red-500 text-white"
+          }`;
+          notification.textContent = message;
+
+          document.body.appendChild(notification);
+
+          // Remove notification after 3 seconds
+          setTimeout(() => {
+            notification.remove();
+          }, 5000);
+        }
+      });
+      /*]]>*/
+    </script>
+  </body>
+</html>

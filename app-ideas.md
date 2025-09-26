@@ -1,4 +1,4 @@
-in election make registered user to be added staticaly for each registered voter 
+in election make registered user to be added staticaly for each registered voter
 there should be many types of election
 
 add a function to download the database
@@ -15,22 +15,22 @@ think of a way to validate candidate other than sending an email to them then va
 
 // in the candidate service change is the aproval methord to fetch all waiting for aproval not and not all people not varified
 
-edit the roles for party creation 
- 
- update the party status 
+edit the roles for party creation
 
- if vice presidents cant create a party if they try to access the page they will not be allowed to do any this further
+update the party status
 
- make a mapping for saving images 
+if vice presidents cant create a party if they try to access the page they will not be allowed to do any this further
 
- change party model an orgination not a party then 
+make a mapping for saving images
 
- for now i will not consider if a party is registered or not
+change party model an orgination not a party then
 
- add ratelimiting feed backs 
+for now i will not consider if a party is registered or not
 
- my website doesnt handle errors very well 
-    - so add error handling method 
-    - make sure that data is not tempered whith (i used valid without any validation)
+add ratelimiting feed backs
+
+my website doesnt handle errors very well - so add error handling method - make sure that data is not tempered whith (i used valid without any validation)
 
 use Luhn algorithm algosithm to varify the id
+
+- for voting regsiteration the user have to varify the email in less than 5 min and also for registration make sure that you take 15 min (i should make the minutes in the backend exacltly 15 minates 5 minates)

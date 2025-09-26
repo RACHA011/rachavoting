@@ -14,6 +14,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ElectionViewDTO {
 
+    private String publicKey;
+
     private String title;
 
     private String year;
