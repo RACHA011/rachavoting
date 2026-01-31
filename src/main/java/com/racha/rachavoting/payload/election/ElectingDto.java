@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ElectingDto {
+    private String publicAccessKey;
+    
     private String title;
 
     private String year;

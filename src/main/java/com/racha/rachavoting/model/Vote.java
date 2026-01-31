@@ -46,6 +46,14 @@ public class Vote {
     @Column(nullable = false, length = 64)
     private String voteHash; // SHA-256(hashedNationalId + encryptedVote)
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime timestamp = LocalDateTime.now();
+
+    @Column(nullable = false, updatable = false)
+    private String tokenHash;
+
+    @Column(nullable = false, updatable = false)
+    private String partyId;
+
+
 }

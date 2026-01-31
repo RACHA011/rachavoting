@@ -39,3 +39,7 @@ there should be many types of election
 
 - dont use cookies or session since the have their flows which are not good for secured processes, like when im registering for votes they say if im using cookies they can provide auto submition for other thing....
     or if using them improve the implimented safegards
+
+- all the election should be linked to their party by admin
+
+- when you want to vote send election in order (provintial, national)

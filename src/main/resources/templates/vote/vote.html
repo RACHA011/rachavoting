@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
@@ -444,7 +444,7 @@
       <!-- Confirmation Modal -->
       <div
         id="confirmation-modal"
-        class="hidden fixed inset-0 z-[1000] bg-black/50 flex items-center justify-center p-4"
+        class="hidden fixed inset-0 z-[1000] bg-black/50 items-center justify-center p-4"
       >
         <div
           class="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto"
@@ -495,534 +495,540 @@
         <p>&copy; 2025 Racha Voting. All rights reserved.</p>
       </div>
     </footer>
-
+    <!-- Scripts -->
     <script>
-      // Voting System State
-      let currentStage = "verification";
-      let voterData = null;
-      let nationalParties = null;
-      let provincialParties = null;
-      let votingData = {
-        nationalParty: "",
-        provincialParty: "",
-      };
-      let selectedParty = "";
+      class VotingPageManager {
+        constructor() {
+          // Application state
+          this.state = {
+            currentStage: "verification",
+            voterData: null,
+            nationalParties: null,
+            provincialParties: null,
+            selectedParty: null,
+            votingData: {
+              nationalParty: null,
+              provincialParty: null,
+            },
+          };
 
-      // National Parties Data
-      const nationalPartie = [
-        {
-          id: "anc",
-          name: "African National Congress",
-          abbreviation: "ANC",
-          logo: "🏛️",
-          leader: "Cyril Ramaphosa",
-          color: "#eab308",
-        },
-        {
-          id: "da",
-          name: "Democratic Alliance",
-          abbreviation: "DA",
-          logo: "🔵",
-          leader: "John Steenhuisen",
-          color: "#2563eb",
-        },
-        {
-          id: "eff",
-          name: "Economic Freedom Fighters",
-          abbreviation: "EFF",
-          logo: "✊",
-          leader: "Julius Malema",
-          color: "#dc2626",
-        },
-        {
-          id: "iff",
-          name: "Inkatha Freedom Party",
-          abbreviation: "IFP",
-          logo: "🛡️",
-          leader: "Velenkosini Hlabisa",
-          color: "#ea580c",
-        },
-        {
-          id: "ff",
-          name: "Freedom Front Plus",
-          abbreviation: "FF+",
-          logo: "🦁",
-          leader: "Pieter Groenewald",
-          color: "#f97316",
-        },
-        {
-          id: "acdp",
-          name: "African Christian Democratic Party",
-          abbreviation: "ACDP",
-          logo: "✝️",
-          leader: "Kenneth Meshoe",
-          color: "#9333ea",
-        },
-      ];
+          // Voting tokens from backend
+          this.votingTokens = {
+            nationalToken: null,
+            provincialToken: null,
+            nationalElectionId: null,
+            provincialElectionId: null,
+          };
 
-      // Provincial Parties Data (Gauteng example)
+          // Cache DOM elements
+          this.elements = {
+            loadingOverlay: document.getElementById("loadingOverlay"),
+            stages: {
+              verification: document.getElementById("verification-stage"),
+              national: document.getElementById("national-stage"),
+              provincial: document.getElementById("provincial-stage"),
+              complete: document.getElementById("complete-stage"),
+            },
+            forms: {
+              verification: document.getElementById("verification-form"),
+            },
+            buttons: {
+              nationalVote: document.getElementById("national-vote-btn"),
+              provincialVote: document.getElementById("provincial-vote-btn"),
+              modalCancel: document.getElementById("modal-cancel"),
+              modalConfirm: document.getElementById("modal-confirm"),
+              returnHome: document.getElementById("return-home"),
+            },
+            containers: {
+              nationalParties: document.getElementById("national-parties"),
+              provincialParties: document.getElementById("provincial-parties"),
+              nationalVoterInfo: document.getElementById("national-voter-info"),
+              provincialVoterInfo: document.getElementById(
+                "provincial-voter-info",
+              ),
+            },
+            modal: {
+              confirmation: document.getElementById("confirmation-modal"),
+              title: document.getElementById("modal-title"),
+              partyDisplay: document.getElementById("selected-party-display"),
+            },
+            errors: {
+              verification: document.getElementById("verification-error"),
+            },
+          };
 
-      const provincialPartie = [
-        {
-          id: "anc-gp",
-          name: "African National Congress - Gauteng",
-          abbreviation: "ANC",
-          logo: "🏛️",
-          leader: "Panyaza Lesufi",
-          color: "#eab308",
-          province: "Gauteng",
-        },
-        {
-          id: "da-gp",
-          name: "Democratic Alliance - Gauteng",
-          abbreviation: "DA",
-          logo: "🔵",
-          leader: "Solly Msimanga",
-          color: "#2563eb",
-          province: "Gauteng",
-        },
-        {
-          id: "eff-gp",
-          name: "Economic Freedom Fighters - Gauteng",
-          abbreviation: "EFF",
-          logo: "✊",
-          leader: "Mandisa Mashego",
-          color: "#dc2626",
-          province: "Gauteng",
-        },
-        {
-          id: "actionsa-gp",
-          name: "ActionSA - Gauteng",
-          abbreviation: "ASA",
-          logo: "⚡",
-          leader: "Herman Mashaba",
-          color: "#16a34a",
-          province: "Gauteng",
-        },
-        {
-          id: "ff-gp",
-          name: "Freedom Front Plus - Gauteng",
-          abbreviation: "FF+",
-          logo: "🦁",
-          leader: "Kobus Hoffman",
-          color: "#f97316",
-          province: "Gauteng",
-        },
-      ];
+          this.init();
+        }
 
-      // Input Validation: National ID - digits only
-      const idInput = document.getElementById("IdNumber");
-      idInput.addEventListener("input", () => {
-        idInput.value = idInput.value.replace(/\D/g, ""); // digits only
-      });
+        // ==================== INITIALIZATION ====================
 
-      // DOM Elements
-      const loadingOverlay = document.getElementById("loadingOverlay");
-      const verificationStage = document.getElementById("verification-stage");
-      const nationalStage = document.getElementById("national-stage");
-      const provincialStage = document.getElementById("provincial-stage");
-      const completeStage = document.getElementById("complete-stage");
-      const confirmationModal = document.getElementById("confirmation-modal");
+        init() {
+          this.initializeEventListeners();
+          this.initializeInputValidation();
+          this.updateProgressIndicator();
+        }
 
-      // Initialize the application
-      document.addEventListener("DOMContentLoaded", function () {
-        initializeEventListeners();
-        updateProgressIndicator();
-        // populateParties();
-      });
+        initializeEventListeners() {
+          // Verification form submission
+          this.elements.forms.verification.addEventListener("submit", (e) =>
+            this.handleVerification(e),
+          );
 
-      // Event Listeners
-      function initializeEventListeners() {
-        // Verification form
-        document
-          .getElementById("verification-form")
-          .addEventListener("submit", handleVerification);
+          // Vote button clicks
+          this.elements.buttons.nationalVote.addEventListener("click", () =>
+            this.handleVoteSubmit("national"),
+          );
+          this.elements.buttons.provincialVote.addEventListener("click", () =>
+            this.handleVoteSubmit("provincial"),
+          );
 
-        // Vote buttons
-        document
-          .getElementById("national-vote-btn")
-          .addEventListener("click", () => handleVoteSubmit("national"));
-        document
-          .getElementById("provincial-vote-btn")
-          .addEventListener("click", () => handleVoteSubmit("provincial"));
+          // Modal actions
+          this.elements.buttons.modalCancel.addEventListener("click", () =>
+            this.closeModal(),
+          );
+          this.elements.buttons.modalConfirm.addEventListener("click", () =>
+            this.confirmVote(),
+          );
 
-        // Modal buttons
-        document
-          .getElementById("modal-cancel")
-          .addEventListener("click", closeModal);
-        document
-          .getElementById("modal-confirm")
-          .addEventListener("click", confirmVote);
+          // Complete stage actions
+          this.elements.buttons.returnHome.addEventListener(
+            "click",
+            () => (window.location.href = "/"),
+          );
 
-        // Complete stage buttons
+          // Close modal on outside click
+          this.elements.modal.confirmation.addEventListener("click", (e) => {
+            if (e.target === this.elements.modal.confirmation) {
+              this.closeModal();
+            }
+          });
+        }
 
-        document
-          .getElementById("return-home")
-          .addEventListener("click", () => (window.location.href = "/"));
+        initializeInputValidation() {
+          const idInput = document.getElementById("IdNumber");
+          idInput.addEventListener("input", () => {
+            idInput.value = idInput.value.replace(/\D/g, ""); // Only allow digits
+          });
+        }
 
-        // Close modal when clicking outside
-        confirmationModal.addEventListener("click", function (e) {
-          if (e.target === confirmationModal) {
-            closeModal();
-          }
-        });
-      }
+        // ==================== STAGE MANAGEMENT ====================
 
-      // Stage Management
-      function goToStage(stage) {
-        // Hide all stages
-        document
-          .querySelectorAll(".voting-stage")
-          .forEach((s) => s.classList.remove("block"));
-        document
-          .querySelectorAll(".voting-stage")
-          .forEach((s) => s.classList.add("hidden"));
+        goToStage(stage) {
+          // Hide all stages
+          Object.values(this.elements.stages).forEach((stageEl) => {
+            stageEl.classList.add("hidden");
+            stageEl.classList.remove("block");
+          });
 
-        // Show target stage
-        document.getElementById(`${stage}-stage`).classList.add("block");
-        document.getElementById(`${stage}-stage`).classList.remove("hidden");
+          // Show target stage
+          this.elements.stages[stage].classList.remove("hidden");
+          this.elements.stages[stage].classList.add("block");
 
-        currentStage = stage;
-        updateProgressIndicator(stage);
-      }
+          this.state.currentStage = stage;
+          this.updateProgressIndicator(stage);
+        }
 
-      function updateProgressIndicator(stage) {
-        const steps = ["verification", "national", "provincial"];
-        const currentIndex = steps.indexOf(currentStage);
+        updateProgressIndicator(stage = "verification") {
+          const steps = ["verification", "national", "provincial"];
 
-        steps.forEach((step, index) => {
-          const stepElement = document.getElementById(`step-${step}`);
-          const circleElement = document.getElementById(`circle-${step}`);
+          steps.forEach((step) => {
+            const stepElement = document.getElementById(`step-${step}`);
+            const circleElement = document.getElementById(`circle-${step}`);
 
-          stepElement.classList.remove("active", "completed");
-
-          stage = !stage ? "verification" : stage;
-          // make the current stage active
-          if (stage == step) {
-            stepElement.classList.remove("text-gray-400");
-            stepElement.classList.add("text-sa-green");
-            circleElement.classList.add(
-              "border-sa-green",
-              "bg-sa-green",
-              "text-white"
-            );
-          } else {
-            stepElement.classList.remove("text-sa-green");
-            stepElement.classList.add("text-gray-400");
+            // Reset classes
+            stepElement.classList.remove("text-sa-green", "text-gray-400");
             circleElement.classList.remove(
               "border-sa-green",
               "bg-sa-green",
-              "text-white"
+              "text-white",
             );
-          }
 
-          if (index < currentIndex) {
-            stepElement.classList.add("completed");
-            circleElement.textContent = "✓";
-          } else if (index === currentIndex) {
-            stepElement.classList.add("active");
-            circleElement.textContent = index + 1;
-          } else {
-            circleElement.textContent = index + 1;
-          }
-        });
-      }
-
-      // Verification Handler
-      async function handleVerification(e) {
-        e.preventDefault();
-
-        const formData = new FormData(e.target);
-        const idNumber = formData.get("IdNumber").trim();
-        const registrationNumber = formData.get("registrationNumber").trim();
-        const securityKey = formData.get("securityKey").trim();
-
-        // Clear previous errors
-        const errorElement = document.getElementById("verification-error");
-        errorElement.classList.add("hidden");
-
-        if (!idNumber || !/^\d{13}$/.test(idNumber)) {
-          showError(
-            "verification-error",
-            "Please enter a valid 13-digit National ID number"
-          );
-          return;
-        }
-
-        // Validation
-        if (!registrationNumber || registrationNumber.length < 8) {
-          showError(
-            "verification-error",
-            "Registration number must be at least 8 characters"
-          );
-          return;
-        }
-
-        if (!securityKey) {
-          showError("verification-error", "Invalid security key");
-          return;
-        }
-
-        showLoading(true);
-        try {
-          // Mock successful verification
-
-          const response = await fetch("/vote/vote/validate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              idNo: idNumber,
-              regNo: registrationNumber,
-              secretKey: securityKey,
-            }),
-          });
-          // check response status
-          if (response.ok) {
-            const data = await response.json();
-            voterData = data.votingDto;
-
-            // tokens
-            const token = data.tokens; //TODO: to be used
-            console.log("Received token:" + token[0] + "\n" + token[1]);
-
-            nationalParties = voterData.election[0].party;
-            provincialParties = voterData.election[1].party;
-
-            populateParties();
-            goToStage("national");
-            updateVoterInfo();
-          } else {
-            const data = await response.text();
-            showError(
-              "verification-error",
-              "Verification failed. server error occurred: (" + data + ")"
-            );
-          }
-        } catch (error) {
-          showError(
-            "verification-error",
-            "Verification failed. An error occured while processing your info."
-          );
-        } finally {
-          showLoading(false);
-        }
-      }
-
-      // Party Population
-      function populateParties() {
-        populateNationalParties();
-        populateProvincialParties();
-      }
-
-      function populateNationalParties() {
-        const container = document.getElementById("national-parties");
-        container.innerHTML = "";
-
-        nationalParties.forEach((party) => {
-          const partyCard = createPartyCard(party, "national");
-          container.appendChild(partyCard);
-        });
-      }
-
-      function populateProvincialParties() {
-        const container = document.getElementById("provincial-parties");
-        container.innerHTML = "";
-
-        provincialParties.forEach((party) => {
-          const partyCard = createPartyCard(party, "provincial");
-          container.appendChild(partyCard);
-        });
-      }
-
-      function createPartyCard(party, type) {
-        const card = document.createElement("div");
-        card.className = "party-card";
-        card.dataset.partyId = party.id;
-        card.dataset.type = type;
-
-        card.innerHTML = `
-        <div class="party-logo" style="background-color: ${party.colors[1]}">
-           <img
-            src="${party.logoUrl}"
-            alt="${party.name}"
-            class=""
-            id="imagePreview"
-          />
-         </div>
-        <div class="party-info">
-            <div class="party-name">${party.name}</div>
-            <div class="party-abbreviation">${party.abbreviation}</div>
-            <div class="party-leader">Leader: ${party.leader}</div>
-        </div>
-        <div class="party-selector">
-            <span class="selector-icon">✓</span>
-        </div>
-      `;
-
-        card.addEventListener("click", () => selectParty(party.id, type));
-
-        return card;
-      }
-
-      function selectParty(partyId, type) {
-        // Clear previous selections for this type
-        document
-          .querySelectorAll(`.party-card[data-type="${type}"]`)
-          .forEach((card) => {
-            card.classList.remove("selected");
-            if (type === "provincial") {
-              card.classList.remove("provincial");
+            // Apply active state
+            if (stage === step) {
+              stepElement.classList.add("text-sa-green");
+              circleElement.classList.add(
+                "border-sa-green",
+                "bg-sa-green",
+                "text-white",
+              );
+            } else {
+              stepElement.classList.add("text-gray-400");
             }
           });
-
-        // Select new party
-        const selectedCard = document.querySelector(
-          `.party-card[data-party-id="${partyId}"]`
-        );
-        selectedCard.classList.add("selected");
-        if (type === "provincial") {
-          selectedCard.classList.add("provincial");
         }
 
-        selectedParty = partyId;
+        // ==================== VERIFICATION ====================
 
-        // Update vote button
-        const voteBtn = document.getElementById(`${type}-vote-btn`);
-        voteBtn.disabled = false;
-        voteBtn.textContent =
-          type === "national" ? "Cast National Vote" : "Cast Provincial Vote";
+        async handleVerification(e) {
+          e.preventDefault();
 
-        if (type === "national") {
-          voteBtn.className = "btn-primary btn-full";
-        } else {
-          voteBtn.className = "btn-secondary btn-full";
-        }
-      }
+          const formData = new FormData(e.target);
+          const credentials = {
+            idNo: formData.get("IdNumber").trim(),
+            regNo: formData.get("registrationNumber").trim(),
+            secretKey: formData.get("securityKey").trim(),
+          };
 
-      // Vote Submission
-      function handleVoteSubmit(type) {
-        if (!selectedParty) return;
+          // Clear previous errors
+          this.hideError("verification");
 
-        const parties =
-          type === "national" ? nationalParties : provincialParties;
-        const selectedPartyData = parties.find((p) => p.id === selectedParty);
-
-        showConfirmationModal(selectedPartyData, type);
-      }
-
-      function showConfirmationModal(party, type) {
-        const modal = document.getElementById("confirmation-modal");
-        const title = document.getElementById("modal-title");
-        const partyDisplay = document.getElementById("selected-party-display");
-
-        title.textContent = `Confirm Your ${
-          type === "national" ? "National" : "Provincial"
-        } Vote`;
-
-        partyDisplay.innerHTML = `
-        <div class="party-logo" style="background-color: ${party.colors[1]}">
-           <img
-            src="${party.logoUrl}"
-            alt="${party.name}"
-            class=""
-            id="imagePreview"
-          />
-        </div>
-        <div class="party-info">
-            <div class="party-name">${party.name}</div>
-            <div class="party-abbreviation">${party.abbreviation}</div>
-            <div class="party-leader">Leader: ${party.leader}</div>
-        </div>
-      `;
-
-        modal.classList.remove("hidden");
-        modal.dataset.voteType = type;
-      }
-
-      function closeModal() {
-        confirmationModal.classList.add("hidden");
-      }
-
-      async function confirmVote() {
-        const voteType = confirmationModal.dataset.voteType;
-
-        showLoading(true);
-        closeModal();
-
-        try {
-          // Simulate API call
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-
-          if (voteType === "national") {
-            votingData.nationalParty = selectedParty;
-            selectedParty = "";
-            goToStage("provincial");
-          } else {
-            votingData.provincialParty = selectedParty;
-            selectedParty = "";
-            goToStage("complete");
-            updateCompletePage();
+          // Validation
+          if (!this.validateCredentials(credentials)) {
+            return;
           }
-        } catch (error) {
-          console.error("Error submitting vote:", error);
-        } finally {
-          showLoading(false);
+
+          this.showLoading(true);
+
+          try {
+            const response = await fetch("/vote/vote/validate", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(credentials),
+            });
+
+            let data = null;
+
+            if (response.ok) {
+              data = await response.json();
+              this.handleVerificationSuccess(data);
+            } else {
+              const errorText = await response.text();
+              this.showError(
+                "verification",
+                `Verification failed: ${errorText}`,
+              );
+            }
+          } catch (error) {
+            this.showError(
+              "verification",
+              "An error occurred while processing your information.",
+            );
+            console.error("Verification error:", error);
+          } finally {
+            this.showLoading(false);
+          }
+        }
+
+        validateCredentials(credentials) {
+          if (!credentials.idNo || !/^\d{13}$/.test(credentials.idNo)) {
+            this.showError(
+              "verification",
+              "Please enter a valid 13-digit National ID number",
+            );
+            return false;
+          }
+
+          if (!credentials.regNo || credentials.regNo.length < 8) {
+            this.showError(
+              "verification",
+              "Registration number must be at least 8 characters",
+            );
+            return false;
+          }
+
+          if (!credentials.secretKey) {
+            this.showError("verification", "Security key is required");
+            return false;
+          }
+
+          return true;
+        }
+
+        handleVerificationSuccess(data) {
+          this.state.voterData = data.votingDto;
+          const tokens = data.tokens;
+          const elections = this.state.voterData.election;
+
+          // Determine which election is national vs provincial
+          const nationalIndex = elections.findIndex((e) =>
+            e.title.includes("Presidential"),
+          );
+          const provincialIndex = nationalIndex === 0 ? 1 : 0;
+
+          // Store parties
+          this.state.nationalParties = elections[nationalIndex].party;
+          this.state.provincialParties = elections[provincialIndex].party;
+
+          // Store tokens
+          this.votingTokens.nationalToken = tokens[nationalIndex];
+          this.votingTokens.provincialToken = tokens[provincialIndex];
+          this.votingTokens.nationalElectionId =
+            elections[nationalIndex].publicAccessKey;
+          this.votingTokens.provincialElectionId =
+            elections[provincialIndex].publicAccessKey;
+
+          this.populateParties();
+          this.updateVoterInfo();
+          this.goToStage("national");
+        }
+
+        // ==================== PARTY MANAGEMENT ====================
+
+        populateParties() {
+          this.populateNationalParties();
+          this.populateProvincialParties();
+        }
+
+        populateNationalParties() {
+          this.elements.containers.nationalParties.innerHTML = "";
+
+          this.state.nationalParties.forEach((party) => {
+            const partyCard = this.createPartyCard(party, "national");
+            this.elements.containers.nationalParties.appendChild(partyCard);
+          });
+        }
+
+        populateProvincialParties() {
+          this.elements.containers.provincialParties.innerHTML = "";
+
+          this.state.provincialParties.forEach((party) => {
+            const partyCard = this.createPartyCard(party, "provincial");
+            this.elements.containers.provincialParties.appendChild(partyCard);
+          });
+        }
+
+        createPartyCard(party, type) {
+          const card = document.createElement("div");
+          card.className = `party-card ${type}`;
+          card.dataset.partyId = party.id;
+          card.dataset.type = type;
+
+          card.innerHTML = `
+      <div class="party-logo" style="background-color: ${party.colors[1]}">
+        <img src="${party.logoUrl}" alt="${party.name}" id="imagePreview" />
+      </div>
+      <div class="party-info">
+        <div class="party-name">${party.name}</div>
+        <div class="party-abbreviation">${party.abbreviation}</div>
+        <div class="party-leader">Leader: ${party.leader}</div>
+      </div>
+      <div class="party-selector">
+        <span class="selector-icon">✓</span>
+      </div>
+    `;
+
+          card.addEventListener("click", () =>
+            this.selectParty(party.id, type),
+          );
+
+          return card;
+        }
+
+        selectParty(partyId, type) {
+          // Clear previous selections for this type
+          document.querySelectorAll(`.party-card.${type}`).forEach((card) => {
+            card.classList.remove("selected");
+          });
+
+          // Select new party
+          const selectedCard = document.querySelector(
+            `.party-card.${type}[data-party-id="${partyId}"]`,
+          );
+          selectedCard.classList.add("selected");
+
+          this.state.selectedParty = partyId;
+
+          // Update vote button
+          this.updateVoteButton(type);
+        }
+
+        updateVoteButton(type) {
+          const voteBtn = this.elements.buttons[`${type}Vote`];
+          voteBtn.disabled = false;
+          voteBtn.textContent =
+            type === "national" ? "Cast National Vote" : "Cast Provincial Vote";
+
+          voteBtn.className =
+            type === "national"
+              ? "btn-primary btn-full"
+              : "btn-secondary btn-full";
+        }
+
+        // ==================== VOTE SUBMISSION ====================
+
+        handleVoteSubmit(type) {
+          if (!this.state.selectedParty) return;
+
+          const parties =
+            type === "national"
+              ? this.state.nationalParties
+              : this.state.provincialParties;
+
+          const selectedPartyData = parties.find(
+            (p) => p.id === this.state.selectedParty,
+          );
+
+          this.showConfirmationModal(selectedPartyData, type);
+        }
+
+        showConfirmationModal(party, type) {
+          this.elements.modal.title.textContent = `Confirm Your ${type === "national" ? "National" : "Provincial"} Vote`;
+
+          this.elements.modal.partyDisplay.innerHTML = `
+      <div class="party-logo" style="background-color: ${party.colors[1]}">
+        <img src="${party.logoUrl}" alt="${party.name}" id="imagePreview" />
+      </div>
+      <div class="party-info">
+        <div class="party-name">${party.name}</div>
+        <div class="party-abbreviation">${party.abbreviation}</div>
+        <div class="party-leader">Leader: ${party.leader}</div>
+      </div>
+    `;
+
+          this.elements.modal.confirmation.classList.remove("hidden");
+          this.elements.modal.confirmation.classList.add("flex");
+          this.elements.modal.confirmation.dataset.voteType = type;
+        }
+
+        closeModal() {
+          this.elements.modal.confirmation.classList.add("hidden");
+          this.elements.modal.confirmation.classList.remove("flex");
+        }
+
+        async confirmVote() {
+          const voteType = this.elements.modal.confirmation.dataset.voteType;
+
+          this.showLoading(true);
+          this.closeModal();
+
+          try {
+            if (voteType === "national") {
+              await this.castNationalVote();
+            } else {
+              await this.castProvincialVote();
+            }
+          } catch (error) {
+            console.error("Error submitting vote:", error);
+            alert("Failed to submit vote. Please try again.");
+          } finally {
+            this.showLoading(false);
+          }
+        }
+
+        async castNationalVote() {
+          const response = await fetch("/vote/vote/cast", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Voting-Token": this.votingTokens.nationalToken,
+            },
+            body: JSON.stringify({
+              electionId: this.votingTokens.nationalElectionId,
+              partyId: this.state.selectedParty,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error("National vote submission failed");
+          }
+
+          const data = await response.json();
+
+          if (!data.success) {
+            throw new Error(data.message || "National vote submission failed");
+          }
+          // this.state.votingData.nationalParty = this.state.selectedParty;
+          this.state.selectedParty = null;
+          this.goToStage("provincial");
+        }
+
+        async castProvincialVote() {
+          const response = await fetch("/vote/vote/cast", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Voting-Token": this.votingTokens.provincialToken,
+            },
+            body: JSON.stringify({
+              electionId: this.votingTokens.provincialElectionId,
+              partyId: this.state.selectedParty,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Provincial vote submission failed");
+          }
+
+          
+          const data = await response.json();
+
+          if (!data.success) {
+            throw new Error(data.message || "Provincial vote submission failed");
+          }
+
+          // console.log("Provincial vote submitted:", this.state.selectedParty);
+          // this.state.votingData.provincialParty = this.state.selectedParty;
+          this.state.selectedParty = null;
+          this.updateCompletePage();
+          this.goToStage("complete");
+        }
+
+        // ==================== UI UPDATES ====================
+
+        updateVoterInfo() {
+          if (!this.state.voterData) return;
+
+          const infoHTML = `
+      <p><strong>Voter Registration No:</strong> ${this.state.voterData.regNo}</p>
+      <p><strong>Province:</strong> ${this.state.voterData.province}</p>
+    `;
+
+          this.elements.containers.nationalVoterInfo.innerHTML = infoHTML;
+          this.elements.containers.provincialVoterInfo.innerHTML =
+            infoHTML +
+            `<p><strong>District:</strong> ${this.state.voterData.district}</p>`;
+
+          // Update provincial titles
+          document.getElementById("provincial-title").textContent =
+            `Provincial Election - ${this.state.voterData.province}`;
+          document.getElementById("provincial-info-title").textContent =
+            `${this.state.voterData.province} Provincial Legislature Election`;
+          document.getElementById("provincial-info-text").textContent =
+            `Select ONE party to represent you in the ${this.state.voterData.province} Provincial Legislature.`;
+        }
+
+        updateCompletePage() {
+          const votingDetails = document.getElementById("voting-details");
+          const now = new Date();
+
+          votingDetails.innerHTML = `
+      <p><strong>Voter Registration No:</strong> ${this.state.voterData.regNo}</p>
+      <p><strong>Province:</strong> ${this.state.voterData.province}</p>
+      <p><strong>Voting Date:</strong> ${now.toLocaleDateString()}</p>
+      <p><strong>Voting Time:</strong> ${now.toLocaleTimeString()}</p>
+    `;
+        }
+
+        // ==================== UTILITY FUNCTIONS ====================
+
+        showLoading(show) {
+          if (show) {
+            this.elements.loadingOverlay.classList.remove("hidden");
+          } else {
+            this.elements.loadingOverlay.classList.add("hidden");
+          }
+        }
+
+        showError(context, message) {
+          const errorElement = this.elements.errors[context];
+          if (errorElement) {
+            errorElement.innerHTML = `<p class="text-sm text-red-600">${message}</p>`;
+            errorElement.classList.remove("hidden");
+          }
+        }
+
+        hideError(context) {
+          const errorElement = this.elements.errors[context];
+          if (errorElement) {
+            errorElement.classList.add("hidden");
+          }
         }
       }
 
-      // Utility Functions
-      function updateVoterInfo() {
-        if (!voterData) return;
-
-        const nationalInfo = document.getElementById("national-voter-info");
-        const provincialInfo = document.getElementById("provincial-voter-info");
-
-        const infoHTML = `
-        <p><strong>Voter Registration No:</strong> ${voterData.regNo}</p>
-        <p><strong>Province:</strong> ${voterData.province}</p>
-      `;
-
-        nationalInfo.innerHTML = infoHTML;
-        provincialInfo.innerHTML =
-          infoHTML + `<p><strong>District:</strong> ${voterData.district}</p>`;
-
-        // Update provincial titles
-        document.getElementById(
-          "provincial-title"
-        ).textContent = `Provincial Election - ${voterData.province}`;
-        document.getElementById(
-          "provincial-info-title"
-        ).textContent = `${voterData.province} Provincial Legislature Election`;
-        document.getElementById(
-          "provincial-info-text"
-        ).textContent = `Select ONE party to represent you in the ${voterData.province} Provincial Legislature. Your vote will help determine who governs your province.`;
-      }
-
-      function updateCompletePage() {
-        const votingDetails = document.getElementById("voting-details");
-        const now = new Date();
-
-        votingDetails.innerHTML = `
-        <p><strong>Voter Registration No:</strong> ${voterData.regNo}</p>
-        <p><strong>Province:</strong> ${voterData.province}</p>
-        <p><strong>Voting Date:</strong> ${now.toLocaleDateString()}</p>
-        <p><strong>Voting Time:</strong> ${now.toLocaleTimeString()}</p>
-      `;
-      }
-
-      function showLoading(show) {
-        if (show) {
-          loadingOverlay.classList.remove("hidden");
-        } else {
-          loadingOverlay.classList.add("hidden");
-        }
-      }
-
-      function showError(elementId, message) {
-        const errorElement = document.getElementById(elementId);
-        errorElement.innerHTML = `<p>${message}</p>`;
-        errorElement.classList.remove("hidden");
-      }
+      // Initialize the application when DOM is ready
+      document.addEventListener("DOMContentLoaded", () => {
+        window.votingManager = new VotingPageManager();
+      });
     </script>
   </body>
 </html>

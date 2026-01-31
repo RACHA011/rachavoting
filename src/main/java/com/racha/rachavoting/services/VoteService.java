@@ -1,5 +1,6 @@
 package com.racha.rachavoting.services;
 
+import java.security.MessageDigest;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import com.racha.rachavoting.model.Voter;
 import com.racha.rachavoting.payload.constants.VotingToken;
 import com.racha.rachavoting.payload.constants.VotingTokenValidation;
 import com.racha.rachavoting.repository.VoteRepository;
+import com.racha.rachavoting.util.constants.VoteResponse;
 
 @Service
 public class VoteService {
@@ -98,24 +100,46 @@ public class VoteService {
                 throw new IllegalArgumentException("Election is not active ");
             }
 
+            // TODO: make a separate post url or function to cast a vote for errors management inbetween process
             // Create vote record
             Vote vote = new Vote();
             vote.setElection(election);
             vote.setPartyId(partyId);
             vote.setTokenHash(validation.getTokenHash());
-            vote.setCastAt(System.currentTimeMillis());
+            // vote.setCastAt(System.currentTimeMillis());
             vote.setVoteHash(createVoteHash(validation.getElectionId(), partyId, validation.getTokenHash()));
 
             // Save vote to database
             vote = voteRepository.save(vote);
 
             // Mark token as used
-            votingTokenService.markTokenAsUsed(validation.getTokenHash());
+            tokenService.markTokenAsUsed(validation.getTokenHash());
 
             return new VoteResponse(true, "Vote cast successfully");
 
         } catch (Exception e) {
             throw new RuntimeException("Vote casting failed: " + e.getMessage(), e);
+        }
+    }
+
+    private String createVoteHash(String electionId, String partyId, String tokenHash) {
+        // Create integrity hash for vote verification
+        String input = electionId + partyId + tokenHash + System.currentTimeMillis();
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(input.getBytes("UTF-8"));
+            
+            StringBuilder hexString = new StringBuilder();
+            for (byte b : hash) {
+                String hex = Integer.toHexString(0xff & b);
+                if (hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create vote hash", e);
         }
     }
 }

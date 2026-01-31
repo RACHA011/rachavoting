@@ -66,6 +66,9 @@ public class Election {
     @Column(nullable = false)
     private BigInteger registeredVoters = new BigInteger("0");
 
+    @ManyToMany(mappedBy = "elections", fetch = FetchType.LAZY)
+    private Set<Party> parties = new HashSet<>();
+
     @Column(nullable = false)
     private BigInteger totalVotes = new BigInteger("0");
 
@@ -114,8 +117,10 @@ public class Election {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Election)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof Election))
+            return false;
         Election election = (Election) o;
         return id != null && id.equals(election.id);
     }

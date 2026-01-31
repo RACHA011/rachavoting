@@ -38,8 +38,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.racha.rachavoting.mapper.PartyMapper;
 import com.racha.rachavoting.mapper.VoterMapper;
 import com.racha.rachavoting.model.Election;
+import com.racha.rachavoting.model.Party;
 import com.racha.rachavoting.model.RegisteredEmail;
 import com.racha.rachavoting.model.Voter;
 import com.racha.rachavoting.payload.EmailDTO;
@@ -53,13 +55,16 @@ import com.racha.rachavoting.payload.vote.VotingDto;
 import com.racha.rachavoting.payload.voter.VoterCreateDTO;
 import com.racha.rachavoting.payload.voter.VoterViewDTO;
 import com.racha.rachavoting.services.ElectionService;
+import com.racha.rachavoting.services.PartyService;
 import com.racha.rachavoting.services.RegisteredEmailService;
 import com.racha.rachavoting.services.TokenService;
+import com.racha.rachavoting.services.VoteService;
 import com.racha.rachavoting.services.VoterService;
 import com.racha.rachavoting.services.components.DistrictService;
 import com.racha.rachavoting.services.components.OtpService;
 import com.racha.rachavoting.util.Hasher;
 import com.racha.rachavoting.util.constants.Rondomkey;
+import com.racha.rachavoting.util.constants.VoteResponse;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -87,6 +92,9 @@ public class VoteController {
     private VoterService voterService;
 
     @Autowired
+    private VoteService voteService;
+
+    @Autowired
     private DistrictService districtService;
 
     @Autowired
@@ -99,10 +107,16 @@ public class VoteController {
     private ElectionService electionService;
 
     @Autowired
+    private PartyService partyServices;
+
+    @Autowired
     private RegisteredEmailService registeredEmailService;
 
     @Autowired
     private VoterMapper voterMapper;
+
+    @Autowired
+    private PartyMapper partyMapper;
 
     @Value("${app.otp.expiration}")
     private long otpExpirationMinutes;
@@ -428,6 +442,7 @@ public class VoteController {
                     // Todo: Check if the voter has already voted in any of the elections
 
                     VotingDto votingDto = voterMapper.toVotingDto(voter);
+                    // its for provincial and presidental election
                     TokenResponse tokenResponse1 = tokenService.generateVotingToken(voter.getUniqueId(),
                             new ArrayList<>(voter.getElections()).get(0).getPublicAccessKey() + "");
                     TokenResponse tokenResponse2 = tokenService.generateVotingToken(voter.getUniqueId(),
@@ -456,45 +471,46 @@ public class VoteController {
     }
 
     // New cast vote endpoint using the secure token
-@PostMapping(value = "/vote/cast", produces = "application/json")
-@ResponseBody
-public ResponseEntity<?> castVote(
-        @RequestHeader("X-Voting-Token") String votingToken,
-        @Valid @RequestBody CastVoteDto castVoteDto) {
-    
-    try {
-        // Validate the voting token
-        VotingTokenValidation validation = tokenService.validateVotingToken(votingToken);
-        
-        // Additional validation: ensure election matches
-        if (!validation.getElectionId().equals(castVoteDto.getElectionId())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body("Token not valid for this election");
-        }
-        
-        // Check if party exists and is valid for this election
-        if (!isValidPartyForElection(castVoteDto.getPartyId(), castVoteDto.getElectionId())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body("Invalid party for this election");
-        }
-        
-        // Cast the vote
-        VoteResponse voteResponse = votingService.castVote(votingToken, castVoteDto.getPartyId());
-        
-        return ResponseEntity.status(HttpStatus.OK).body(voteResponse);
-        
-    } catch (IllegalArgumentException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-            .body("Invalid or expired voting token");
-    } catch (IllegalStateException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-            .body("Vote already cast with this token");
-    } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body("Vote casting failed: " + e.getMessage());
-    }
-}
+    @PostMapping(value = "/vote/cast", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<?> castVote(
+            @RequestHeader("X-Voting-Token") String votingToken,
+            @Valid @RequestBody CastVoteDto castVoteDto) {
 
+        try {
+            // Validate the voting token
+            VotingTokenValidation validation =
+            tokenService.validateVotingToken(votingToken);
+
+            // Additional validation: ensure election matches
+            if (!validation.getElectionId().equals(castVoteDto.getElectionId())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body("Token not valid for this election");
+            }
+
+            // Check if party exists and is valid for this election
+            if (!isValidPartyForElection(castVoteDto.getPartyId(),
+            castVoteDto.getElectionId())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body("Invalid party for this election");
+            }
+
+            // Cast the vote
+            VoteResponse voteResponse = voteService.castVote(votingToken,
+            castVoteDto.getPartyId());
+
+            return ResponseEntity.status(HttpStatus.OK).body(voteResponse);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("Invalid or expired voting token");
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Vote already cast with this token");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Vote casting failed: " + e.getMessage());
+        }
+    }
 
     // ==================== PRIVATE HELPER METHODS ==================== //
 
@@ -665,6 +681,29 @@ public ResponseEntity<?> castVote(
         response.put("message", message);
         response.put("timestamp", Instant.now());
         return ResponseEntity.status(status).body(response);
+    }
+
+    private boolean isValidPartyForElection(String partyId, String electionId) {
+        Election election = electionService.findByPublicKey(electionId);
+
+        if (election == null) {
+            return false;
+        }
+
+        Party party = null;
+        try {
+            party = partyServices.getPartyById(Long.parseLong(partyId));
+            if (party == null) {
+                return false;
+            }
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Invalid party ID format", e);
+        } catch (Exception e) {
+            // throw new Exception("Error retrieving party", e);
+            return false;
+        }
+
+        return election.getParties().contains(party);
     }
 
     // ==================== Error Handler ==================== //

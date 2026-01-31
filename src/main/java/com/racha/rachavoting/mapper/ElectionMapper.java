@@ -45,6 +45,7 @@ public class ElectionMapper {
         Set<PartyBasicDTO> parties = partyService.getAllParties();
 
         return ElectingDto.builder()
+                .publicAccessKey(election.getPublicAccessKey())
                 .title(election.getTitle())
                 .year(election.getYear())
                 .party(parties)
