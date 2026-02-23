@@ -10,22 +10,34 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 
 @Data
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = { "election_id", "voter_id" })
+})
 public class Vote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "election_id", nullable = false)
+    // private Election election;
+
+    // @OneToOne(fetch = FetchType.LAZY)
+    // @JoinColumn(name = "voter_id", referencedColumnName = "hashedNationalId")
+    // private Voter voter;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "election_id", nullable = false)
     private Election election;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "voter_id", referencedColumnName = "hashedNationalId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "voter_id", referencedColumnName = "hashedNationalId", nullable = false)
     private Voter voter;
 
     @Column(nullable = false, columnDefinition = "TEXT")
@@ -34,6 +46,14 @@ public class Vote {
     @Column(nullable = false, length = 64)
     private String voteHash; // SHA-256(hashedNationalId + encryptedVote)
 
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime timestamp = LocalDateTime.now();
+
+    @Column(nullable = false, updatable = false)
+    private String tokenHash;
+
+    @Column(nullable = false, updatable = false)
+    private String partyId;
+
+
 }

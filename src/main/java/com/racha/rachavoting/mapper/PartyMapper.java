@@ -24,6 +24,7 @@ public class PartyMapper {
         dto.setLeader(party.getLeader());
         dto.setSlogan(party.getSlogan());
         dto.setLogoUrl(party.getLogoUrl());
+        dto.setColors(party.getColors());
         return dto;
     }
 

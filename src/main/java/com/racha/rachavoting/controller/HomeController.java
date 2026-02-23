@@ -1,5 +1,8 @@
 package com.racha.rachavoting.controller;
 
+import java.security.SecureRandom;
+import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +10,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -38,7 +42,8 @@ public class HomeController {
     @Autowired
     private LogoService logoService;
 
-
+    @Autowired
+    private SecureRandom secureRandom;
 
     @GetMapping("/")
     public String home(Model model) {
@@ -128,6 +133,7 @@ public class HomeController {
             return ResponseEntity.status(500).body("Error processing logo: " + e.getMessage());
         }
     }
+
     @GetMapping(path = "/get-icon")
     @ResponseBody
     public ResponseEntity<?> getIcon(@RequestParam String id) {
@@ -154,4 +160,107 @@ public class HomeController {
         }
     }
 
+    @PostMapping("/generate-id")
+    public ResponseEntity<?> getId(
+            @RequestParam(value = "dob", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dob) {
+
+        try {
+            // 1. Generate date of birth
+            LocalDate dateOfBirth = (dob != null) ? dob : generateRandomDateWithoutInvalidLeapDays();
+
+            // 2. Generate gender
+            String gender = (getSecureBit() == 1) ? "male" : "female";
+
+            // 3. Generate valid ID in one attempt
+            String idNumber = generateValidID(dateOfBirth, gender);
+
+            return ResponseEntity.ok(idNumber);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error generating ID: " + e.getMessage());
+        }
+    }
+
+    // Optimized ID generation that creates valid IDs in one attempt
+    private String generateValidID(LocalDate dob, String gender) {
+        // 1. Generate date part (YYMMDD)
+        String datePart = dob.format(DateTimeFormatter.ofPattern("yyMMdd"));
+
+        // 2. Generate sequence number based on gender
+        int sequence;
+        if ("female".equalsIgnoreCase(gender)) {
+            sequence = 1000 + secureRandom.nextInt(4000); // 1000-4999
+        } else {
+            sequence = 5000 + secureRandom.nextInt(5000); // 5000-9999
+        }
+        String sequencePart = String.format("%04d", sequence);
+
+        // 3. Citizenship (0 = SA citizen)
+        String citizenshipPart = "0";
+
+        // 4. Race digit (historical, use 8 for test data)
+        String racePart = "8";
+
+        // 5. Combine first 12 digits
+        String first12 = datePart + sequencePart + citizenshipPart + racePart;
+
+        // 6. Calculate checksum
+        int checksum = calculateLuhnChecksum(first12);
+
+        return first12 + checksum;
+    }
+
+    // Pre-calculated Luhn checksum
+    private static int calculateLuhnChecksum(String number) {
+        int sum = 0;
+        boolean even = false;
+
+        for (int i = number.length() - 1; i >= 0; i--) {
+            int digit = Character.getNumericValue(number.charAt(i));
+
+            if (even) {
+                digit *= 2;
+                if (digit > 9) {
+                    digit = (digit % 10) + 1;
+                }
+            }
+
+            sum += digit;
+            even = !even;
+        }
+
+        return (10 - (sum % 10)) % 10;
+    }
+
+    private LocalDate generateRandomDateSecure() {
+        int minYear = 1950;
+        int maxYear = 2006;
+
+        // Generate random year between 1950-2006
+        int year = minYear + secureRandom.nextInt(maxYear - minYear + 1);
+
+        // Generate random month (1-12)
+        int month = 1 + secureRandom.nextInt(12);
+
+        // Generate random day (properly handling month lengths)
+        int maxDay = Month.of(month).maxLength();
+        int day = 1 + secureRandom.nextInt(maxDay);
+
+        return LocalDate.of(year, month, day);
+    }
+
+    // avoids February 29th for non-leap years
+    private LocalDate generateRandomDateWithoutInvalidLeapDays() {
+        LocalDate date;
+        do {
+            date = generateRandomDateSecure();
+        } while (date.getMonth() == Month.FEBRUARY &&
+                date.getDayOfMonth() == 29 &&
+                !date.isLeapYear());
+
+        return date;
+    }
+
+    private int getSecureBit() {
+        return secureRandom.nextInt(2); // returns 0 or 1
+    }
 }

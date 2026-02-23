@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
-    <title>SA Vote Online</title>
+    <title>Racha voting</title>
     <link rel="stylesheet" th:href="@{/css/output.css}" />
   </head>
   <body class="min-h-screen flex flex-col">
@@ -9,6 +9,28 @@
     <header th:replace="~{/eg/header :: header}"></header>
 
     <main class="flex-1">
+      <div
+        th:if="${error}"
+        class="fixed top-4 right-4 p-4 rounded-md shadow-lg z-50 bg-red-500 text-white animate-fade-out"
+      >
+        <div class="flex items-center">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6 mr-2"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <span th:text="${error}">Error message</span>
+        </div>
+      </div>
       <!-- Hero will be inserted here -->
       <div th:replace="~{/eg/hero :: div}"></div>
 
@@ -862,7 +884,7 @@
             </a>  -->
 
             <a
-              th:href="@{/vote/register}"
+              th:href="@{/vote/register-to-vote}"
               class="inline-block bg-white text-sa-blue hover:bg-white/90 font-medium py-3 px-6 rounded-md transition-colors w-full sm:w-auto"
             >
               Register Now
@@ -876,5 +898,6 @@
     <footer th:replace="~{/eg/footer :: footer}"></footer>
 
     <script th:src="@{/js/main.js}"></script>
+    
   </body>
 </html>

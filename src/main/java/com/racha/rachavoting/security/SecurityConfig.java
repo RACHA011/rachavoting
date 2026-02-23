@@ -1,5 +1,7 @@
 package com.racha.rachavoting.security;
 
+import java.security.SecureRandom;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -87,7 +89,11 @@ public class SecurityConfig {
                                                 .contentSecurityPolicy(csp -> csp
                                                                 .policyDirectives(
                                                                                 "default-src 'self'; img-src 'self' data:; script-src 'self'; frame-src 'none';"))
-                                                .frameOptions(frame -> frame.deny()))
+                                                .frameOptions(frame -> frame.deny())
+                                                .httpStrictTransportSecurity(hsts -> hsts
+                                                                .includeSubDomains(true)
+                                                                .preload(true)
+                                                                .maxAgeInSeconds(63072000)))
                                 // CSRF configuration
                                 .csrf(csrf -> csrf.ignoringRequestMatchers("/api/public/candidate/**"))
                                 // Authorization rules
@@ -157,5 +163,10 @@ public class SecurityConfig {
         @Bean
         public static PasswordEncoder passwordEncoder() {
                 return new BCryptPasswordEncoder();
+        }
+
+        @Bean
+        public SecureRandom secureRandom() {
+                return new SecureRandom();
         }
 }

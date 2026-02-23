@@ -1,122 +1,1034 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head th:replace="~{/componets/head :: head}"> </head>
-  <body>
-    <!-- header section starts -->
-    <header th:replace="~{/componets/header :: header}"></header>
-    <!-- end header section -->
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>South African Voting System</title>
+    <link rel="stylesheet" th:href="@{/css/output.css}" />
+  </head>
 
-    <main>
-      <div class="container">
-        <a th:href="@{/}" class="back-link">
-          <i class="fa fa-arrow-left"></i> Back to Home
-        </a>
-
-        <h1>Cast Your Vote</h1>
-
-        <div id="error-message" class="alert error-alert none">
-          <i class="fa fa-exclamation-circle"></i>
-          <div>
-            <h4>Error</h4>
-            <p>Please select a candidate before submitting your vote.</p>
-          </div>
+  <body class="bg-gray-50">
+    <!-- Loading Overlay -->
+    <div
+      id="loadingOverlay"
+      class="hidden fixed inset-0 z-[2000] bg-black/50 backdrop-blur-sm flex items-center justify-center"
+    >
+      <div
+        class="bg-white p-8 rounded-xl shadow-xl max-w-xs w-full text-center"
+      >
+        <div class="flex justify-center mb-4">
+          <svg
+            class="animate-spin h-8 w-8 text-sa-green"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path
+              d="M21 12a9 9 0 1 1-6.219-8.56"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
         </div>
+        <p class="text-gray-700 font-medium">Processing your vote...</p>
+      </div>
+    </div>
 
-        <div id="voting-form" class="card">
-          <div class="card-header">
-            <h2>Presidential Election 2024</h2>
-            <p>Select one candidate from the list below</p>
-          </div>
-          <div class="card-content">
-            <div class="radio-group">
-              <div class="radio-option">
-                <input
-                  type="radio"
-                  name="candidate"
-                  id="candidate1"
-                  value="candidate1"
-                />
-                <label for="candidate1">
-                  <span class="candidate-name">Jane Smith</span>
-                  <span class="candidate-party">Progressive Party</span>
-                </label>
-              </div>
-              <div class="radio-option">
-                <input
-                  type="radio"
-                  name="candidate"
-                  id="candidate2"
-                  value="candidate2"
-                />
-                <label for="candidate2">
-                  <span class="candidate-name">John Doe</span>
-                  <span class="candidate-party">Conservative Party</span>
-                </label>
-              </div>
-              <div class="radio-option">
-                <input
-                  type="radio"
-                  name="candidate"
-                  id="candidate3"
-                  value="candidate3"
-                />
-                <label for="candidate3">
-                  <span class="candidate-name">Alex Johnson</span>
-                  <span class="candidate-party">Centrist Alliance</span>
-                </label>
-              </div>
-              <div class="radio-option">
-                <input
-                  type="radio"
-                  name="candidate"
-                  id="candidate4"
-                  value="candidate4"
-                />
-                <label for="candidate4">
-                  <span class="candidate-name">Maria Rodriguez</span>
-                  <span class="candidate-party">Green Party</span>
-                </label>
-              </div>
+    <!-- Header -->
+    <header class="bg-white shadow-md">
+      <!-- South African Flag Stripe -->
+      <div class="flex h-2 w-full">
+        <div class="w-1/6 bg-sa-red"></div>
+        <div class="w-1/6 bg-sa-blue"></div>
+        <div class="w-1/6 bg-sa-yellow"></div>
+        <div class="w-1/6 bg-sa-green"></div>
+        <div class="w-1/6 bg-white"></div>
+        <div class="w-1/6 bg-black"></div>
+      </div>
+
+      <div class="container mx-auto px-4 py-4">
+        <div class="flex flex-col md:flex-row items-center justify-between">
+          <!-- Logo & Title -->
+          <div class="flex items-center space-x-4 mb-4 md:mb-0">
+            <div
+              class="flex items-center justify-center bg-sa-green rounded-full w-12 h-12 text-white font-bold text-xl"
+            >
+              SA
+            </div>
+            <div class="text-center md:text-left">
+              <h1 class="text-xl md:text-2xl font-bold text-gray-800">
+                Racha Voting
+              </h1>
+              <p class="text-xs md:text-sm text-gray-600">
+                Secure Online Voting System
+              </p>
             </div>
           </div>
-          <div class="card-footer">
-            <button id="submit-vote" class="btn primary-btn full-width">
-              Submit Vote
+
+          <!-- Progress Indicator -->
+          <div class="flex items-center space-x-2 text-sm">
+            <div id="step-verification" class="flex items-center font-semibold">
+              <div
+                id="circle-verification"
+                class="flex items-center justify-center w-6 h-6 rounded-full border-2 text-xs mr-2"
+              >
+                1
+              </div>
+              <span>Verify</span>
+            </div>
+            <div class="w-8 h-0.5 bg-gray-300"></div>
+            <div id="step-national" class="flex items-center">
+              <div
+                id="circle-national"
+                class="flex items-center justify-center w-6 h-6 rounded-full border-2 border-gray-300 text-xs mr-2"
+              >
+                2
+              </div>
+              <span>National</span>
+            </div>
+            <div class="w-8 h-0.5 bg-gray-300"></div>
+            <div id="step-provincial" class="flex items-center">
+              <div
+                id="circle-provincial"
+                class="flex items-center justify-center w-6 h-6 rounded-full border-2 border-gray-300 text-xs mr-2"
+              >
+                3
+              </div>
+              <span>Provincial</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 max-w-4xl">
+      <!-- Voter Verification Stage -->
+      <div id="verification-stage" class="block voting-stage">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div
+            class="bg-gradient-green-blue text-white px-6 py-4 flex items-center justify-between"
+          >
+            <div class="flex items-center space-x-2">
+              <span>🛡️</span>
+              <h2 class="text-xl font-bold">Voter Verification</h2>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <div
+              class="bg-blue-50 border-l-4 border-sa-blue p-4 mb-6 flex items-start space-x-3"
+            >
+              <span class="text-sa-blue">🛡️</span>
+              <div>
+                <h3 class="font-semibold text-sa-blue">
+                  Secure Verification Required
+                </h3>
+                <p class="text-sm text-gray-700">
+                  Please enter your voter registration number and security key
+                  to access your ballot. This information was provided when you
+                  registered to vote.
+                </p>
+              </div>
+            </div>
+
+            <form id="verification-form" class="mb-8">
+              <div
+                id="verification-error"
+                class="hidden bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded"
+              >
+                <p class="text-sm text-red-600"></p>
+              </div>
+
+              <div class="mb-6">
+                <label
+                  for="IdNumber"
+                  class="block text-gray-700 font-semibold mb-2"
+                >
+                  🪪 National Id
+                  <span class="text-sa-red">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="IdNumber"
+                  name="IdNumber"
+                  autocomplete="off"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green focus:border-transparent"
+                  placeholder="Enter your Id number"
+                  maxlength="13"
+                  pattern="\d{13}"
+                  required
+                />
+                <p class="text-sm text-gray-500 mt-1">
+                  Your South African National ID number
+                </p>
+              </div>
+
+              <div class="mb-6">
+                <label
+                  for="registrationNumber"
+                  class="block text-gray-700 font-semibold mb-2"
+                >
+                  👤 Voter Registration Number
+                  <span class="text-sa-red">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="registrationNumber"
+                  name="registrationNumber"
+                  autocomplete="off"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green focus:border-transparent"
+                  placeholder="Enter your voter registration number"
+                  required
+                />
+                <p class="text-sm text-gray-500 mt-1">
+                  Your unique voter registration number from your voter
+                  registration certificate
+                </p>
+              </div>
+
+              <div class="mb-6">
+                <label
+                  for="securityKey"
+                  class="block text-gray-700 font-semibold mb-2"
+                >
+                  🔑 Security Key <span class="text-sa-red">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="securityKey"
+                  name="securityKey"
+                  autocomplete="current-password"
+                  class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green focus:border-transparent"
+                  placeholder="Enter your security key"
+                  maxlength="50"
+                  required
+                />
+                <p class="text-sm text-gray-500 mt-1">
+                  The security key provided with your voter registration
+                </p>
+              </div>
+
+              <button
+                type="submit"
+                class="w-full bg-sa-green hover:bg-sa-yellow text-white font-bold py-3 px-6 rounded-md transition-colors duration-300 transform hover:-translate-y-1"
+              >
+                Verify Identity & Access Ballot
+              </button>
+            </form>
+
+            <div class="pt-6 border-t border-gray-200">
+              <h3 class="font-semibold text-gray-800 mb-3">Need Help?</h3>
+              <ul class="text-sm text-gray-600 space-y-1">
+                <li>
+                  • Lost your registration number or Forgotten your security
+                  key? <br />
+                  contact
+                  <span
+                    ><a
+                      href="mailto:rachadev032@gmail.com"
+                      class="hover:underline"
+                    >
+                      rachadev032@gmail.com
+                    </a></span
+                  >
+                  for assistance
+                </li>
+                <li>• Technical issues? Cantact: 0712040564</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- National Voting Stage -->
+      <div id="national-stage" class="hidden voting-stage">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div
+            class="bg-gradient-green-blue text-white px-6 py-4 flex items-center justify-between"
+          >
+            <div class="flex items-center space-x-2">
+              <span>🏛️</span>
+              <h2 class="text-xl font-bold">National Election</h2>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <div class="bg-blue-50 border-l-4 border-sa-blue p-4 mb-6">
+              <h3 class="font-semibold text-sa-blue">
+                National Assembly Election
+              </h3>
+              <p class="text-sm text-gray-700">
+                Select ONE party to represent you in the National Assembly. Your
+                vote will help determine the composition of Parliament and the
+                next government.
+              </p>
+            </div>
+
+            <div
+              class="text-sm text-gray-600 mb-6"
+              id="national-voter-info"
+            ></div>
+
+            <div class="grid gap-4 mb-8" id="national-parties">
+              <!-- National parties will be populated by JavaScript -->
+            </div>
+
+            <button
+              id="national-vote-btn"
+              class="w-full bg-sa-green text-white font-bold py-3 px-6 rounded-md opacity-50 cursor-not-allowed"
+              disabled
+            >
+              Select a Party to Continue
             </button>
-          </div>
-        </div>
 
-        <div id="thank-you" class="card none">
-          <div class="card-header text-center">
-            <h2>Thank You For Voting!</h2>
-            <p>Your vote has been recorded successfully.</p>
-          </div>
-          <div class="card-content text-center">
-            <div class="success-icon">
-              <i class="fa fa-check-circle"></i>
-            </div>
-            <p id="vote-confirmation">
-              Thank you for participating in this democratic process.
+            <p class="text-sm text-gray-500 text-center mt-6">
+              Your vote is secret and secure. No one can see who you voted for.
             </p>
           </div>
-          <div class="card-footer text-center">
-            <a th:href="@{/result}" class="btn primary-btn">View Results</a>
+        </div>
+      </div>
+
+      <!-- Provincial Voting Stage -->
+      <div id="provincial-stage" class="hidden voting-stage">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div
+            class="bg-gradient-blue-green text-white px-6 py-4 flex items-center justify-between"
+          >
+            <div class="flex items-center space-x-2">
+              <span>📍</span>
+              <h2 class="text-xl font-bold" id="provincial-title">
+                Provincial Election
+              </h2>
+            </div>
+          </div>
+
+          <div class="p-6">
+            <div class="bg-blue-50 border-l-4 border-sa-blue p-4 mb-6">
+              <h3 class="font-semibold text-sa-blue" id="provincial-info-title">
+                Provincial Legislature Election
+              </h3>
+              <p class="text-sm text-gray-700" id="provincial-info-text">
+                Select ONE party to represent you in the Provincial Legislature.
+              </p>
+            </div>
+
+            <div
+              class="text-sm text-gray-600 mb-6"
+              id="provincial-voter-info"
+            ></div>
+
+            <div class="bg-green-50 border-l-4 border-sa-green p-4 mb-6">
+              <p class="text-sm text-gray-700">
+                ✓ Your National vote has been successfully recorded. Now
+                complete your Provincial vote.
+              </p>
+            </div>
+
+            <div class="grid gap-4 mb-8" id="provincial-parties">
+              <!-- Provincial parties will be populated by JavaScript -->
+            </div>
+
+            <button
+              id="provincial-vote-btn"
+              class="w-full bg-sa-blue hover:bg-sa-green text-white font-bold py-3 px-6 rounded-md transition-colors duration-300 transform hover:-translate-y-1"
+              disabled
+            >
+              Select a Party to Continue
+            </button>
+
+            <p class="text-sm text-gray-500 text-center mt-6">
+              Your vote is secret and secure. No one can see who you voted for.
+            </p>
           </div>
         </div>
+      </div>
 
-        <div class="voting-info">
-          <p>
-            Your vote is anonymous and secure. Each voter can only vote once.
-          </p>
-          <p>If you experience any issues, please contact our support team.</p>
+      <!-- Voting Complete Stage -->
+      <div id="complete-stage" class="hidden voting-stage">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div
+            class="bg-gradient-green-blue text-white px-6 py-4 flex items-center justify-between"
+          >
+            <div class="flex items-center space-x-2">
+              <span>✅</span>
+              <h2 class="text-xl font-bold">Voting Complete!</h2>
+            </div>
+          </div>
+
+          <div class="p-6 text-center">
+            <div
+              class="w-24 h-24 bg-sa-green rounded-full flex items-center justify-center mx-auto mb-6 text-white text-4xl"
+            >
+              ✅
+            </div>
+
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">
+              Thank You for Voting!
+            </h3>
+            <p class="text-lg text-gray-600 mb-8">
+              Your votes have been successfully cast and recorded securely. You
+              have participated in South Africa's democratic process.
+            </p>
+
+            <div class="bg-gray-50 rounded-lg p-6 mb-8">
+              <h4 class="text-xl font-semibold text-gray-800 mb-4">
+                Voting Summary
+              </h4>
+              <div class="grid md:grid-cols-2 gap-6 mb-6">
+                <div
+                  class="bg-white rounded-lg p-4 border-l-4 border-sa-green text-left"
+                >
+                  <h5 class="font-semibold text-sa-green">National Election</h5>
+                  <div class="flex items-center mt-2">
+                    <span class="text-sa-green mr-2">✓</span>
+                    <span class="text-sm">Vote Cast Successfully</span>
+                  </div>
+                </div>
+                <div
+                  class="bg-white rounded-lg p-4 border-l-4 border-sa-blue text-left"
+                >
+                  <h5 class="font-semibold text-sa-blue">
+                    Provincial Election
+                  </h5>
+                  <div class="flex items-center mt-2">
+                    <span class="text-sa-green mr-2">✓</span>
+                    <span class="text-sm">Vote Cast Successfully</span>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="pt-4 border-t border-gray-200 text-sm text-gray-600 text-left"
+                id="voting-details"
+              ></div>
+            </div>
+
+            <div
+              class="bg-blue-50 border-l-4 border-sa-blue p-4 mb-8 text-left"
+            >
+              <h4 class="font-semibold text-sa-blue mb-3">
+                Important Information
+              </h4>
+              <ul class="text-sm text-gray-700 space-y-2">
+                <li>• Your votes are completely secret and anonymous</li>
+                <li>• No one can see who you voted for</li>
+                <li>
+                  • Your participation has been recorded for electoral purposes
+                </li>
+                <li>• Results will be available after polls close</li>
+              </ul>
+            </div>
+
+            <div class="space-y-4 mb-8">
+              <button
+                id="return-home"
+                class="w-full bg-sa-blue hover:bg-sa-green text-white font-bold py-3 px-6 rounded-md transition-colors duration-300"
+              >
+                🏠 Return to Homepage
+              </button>
+            </div>
+
+            <div class="pt-6 border-t border-gray-200">
+              <p class="text-gray-600 font-medium">
+                Thank you for participating in South Africa's democracy!
+              </p>
+              <p class="text-sm text-gray-500 mt-1">
+                Your voice matters and your vote counts towards building a
+                better South Africa.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Confirmation Modal -->
+      <div
+        id="confirmation-modal"
+        class="hidden fixed inset-0 z-[1000] bg-black/50 items-center justify-center p-4"
+      >
+        <div
+          class="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto"
+        >
+          <div class="px-6 py-4">
+            <h3 id="modal-title" class="text-xl font-bold text-gray-800">
+              Confirm Your Vote
+            </h3>
+          </div>
+          <div class="px-6 py-4">
+            <div class="text-center">
+              <h4 class="text-lg font-semibold text-gray-800 mb-4">
+                Please Confirm Your Selection
+              </h4>
+              <div
+                id="selected-party-display"
+                class="bg-white border-2 border-sa-green rounded-lg p-6 mb-6 flex items-center space-x-4"
+              ></div>
+              <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                <p class="text-sm text-red-600 font-medium">
+                  ⚠️ Warning: Once you confirm your vote, it cannot be changed.
+                  Please review your selection carefully.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="px-6 py-4 flex space-x-4">
+            <button
+              id="modal-cancel"
+              class="flex-1 bg-sa-blue hover:bg-sa-green text-white font-bold py-2 px-4 rounded transition-colors duration-300"
+            >
+              Go Back to Change Selection
+            </button>
+            <button
+              id="modal-confirm"
+              class="flex-1 bg-sa-green hover:bg-sa-yellow text-white font-bold py-2 px-4 rounded transition-colors duration-300"
+            >
+              Confirm Vote & Continue
+            </button>
+          </div>
         </div>
       </div>
     </main>
 
-    <!-- footer section starts -->
-    <footer th:replace="~{/componets/footer :: footer}"></footer>
-    <!-- end footer section -->
+    <!-- Footer -->
+    <footer class="bg-gray-100 py-6 mt-12">
+      <div class="container mx-auto px-4 text-center text-gray-600 text-sm">
+        <p>&copy; 2025 Racha Voting. All rights reserved.</p>
+      </div>
+    </footer>
+    <!-- Scripts -->
+    <script>
+      class VotingPageManager {
+        constructor() {
+          // Application state
+          this.state = {
+            currentStage: "verification",
+            voterData: null,
+            nationalParties: null,
+            provincialParties: null,
+            selectedParty: null,
+            votingData: {
+              nationalParty: null,
+              provincialParty: null,
+            },
+          };
 
-    <script th:src="@{/js/vote.js}"></script>
+          // Voting tokens from backend
+          this.votingTokens = {
+            nationalToken: null,
+            provincialToken: null,
+            nationalElectionId: null,
+            provincialElectionId: null,
+          };
+
+          // Cache DOM elements
+          this.elements = {
+            loadingOverlay: document.getElementById("loadingOverlay"),
+            stages: {
+              verification: document.getElementById("verification-stage"),
+              national: document.getElementById("national-stage"),
+              provincial: document.getElementById("provincial-stage"),
+              complete: document.getElementById("complete-stage"),
+            },
+            forms: {
+              verification: document.getElementById("verification-form"),
+            },
+            buttons: {
+              nationalVote: document.getElementById("national-vote-btn"),
+              provincialVote: document.getElementById("provincial-vote-btn"),
+              modalCancel: document.getElementById("modal-cancel"),
+              modalConfirm: document.getElementById("modal-confirm"),
+              returnHome: document.getElementById("return-home"),
+            },
+            containers: {
+              nationalParties: document.getElementById("national-parties"),
+              provincialParties: document.getElementById("provincial-parties"),
+              nationalVoterInfo: document.getElementById("national-voter-info"),
+              provincialVoterInfo: document.getElementById(
+                "provincial-voter-info",
+              ),
+            },
+            modal: {
+              confirmation: document.getElementById("confirmation-modal"),
+              title: document.getElementById("modal-title"),
+              partyDisplay: document.getElementById("selected-party-display"),
+            },
+            errors: {
+              verification: document.getElementById("verification-error"),
+            },
+          };
+
+          this.init();
+        }
+
+        // ==================== INITIALIZATION ====================
+
+        init() {
+          this.initializeEventListeners();
+          this.initializeInputValidation();
+          this.updateProgressIndicator();
+        }
+
+        initializeEventListeners() {
+          // Verification form submission
+          this.elements.forms.verification.addEventListener("submit", (e) =>
+            this.handleVerification(e),
+          );
+
+          // Vote button clicks
+          this.elements.buttons.nationalVote.addEventListener("click", () =>
+            this.handleVoteSubmit("national"),
+          );
+          this.elements.buttons.provincialVote.addEventListener("click", () =>
+            this.handleVoteSubmit("provincial"),
+          );
+
+          // Modal actions
+          this.elements.buttons.modalCancel.addEventListener("click", () =>
+            this.closeModal(),
+          );
+          this.elements.buttons.modalConfirm.addEventListener("click", () =>
+            this.confirmVote(),
+          );
+
+          // Complete stage actions
+          this.elements.buttons.returnHome.addEventListener(
+            "click",
+            () => (window.location.href = "/"),
+          );
+
+          // Close modal on outside click
+          this.elements.modal.confirmation.addEventListener("click", (e) => {
+            if (e.target === this.elements.modal.confirmation) {
+              this.closeModal();
+            }
+          });
+        }
+
+        initializeInputValidation() {
+          const idInput = document.getElementById("IdNumber");
+          idInput.addEventListener("input", () => {
+            idInput.value = idInput.value.replace(/\D/g, ""); // Only allow digits
+          });
+        }
+
+        // ==================== STAGE MANAGEMENT ====================
+
+        goToStage(stage) {
+          // Hide all stages
+          Object.values(this.elements.stages).forEach((stageEl) => {
+            stageEl.classList.add("hidden");
+            stageEl.classList.remove("block");
+          });
+
+          // Show target stage
+          this.elements.stages[stage].classList.remove("hidden");
+          this.elements.stages[stage].classList.add("block");
+
+          this.state.currentStage = stage;
+          this.updateProgressIndicator(stage);
+        }
+
+        updateProgressIndicator(stage = "verification") {
+          const steps = ["verification", "national", "provincial"];
+
+          steps.forEach((step) => {
+            const stepElement = document.getElementById(`step-${step}`);
+            const circleElement = document.getElementById(`circle-${step}`);
+
+            // Reset classes
+            stepElement.classList.remove("text-sa-green", "text-gray-400");
+            circleElement.classList.remove(
+              "border-sa-green",
+              "bg-sa-green",
+              "text-white",
+            );
+
+            // Apply active state
+            if (stage === step) {
+              stepElement.classList.add("text-sa-green");
+              circleElement.classList.add(
+                "border-sa-green",
+                "bg-sa-green",
+                "text-white",
+              );
+            } else {
+              stepElement.classList.add("text-gray-400");
+            }
+          });
+        }
+
+        // ==================== VERIFICATION ====================
+
+        async handleVerification(e) {
+          e.preventDefault();
+
+          const formData = new FormData(e.target);
+          const credentials = {
+            idNo: formData.get("IdNumber").trim(),
+            regNo: formData.get("registrationNumber").trim(),
+            secretKey: formData.get("securityKey").trim(),
+          };
+
+          // Clear previous errors
+          this.hideError("verification");
+
+          // Validation
+          if (!this.validateCredentials(credentials)) {
+            return;
+          }
+
+          this.showLoading(true);
+
+          try {
+            const response = await fetch("/vote/vote/validate", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(credentials),
+            });
+
+            let data = null;
+
+            if (response.ok) {
+              data = await response.json();
+              this.handleVerificationSuccess(data);
+            } else {
+              const errorText = await response.text();
+              this.showError(
+                "verification",
+                `Verification failed: ${errorText}`,
+              );
+            }
+          } catch (error) {
+            this.showError(
+              "verification",
+              "An error occurred while processing your information.",
+            );
+            console.error("Verification error:", error);
+          } finally {
+            this.showLoading(false);
+          }
+        }
+
+        validateCredentials(credentials) {
+          if (!credentials.idNo || !/^\d{13}$/.test(credentials.idNo)) {
+            this.showError(
+              "verification",
+              "Please enter a valid 13-digit National ID number",
+            );
+            return false;
+          }
+
+          if (!credentials.regNo || credentials.regNo.length < 8) {
+            this.showError(
+              "verification",
+              "Registration number must be at least 8 characters",
+            );
+            return false;
+          }
+
+          if (!credentials.secretKey) {
+            this.showError("verification", "Security key is required");
+            return false;
+          }
+
+          return true;
+        }
+
+        handleVerificationSuccess(data) {
+          this.state.voterData = data.votingDto;
+          const tokens = data.tokens;
+          const elections = this.state.voterData.election;
+
+          // Determine which election is national vs provincial
+          const nationalIndex = elections.findIndex((e) =>
+            e.title.includes("Presidential"),
+          );
+          const provincialIndex = nationalIndex === 0 ? 1 : 0;
+
+          // Store parties
+          this.state.nationalParties = elections[nationalIndex].party;
+          this.state.provincialParties = elections[provincialIndex].party;
+
+          // Store tokens
+          this.votingTokens.nationalToken = tokens[nationalIndex];
+          this.votingTokens.provincialToken = tokens[provincialIndex];
+          this.votingTokens.nationalElectionId =
+            elections[nationalIndex].publicAccessKey;
+          this.votingTokens.provincialElectionId =
+            elections[provincialIndex].publicAccessKey;
+
+          this.populateParties();
+          this.updateVoterInfo();
+          this.goToStage("national");
+        }
+
+        // ==================== PARTY MANAGEMENT ====================
+
+        populateParties() {
+          this.populateNationalParties();
+          this.populateProvincialParties();
+        }
+
+        populateNationalParties() {
+          this.elements.containers.nationalParties.innerHTML = "";
+
+          this.state.nationalParties.forEach((party) => {
+            const partyCard = this.createPartyCard(party, "national");
+            this.elements.containers.nationalParties.appendChild(partyCard);
+          });
+        }
+
+        populateProvincialParties() {
+          this.elements.containers.provincialParties.innerHTML = "";
+
+          this.state.provincialParties.forEach((party) => {
+            const partyCard = this.createPartyCard(party, "provincial");
+            this.elements.containers.provincialParties.appendChild(partyCard);
+          });
+        }
+
+        createPartyCard(party, type) {
+          const card = document.createElement("div");
+          card.className = `party-card ${type}`;
+          card.dataset.partyId = party.id;
+          card.dataset.type = type;
+
+          card.innerHTML = `
+      <div class="party-logo" style="background-color: ${party.colors[1]}">
+        <img src="${party.logoUrl}" alt="${party.name}" id="imagePreview" />
+      </div>
+      <div class="party-info">
+        <div class="party-name">${party.name}</div>
+        <div class="party-abbreviation">${party.abbreviation}</div>
+        <div class="party-leader">Leader: ${party.leader}</div>
+      </div>
+      <div class="party-selector">
+        <span class="selector-icon">✓</span>
+      </div>
+    `;
+
+          card.addEventListener("click", () =>
+            this.selectParty(party.id, type),
+          );
+
+          return card;
+        }
+
+        selectParty(partyId, type) {
+          // Clear previous selections for this type
+          document.querySelectorAll(`.party-card.${type}`).forEach((card) => {
+            card.classList.remove("selected");
+          });
+
+          // Select new party
+          const selectedCard = document.querySelector(
+            `.party-card.${type}[data-party-id="${partyId}"]`,
+          );
+          selectedCard.classList.add("selected");
+
+          this.state.selectedParty = partyId;
+
+          // Update vote button
+          this.updateVoteButton(type);
+        }
+
+        updateVoteButton(type) {
+          const voteBtn = this.elements.buttons[`${type}Vote`];
+          voteBtn.disabled = false;
+          voteBtn.textContent =
+            type === "national" ? "Cast National Vote" : "Cast Provincial Vote";
+
+          voteBtn.className =
+            type === "national"
+              ? "btn-primary btn-full"
+              : "btn-secondary btn-full";
+        }
+
+        // ==================== VOTE SUBMISSION ====================
+
+        handleVoteSubmit(type) {
+          if (!this.state.selectedParty) return;
+
+          const parties =
+            type === "national"
+              ? this.state.nationalParties
+              : this.state.provincialParties;
+
+          const selectedPartyData = parties.find(
+            (p) => p.id === this.state.selectedParty,
+          );
+
+          this.showConfirmationModal(selectedPartyData, type);
+        }
+
+        showConfirmationModal(party, type) {
+          this.elements.modal.title.textContent = `Confirm Your ${type === "national" ? "National" : "Provincial"} Vote`;
+
+          this.elements.modal.partyDisplay.innerHTML = `
+      <div class="party-logo" style="background-color: ${party.colors[1]}">
+        <img src="${party.logoUrl}" alt="${party.name}" id="imagePreview" />
+      </div>
+      <div class="party-info">
+        <div class="party-name">${party.name}</div>
+        <div class="party-abbreviation">${party.abbreviation}</div>
+        <div class="party-leader">Leader: ${party.leader}</div>
+      </div>
+    `;
+
+          this.elements.modal.confirmation.classList.remove("hidden");
+          this.elements.modal.confirmation.classList.add("flex");
+          this.elements.modal.confirmation.dataset.voteType = type;
+        }
+
+        closeModal() {
+          this.elements.modal.confirmation.classList.add("hidden");
+          this.elements.modal.confirmation.classList.remove("flex");
+        }
+
+        async confirmVote() {
+          const voteType = this.elements.modal.confirmation.dataset.voteType;
+
+          this.showLoading(true);
+          this.closeModal();
+
+          try {
+            if (voteType === "national") {
+              await this.castNationalVote();
+            } else {
+              await this.castProvincialVote();
+            }
+          } catch (error) {
+            console.error("Error submitting vote:", error);
+            alert("Failed to submit vote. Please try again.");
+          } finally {
+            this.showLoading(false);
+          }
+        }
+
+        async castNationalVote() {
+          const response = await fetch("/vote/vote/cast", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Voting-Token": this.votingTokens.nationalToken,
+            },
+            body: JSON.stringify({
+              electionId: this.votingTokens.nationalElectionId,
+              partyId: this.state.selectedParty,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error("National vote submission failed");
+          }
+
+          const data = await response.json();
+
+          if (!data.success) {
+            throw new Error(data.message || "National vote submission failed");
+          }
+          // this.state.votingData.nationalParty = this.state.selectedParty;
+          this.state.selectedParty = null;
+          this.goToStage("provincial");
+        }
+
+        async castProvincialVote() {
+          const response = await fetch("/vote/vote/cast", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-Voting-Token": this.votingTokens.provincialToken,
+            },
+            body: JSON.stringify({
+              electionId: this.votingTokens.provincialElectionId,
+              partyId: this.state.selectedParty,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Provincial vote submission failed");
+          }
+
+          
+          const data = await response.json();
+
+          if (!data.success) {
+            throw new Error(data.message || "Provincial vote submission failed");
+          }
+
+          // console.log("Provincial vote submitted:", this.state.selectedParty);
+          // this.state.votingData.provincialParty = this.state.selectedParty;
+          this.state.selectedParty = null;
+          this.updateCompletePage();
+          this.goToStage("complete");
+        }
+
+        // ==================== UI UPDATES ====================
+
+        updateVoterInfo() {
+          if (!this.state.voterData) return;
+
+          const infoHTML = `
+      <p><strong>Voter Registration No:</strong> ${this.state.voterData.regNo}</p>
+      <p><strong>Province:</strong> ${this.state.voterData.province}</p>
+    `;
+
+          this.elements.containers.nationalVoterInfo.innerHTML = infoHTML;
+          this.elements.containers.provincialVoterInfo.innerHTML =
+            infoHTML +
+            `<p><strong>District:</strong> ${this.state.voterData.district}</p>`;
+
+          // Update provincial titles
+          document.getElementById("provincial-title").textContent =
+            `Provincial Election - ${this.state.voterData.province}`;
+          document.getElementById("provincial-info-title").textContent =
+            `${this.state.voterData.province} Provincial Legislature Election`;
+          document.getElementById("provincial-info-text").textContent =
+            `Select ONE party to represent you in the ${this.state.voterData.province} Provincial Legislature.`;
+        }
+
+        updateCompletePage() {
+          const votingDetails = document.getElementById("voting-details");
+          const now = new Date();
+
+          votingDetails.innerHTML = `
+      <p><strong>Voter Registration No:</strong> ${this.state.voterData.regNo}</p>
+      <p><strong>Province:</strong> ${this.state.voterData.province}</p>
+      <p><strong>Voting Date:</strong> ${now.toLocaleDateString()}</p>
+      <p><strong>Voting Time:</strong> ${now.toLocaleTimeString()}</p>
+    `;
+        }
+
+        // ==================== UTILITY FUNCTIONS ====================
+
+        showLoading(show) {
+          if (show) {
+            this.elements.loadingOverlay.classList.remove("hidden");
+          } else {
+            this.elements.loadingOverlay.classList.add("hidden");
+          }
+        }
+
+        showError(context, message) {
+          const errorElement = this.elements.errors[context];
+          if (errorElement) {
+            errorElement.innerHTML = `<p class="text-sm text-red-600">${message}</p>`;
+            errorElement.classList.remove("hidden");
+          }
+        }
+
+        hideError(context) {
+          const errorElement = this.elements.errors[context];
+          if (errorElement) {
+            errorElement.classList.add("hidden");
+          }
+        }
+      }
+
+      // Initialize the application when DOM is ready
+      document.addEventListener("DOMContentLoaded", () => {
+        window.votingManager = new VotingPageManager();
+      });
+    </script>
   </body>
 </html>

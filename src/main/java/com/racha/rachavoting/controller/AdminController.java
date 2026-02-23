@@ -5,6 +5,7 @@ import java.security.Principal;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +28,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.racha.rachavoting.model.Authority;
 import com.racha.rachavoting.model.Candidate;
 import com.racha.rachavoting.model.Election;
-import com.racha.rachavoting.model.Vote;
 import com.racha.rachavoting.payload.admin.ElectionCreateDTO;
 import com.racha.rachavoting.payload.admin.ElectionViewDTO;
 import com.racha.rachavoting.payload.candidate.CandidateViewDTO;
@@ -209,6 +210,7 @@ public class AdminController {
 
         for (Election election : elections) {
             ElectionViewDTO dto = new ElectionViewDTO();
+            dto.setPublicKey(election.getPublicAccessKey());
             dto.setTitle(election.getTitle());
             dto.setYear(election.getYear());
             dto.setStartDate(election.getStartDate());
@@ -236,15 +238,18 @@ public class AdminController {
      * @param principal The currently authenticated user.
      * @return The view for displaying election details.
      */
-    @GetMapping("/election/{year}")
-    public String electionByYear(@PathVariable String year, Model model, Principal principal) {
+    @GetMapping("/election/{publicKey}")
+    @Transactional(readOnly = true)
+    public String electionByYear(@PathVariable String publicKey, Model model, Principal principal) {
         model.addAttribute("user", principal.getName());
         model.addAttribute("title", "Election Management");
         model.addAttribute("pagetitle", "Election Management");
 
-        Election election = electionService.findElectionByYear(year);
+        Election election = electionService.findByPublicKey(publicKey);
+
         if (election != null) {
             ElectionViewDTO dto = new ElectionViewDTO();
+            dto.setPublicKey(election.getPublicAccessKey());
             dto.setTitle(election.getTitle());
             dto.setYear(election.getYear());
             dto.setStartDate(election.getStartDate());
@@ -256,7 +261,7 @@ public class AdminController {
             dto.setTotalVotes(election.getTotalVotes());
             model.addAttribute("election", dto);
         } else {
-            model.addAttribute("error", "Election not found for the year: " + year);
+            model.addAttribute("error", "Election not found");
         }
 
         return "admin/auth/componets/electionview";
@@ -286,11 +291,7 @@ public class AdminController {
 
         // Validate business rules only if no basic validation errors
         if (!result.hasErrors()) {
-            // Check for duplicate year
-            // if (electionService.existsByYear(dto.getYear() + "")) {
-            // result.rejectValue("year", "duplicate", "Election for this year already
-            // exists");
-            // }
+           
 
             // Check registration deadline
             if (dto.getRegistrationDeadline().isAfter(dto.getStartDate())) {
@@ -301,9 +302,11 @@ public class AdminController {
 
             // Check for date overlap
             // if (electionService.hasDateOverlap(dto.getStartDate(), dto.getEndDate())) {
-                
-            //     result.rejectValue("startDate", "overlap", "Dates overlap with existing election");
-            //     redirectAttributes.addFlashAttribute("error", "Dates overlap with existing election");
+
+            // result.rejectValue("startDate", "overlap", "Dates overlap with existing
+            // election");
+            // redirectAttributes.addFlashAttribute("error", "Dates overlap with existing
+            // election");
 
             // }
         }
@@ -327,7 +330,7 @@ public class AdminController {
             election.setUpdatedAt(LocalDateTime.now());
             election.setCreatedBy(principal.getName());
             election.setRegisteredVoters(new BigInteger("0"));
-            election.setVotes(new ArrayList<Vote>());
+            election.setVotes(new HashSet<>());
 
             electionService.saveElection(election);
 

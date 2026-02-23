@@ -10,5 +10,4 @@ public interface VoteRepository extends JpaRepository<Vote, Long> {
     // Custom query methods can be defined here if needed
     // For example, to find votes by candidate name or voter ID
    
-
 } 

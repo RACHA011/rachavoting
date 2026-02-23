@@ -30,7 +30,7 @@
             </div>
             <div class="text-center md:text-left">
               <h1 class="text-xl md:text-2xl font-bold text-gray-800">
-                SA vote online
+                Racha voting
               </h1>
               <p class="text-xs md:text-sm text-gray-600">
                 Secure Online Voter Registration
@@ -40,6 +40,31 @@
         </div>
       </div>
     </header>
+
+    <div
+      id="loadingOverlay"
+      class="hidden fixed inset-0 z-[2000] items-center justify-center bg-black/50 backdrop-blur-sm"
+    >
+      <div
+        class="bg-white p-8 rounded-xl shadow-xl text-center max-w-xs w-full"
+      >
+        <div class="flex justify-center mb-4">
+          <svg
+            class="animate-spin h-8 w-8 text-indigo-600"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+          >
+            <path
+              d="M21 12a9 9 0 1 1-6.219-8.56"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+        <p class="text-gray-700 font-medium">Loading...</p>
+      </div>
+    </div>
 
     <!-- Main Content -->
     <main class="container mx-auto px-4 py-8 max-w-4xl">
@@ -58,6 +83,19 @@
           action="#"
           th:action="@{/vote/register}"
         >
+          <!-- test version notice -->
+          <div
+            class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6 rounded-md"
+          >
+            <p class="font-semibold">⚠️ Test Version Notice</p>
+            <p class="text-sm">
+              This is a <strong>test version</strong> of Racha Voting. Please
+              generate your ID and <span class="font-bold">copy it</span>, as
+              you will need it later to vote. If you lose it, it cannot be
+              recovered.
+            </p>
+          </div>
+
           <!-- National ID -->
           <div class="mb-6">
             <label
@@ -66,18 +104,55 @@
             >
               National ID Number <span class="text-sa-red">*</span>
             </label>
-            <input
-              type="text"
-              id="nationalId"
-              name="nationalId"
-              required
-              pattern="[0-9]{13}"
-              maxlength="13"
-              class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green focus:border-transparent"
-            />
-            <p class="text-sm text-gray-500 mt-1">
+            <div class="flex gap-2">
+              <input
+                type="text"
+                id="nationalId"
+                name="nationalId"
+                required
+                pattern="[0-9]{13}"
+                maxlength="13"
+                class="flex-1 px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green focus:border-transparent"
+              />
+              <button
+                type="button"
+                id="generateIdBtn"
+                class="px-4 py-3 bg-sa-blue hover:bg-blue-700 text-white font-semibold rounded-md transition-colors duration-300 whitespace-nowrap"
+              >
+                Generate
+              </button>
+              <button
+                type="button"
+                id="copyIdBtn"
+                class="px-4 py-3 bg-sa-green hover:bg-green-700 text-white font-semibold rounded-md transition-colors duration-300 whitespace-nowrap"
+              >
+                Copy
+              </button>
+            </div>
+            <!--p class="text-sm text-gray-500 mt-1">
               Your 13-digit South African ID number
+            </p -->
+            <p class="text-sm text-gray-500 mt-1">
+              This ID is for testing purposes only. Please copy and save it
+              securely.
             </p>
+
+            <!-- Date of Birth Input (Hidden by default) -->
+            <div id="dobSection" class="mt-3 hidden">
+              <label
+                for="dobInput"
+                class="block text-gray-600 font-medium mb-1 text-sm"
+              >
+                Date of Birth (Optional - leave blank for random)
+              </label>
+              <input
+                type="date"
+                id="dobInput"
+                class="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-sa-green focus:border-transparent text-sm"
+                min="1950-01-01"
+                max="2006-12-31"
+              />
+            </div>
             <!-- <p
               class="text-sm text-sa-red mt-1"
               th:if="${#fields.hasErrors('nationalId')}"
@@ -179,6 +254,7 @@
           <!-- Submit Button -->
           <div>
             <button
+              id="registerVoter"
               type="submit"
               class="w-full bg-sa-green hover:bg-sa-yellow text-white font-bold py-3 px-6 rounded-md transition-colors duration-300"
             >
@@ -216,15 +292,17 @@
     <!-- Footer -->
     <footer class="bg-gray-100 py-6">
       <div class="container mx-auto px-4 text-center text-gray-600 text-sm">
-        <p>
-          &copy; 2025 Electoral Commission of South Africa. All rights reserved.
-        </p>
+        <p>&copy; 2025 Racha voting.</p>
       </div>
     </footer>
 
     <script th:inline="javascript">
       /*<![CDATA[*/
       document.addEventListener("DOMContentLoaded", function () {
+        const errorMessage = /*[[${error}]]*/ null;
+        if (errorMessage) {
+          showNotification(errorMessage, "error");
+        }
         // Province change handler
         document
           .getElementById("province")
@@ -287,13 +365,14 @@
           const month = parseInt(birthDate.substring(2, 4), 10);
           const day = parseInt(birthDate.substring(4, 6), 10);
 
-          if (month < 1 || month > 12 || day < 1 || day > 31) {
+          if (month < 1 || month > 12 || day < 1 || day > 31 || year > 2006) {
             return false;
           }
 
+          return true;
           // Apply Luhn algorithm
           // Step 1: Add all digits in odd positions (1, 3, 5, 7, 9, 11)
-          let oddSum = 0;
+          /* let oddSum = 0;
           for (let i = 0; i < 12; i += 2) {
             oddSum += parseInt(idNumber.charAt(i), 10);
           }
@@ -320,9 +399,117 @@
           const calculatedCheckDigit = (10 - (totalSum % 10)) % 10;
 
           // Step 7: Check if the calculated check digit matches the actual check digit
-          return calculatedCheckDigit === checkDigit;
+          return calculatedCheckDigit === checkDigit;*/
         }
+
+        function showNotification(message, type) {
+          // Create notification element
+          const notification = document.createElement("div");
+          notification.className = `fixed top-4 right-4 p-4 rounded-md shadow-lg z-50 ${
+            type === "success"
+              ? "bg-green-500 text-white"
+              : "bg-red-500 text-white"
+          }`;
+          notification.textContent = message;
+
+          document.body.appendChild(notification);
+
+          // Remove notification after 3 seconds
+          setTimeout(() => {
+            notification.remove();
+          }, 30000);
+        }
+
+        // Generate ID button handler
+        document
+          .getElementById("generateIdBtn")
+          .addEventListener("click", async function () {
+            const dobSection = document.getElementById("dobSection");
+            const dobInput = document.getElementById("dobInput");
+            // Show/hide date of birth section
+            if (dobSection.classList.contains("hidden")) {
+              dobSection.classList.remove("hidden");
+              this.textContent = "Generate ID";
+            } else {
+              // Generate the ID
+              const selectedDate = dobInput.value;
+              let dateOfBirth;
+
+              if (selectedDate) {
+                dateOfBirth = new Date(selectedDate);
+              }
+
+              // Call your backend to generate an ID
+              const response = await fetch(
+                "/generate-id" +
+                  (dateOfBirth
+                    ? `?dob=${dateOfBirth.toISOString().split("T")[0]}`
+                    : ""),
+                {
+                  method: "POST",
+                }
+              );
+
+              if (!response.ok)
+                showNotification("Error generating Id", "error");
+
+              let responseData = await response.text();
+              document.getElementById("nationalId").value = responseData;
+              // Hide the date section and reset button text
+              dobSection.classList.add("hidden");
+              dobInput.value = "";
+              this.textContent = "Generate";
+
+              showNotification("ID number generated successfully!", "success");
+            }
+          });
+
+        document
+          .getElementById("registrationForm")
+          .addEventListener("submit", function (e) {
+            const form = e.target;
+            const submitButton = form.querySelector('button[type="submit"]');
+            const loadingOverlay = document.getElementById("loadingOverlay");
+
+            // Disable the submit button
+            submitButton.disabled = true;
+            submitButton.classList.add("opacity-50", "cursor-not-allowed");
+
+            // Show loading overlay
+            loadingOverlay.classList.remove("hidden");
+            loadingOverlay.classList.add("flex");
+
+            // Prevent any further submissions
+            form.dataset.submitting = "true";
+          });
+
+        // Copy ID button
+        document
+          .getElementById("copyIdBtn")
+          .addEventListener("click", function () {
+            const idField = document.getElementById("nationalId");
+            if (!idField.value) {
+              showNotification(
+                "No ID to copy. Please generate one first.",
+                "error"
+              );
+              return;
+            }
+
+            navigator.clipboard
+              .writeText(idField.value)
+              .then(() => {
+                showNotification("ID copied to clipboard!", "success");
+              })
+              .catch(() => {
+                showNotification(
+                  "Failed to copy ID. Please copy manually.",
+                  "error"
+                );
+              });
+          });
       });
+
       /*]]>*/
     </script>
   </body>
